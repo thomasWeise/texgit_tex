@@ -1,0 +1,486 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2023 by Thomas Weise <http://iao.hfuu.edu.cn/5>
+%
+% This file may be distributed and/or modified under the conditions of the LaTeX Project Public License, either version 1.3 of this license or (at your option) any later version. The latest version of this license is in http://www.latex-project.org/lppl.txt.
+% The license can be found at https://thomasweise.github.io/latexgit/LICENSE.html.
+% This work is author-maintained, i.e., it can only be maintained by Thomas Weise.
+% 
+% \fi
+%
+% \iffalse
+%
+%<*driver>
+\ProvidesFile{latexgit.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
+%<package>\ProvidesPackage{latexgit}[2023/11/17 0.8.0 The first public version.]%
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{latexgit}[2014/06/17]
+%
+\usepackage{xcolor}%
+\usepackage[%
+colorlinks,%
+breaklinks=true,%
+urlcolor={blue!80!black},%
+menucolor=black,%
+linkcolor={red!50!black},%
+bookmarks=true,%
+bookmarksopen=false,%
+hyperfootnotes=true,%
+citecolor={blue!50!black},%
+filecolor=black,%
+pdfkeywords={LaTeX, package, latexgit}
+]{hyperref}%
+\usepackage{breakurl}%
+\usepackage[square,numbers,comma,sort&compress]{natbib}%
+%
+\newcommand{\exampleautorefname}{Example}%
+\renewcommand{\sectionautorefname}{Section}%
+\renewcommand{\subsectionautorefname}{Section}%
+\renewcommand{\subsubsectionautorefname}{Section}%
+\usepackage{verbatim}%
+\usepackage{graphicx}%
+\usepackage{subcaption}%
+\usepackage{afterpage}%
+%
+\usepackage{listings}%
+\lstset{%
+language=[LaTeX]TeX,%
+basicstyle=\small,%
+keywordstyle=\ttfamily\color{teal!90!black}\bfseries,%
+morekeywords={url,verbatiminput},
+classoffset=1,morekeywords={gitLoad,gitFile,gitUrl},keywordstyle=\ttfamily\bfseries\color{red!70!black},classoffset=0,%
+identifierstyle=,%
+commentstyle=\color{gray}\footnotesize,%
+stringstyle=\ttfamily\color{red!90!black}, % typewriter type for string
+numbers=left,%
+numberstyle=\tiny,%
+columns=fullflexible,%
+frame=shadowbox,%
+frameround=tttt,%
+backgroundcolor=\color{black!10!yellow!5!white}%
+}%
+%
+\EnableCrossrefs         
+\CodelineIndex
+\RecordChanges
+%
+%
+\begin{document}
+  \DocInput{latexgit.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \changes{v0.8.0}{2023/11/16}{Initial Draft Version}
+%
+% \GetFileInfo{latexgit.dtx}
+%
+% \DoNotIndex{\def,\if,\fi}
+%
+% \title{The \textsf{latexgit} Package}
+% \author{Thomas Weise\\%
+% \resizebox{0.95\textwidth}{!}{%
+% \parbox{\linewidth}{%
+% \centering%
+% Institute of Applied Optimization\\%
+% School of Artificial Intelligence and Big Data\\%
+% Hefei University, Hefei 230601, Anhui, China\\%
+% \href{mailto:tweise@hfuu.edu.cn}{tweise@hfuu.edu.cn} $\cdot$ \href{mailto:tweise@ustc.edu.cn}{tweise@hfuu.edu.cn}%
+% }}}%
+% \date{\today}
+%
+% \maketitle
+%
+% \begin{abstract}
+% This \LaTeX\ package works in combination with the Python package
+% |latexgit|.
+% It offers the command |\gitLoad|\index{|\gitLoad|}, which can load a file
+% from a |git|\index{git} repository, optionally post-process it, and then
+% provide a local path to the file as macro |\gitFile|\index{|\gitFile|} and
+% the URL to the original file in |\gitUrl|\index{|\gitUrl|}.
+% This is achieved by storing the |git| requests in the |aux|\index{aux} file
+% of the project during the first |pdflatex|\index{pdflatex} pass.
+% The |aux| file is then processed by the Python package which performs the
+% actual git queries, stores the result in local files, and adds the resolved
+% paths to the |aux| file.
+% During the first |pdflatex|\index{pdflatex} run, |\gitFile| and |\gitUrl|
+% offer dummy results.
+% However, after the resolution via the Python package, in the second
+% |pdflatex| run they then point to the right data.
+% \end{abstract}
+%
+% \setcounter{tocdepth}{2}
+% \tableofcontents
+%
+% \section{Introduction}%
+%
+% \subsection{Addressed Problem and Use Case}%
+% \LaTeX\ documents can contain source codes from different locations.
+% Especially in computer science, we want to present examples source codes in
+% our lecture scripts or slides.
+% These example codes need to be \emph{correct}.
+% They should compile.
+% However, they often are also just snippets from longer codes.
+% This package addresses the following problem:%
+%
+% \begin{quote}
+% \emph{``How can we include snippets of code from a separate, complex code basis
+% (located in a |git| repository) into our \LaTeX\ documents?''}
+% \end{quote}
+%
+% \subsection{Provided Functionality}%
+% \label{sec:functionality}%
+% It does so by offering a combination of a \LaTeX\ package (this package
+% here) and a Python\index{Python} program (published at
+% \url{https://pypi.org/projects/latexgit}).
+% This \LaTeX\ provides the command |\gitLoad| that can load a specific file
+% (its second argument) from a specific |git| repository (its first argument)
+% and, optionally, pipe the file contents through a program for
+% post-processing (the third argument, which can be left empty).
+% Such requests are stored in the |aux| file during the first |pdflatex| pass,
+% then resolved by the Python program, and their results become available in
+% the second |pdflatex| pass via the commands |\gitFile| and |\gitUrl|.
+%
+% \section{Usage}%
+% Using the package requires the following steps:
+% \begin{enumerate}%
+% \item Obviously, the package \emph{and} its Python-based postprocessor
+% must be installed (see \autoref{sec:installation}).
+% \item In your document, you need to load the package in the preamble
+% (see \autoref{sec:loadThePackage}).%
+% \item Then you can make |git| queries and using the paths to files holding
+% their results (see \autoref{sec:gitquery}).
+% \item Finally, the Python package can carry them out after the first
+% |pdflatex| run and in the next |pdflatex| run, |\gitFile| and |\gitUrl| are
+% defined appropriately, see \autoref{sec:pythonProgram}.
+% \end{enumerate}
+%
+% \subsection{Installation}%
+% \label{sec:installation}%
+%
+% \subsubsection{\LaTeX\ Package}%
+% First, make sure that you have the |latexgit.sty| either installed or inside
+% your document's directory.
+% You can download |latexgit.dtx|\index{|latexgit.dtx|} and
+% |latexgit.ins|\index{|latexgit.ins|} from
+% \url{https://github.com/thomasWeise/latexgit_tex}\index{latexgit\_tex} and
+% then execute
+% \begin{quote}%
+% |pdflatex latexgit.ins|\index{pdflatex}
+% \end{quote}%
+% and you should get
+% the style file |latexgit.sty|\index{|latexgit.sty|}.
+% Copy it into your document's folder.
+%
+% \subsubsection{Python Package}%
+% The Python\index{Python} package is available at
+% \url{https://github.com/thomasWeise/latexgit_py}\index{latexgit\_py},
+% \url{https://thomasweise.github.io/latexgit_py}, and
+% \url{https://pypi.org/project/latexgit}.
+% You can most easily install it from PyPI\index{PyPI} by doing
+% \begin{quote}
+% |pip install latexgit|
+% \end{quote}
+%
+% \subsection{Loading the Package}%
+% \label{sec:loadThePackage}%
+% Load this package using%
+% \begin{quote}
+%   |\usepackage{latexgit}|
+% \end{quote}
+% \begin{sloppypar}%
+% Side note: This will automatically load the packages
+% |alphalph|\index{alphalph} and |filecontents|\index{filecontents}, see
+% \autoref{sec:implementation}.
+% \end{sloppypar}%
+%
+% \subsection{Querying a File from a git Repository}%
+% \label{sec:gitquery}%
+% To query a file stored at path |thePath| inside from a |git|\index{git}
+% repository available under URL |theUrl|, you would specify the command
+% \begin{quote}
+% |\gitLoad{theUrl}{theFile}{}|\index{|\gitLoad|}
+% \end{quote}
+% After this command is executed, a local path to the file becomes available
+% in the fully-expandable command |\gitFile|\index{|\gitFile|}.
+% The full URL to the file in the |git| repository, including the current
+% commit id, becomes available in the fully-expandable command
+% |\gitUrl|\index{|\gitUrl|}.
+% Both |\gitFile| and |\gitUrl| will be overwritten every time |\gitLoad| is
+% invoked.
+% You can invoke |\gitLoad| any number of times.
+%
+% The third parameter, left empty in the above example, can specify an
+% optional post-processing commend.
+% If it is not left empty, this command will be executed in the
+% shell\index{shell}.
+% The contents of the file loaded from the |git| repository will be piped to
+% the |stdin|\index{stdin} of the command.
+% The |stdout|\index{stdout} of the command will be piped to a file and
+% |\gitFile|\index{|\gitFile|} will then contain the path to this file
+% instead.
+% For example, under Linux\index{Linux}, you could use the
+% \href{https://www.man7.org/linux/man-pages/man1/head.1.html}{|head|}\index{head}
+% command to return only the first 5~lines of a file as follows:
+% \begin{quote}
+% |\gitLoad{theUrl}{theFile}{head -n 5}|\index{|\gitLoad|}.
+% \end{quote}
+%
+% \subsection{Executing the Python Package}
+% \label{sec:pythonProgram}
+% \begin{sloppypar}%
+% During the first |pdflatex|\index{pdflatex} run, |\gitFile| points to an
+% empty dummy file
+% (|\jobname.latexgit.dummy|)\index{|\jobname.latexgit.dummy|} and
+% |\gitUrl| points to |http://example.com|\index{http://example.com}.
+% Both commands will only expand to useful information if the Python package
+% |latexgit| is applied to the project's |aux| file.
+% This works very similar to \BibTeX.
+% If the name of your \TeX\ file is |myfile.tex|, then you would execute
+% \end{sloppypar}%
+% \begin{quote}
+% |python3 -m latexgit.aux myfile|
+% \end{quote}
+% More specifically, the Python package processes the |aux| files, so for a
+% specific |aux|\index{aux} file |myfile.aux|, you could also do:
+% \begin{quote}
+% |python3 -m latexgit.aux myfile.aux|
+% \end{quote}
+%
+% After this, in the next pass of |pdflatex|, |\gitFile| and |\gitUrl| will
+% contain the right paths and URLs.
+%
+%
+% \section{Provided Macros}\label{sec:providedMacros}%
+%
+% Here we discuss the macros that can directly be accessed by the user to make use of the functionality of the |latexgit| package.
+% The implementation of these macros is given in \autoref{sec:implementation} and several examples can be found in \autoref{sec:examples}.
+%
+% \DescribeMacro{\gitLoad}%
+% The macro |\gitLoad|\marg{repositoryURL}\marg{path}\marg{postProcessing} provides a local path to a file from a |git| repository.
+% \begin{itemize}%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/latexgit} or \url{ssh://git@github.com/thomasWeise/latexgit} or any other valid repository URL.%
+% \item[\marg{path}] is then the path to the file within the repository.
+% This could be, for example, |latex/latexgit.dtx|.%
+% \item[\marg{postProcessing}] Can either be empty, in which case the repository is downloaded and the the local path to the file is returned.
+% It can also be shell command, e.g., |head -n 5|.
+% In this case, the contents of the file are piped to |stdin| of the command and the text written to the |stdout| by the command is stored in a file whose path is returned.
+% \end{itemize}%
+% After invoking this command, two new commands will be defined:%
+% \begin{itemize}%
+% \item[gitFile] returns the path to the file that was loaded and/or post-processed.%
+% \item[gitUrl] returns the fully URL to the file in the |git| repository online.
+% This command works for GitHub, but it may not provide the correct URL for other repository types.%
+% \end{itemize}%
+%
+% \subsection{Examples}\label{sec:examples}%
+%
+% Here we provide a set of examples for the use of the package.
+% Each example demonstrates another facet of the package and, at the same time, serves as test case.
+%
+% In order to create some placeholder text in the examples, we use the |lipsum| command from package |lipsum|\index{lipsum}~\cite{H2021LAT1POLIDT}, which prints pseudo-Latin text known as ``Lorem Ipsum'' (see \url{http://en.wikipedia.org/wiki/Lorem_ipsum}).
+%
+% In \autoref{ex:example_1} we place a XXX.
+% The result can be seen in \autoref{ex:example_1:res}.
+% 
+% \lstinputlisting[float,label=ex:example_1,caption={An example using the latexgit package, rendered as \autoref{ex:example_1:res}.}]{examples/example_1.tex}%
+%
+% \begin{figure}%
+% \centering%
+% \strut\hfill\strut%
+% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_1}.
+% }{%
+% \fbox{\includegraphics[page=1,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_1.pdf}}%
+% }%
+% \strut\hfill\strut\hfill\strut%
+% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_1}.
+% }{%
+% \fbox{\includegraphics[page=2,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_1.pdf}}%
+% }%
+% \strut\hfill\strut%
+% \\%
+% \strut\hfill\strut%
+% \subcaptionbox{Page 3 of the pdf compiled from \autoref{ex:example_1}.
+% }{\parbox{\linewidth}{\centering%
+% \fbox{\includegraphics[page=3,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_1.pdf}}%
+% }}%
+% \strut\hfill\strut%
+%
+% \caption{The rendered result of \autoref{ex:example_1} (with trimmed page margins and bottoms).}%
+% \label{ex:example_1:res}%
+% \end{figure}%
+% 
+% \afterpage{\clearpage}%
+%
+% \clearpage%
+%
+%
+% \StopEventually{}
+%
+% \section{Implementation}%
+% \label{sec:implementation}%
+% The names of all internal elements of the package are prefixed with |@latexgit@|.
+% This naming convention should prevent any name clashes with other packages.
+%
+% Our |latexgit| package requires only one other package:%
+% \begin{enumerate}%
+% \item |alphalph|\index{alphalph}~\cite{O2019TAP} is required to translate \TeX\ counters to alphabetic series for counters that are outside of the range~$1\dots26$.
+% Basically, for each file we include from |git|, we store the corresponding local path in a command of the structure |\@latexgit@pathXXX| where the |XXX| is an alphabetical sequence which is increasing in the form ``\alphalph{1},'', ``\alphalph{2},'' \dots, ``\alphalph{25},'' ``\alphalph{26},'' ``\alphalph{27},'' \dots, ``\alphalph{51},'' ``\alphalph{52},'' ``\alphalph{53},'' ``\alphalph{701},'' ``\alphalph{702},''  ``\alphalph{703},''  ``\alphalph{704},'' \dots%
+%
+% \item |filecontents|\index{filecontents}~\cite{P2023TFP} is used to allow us to generate the dummy file on the fly.
+% This package is obsolete for the most recent \LaTeX\ version, where it simply does nothing, but may help us to get our package to work on older systems.
+% \end{enumerate}%
+%    \begin{macrocode}
+\RequirePackage{alphalph}%  Convert counters to alphabetical series.
+\RequirePackage{filecontents}%  Allow us to create the dummy file.
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\newcount\@latexgit@counter%  The counter for the git files included.
+\@latexgit@counter0\relax%    We start the counter at 0.
+%
+% This is the path to the dummy file.
+% The dummy file is created directly below.
+% The dummy file is referenced by all invocations of |\gitFile| until the
+% Python package has been applied to the |.aux| file and has loaded the
+% actual files.
+\edef\@latexgit@dummyPath{\jobname.latexgit.dummy}%  the dummy file
+%
+% Create the dummy file that replaces git files before they are loaded.
+% This file only has one line with one single space.
+\expandafter\begin\expandafter{filecontents*}{\@latexgit@dummyPath}
+
+\end{filecontents*}
+%
+% This command does nothing and is just a placeholder in the aux files.
+\protected\gdef\@latexgit@gitFile#1#2#3{}%
+%    \end{macrocode}
+%
+% \begin{macro}{\gitLoad}
+% The macro |\gitLoad|\marg{repositoryURL}\marg{path}\marg{postProcessing}
+% defines a query to a |git| repository.
+% The query is stored in the |aux| file of the project and carried out by the
+% Python companion package (see \autoref{sec:pythonProgram}).
+% This macro will define two other macros, |\gitFile| and |\gitUrl|.
+% During the first \LaTeX\ build, these macros will return a path to a dummy
+% file which only has a single space character in it followed by a newline and
+% the URL \url{https://example.com}, respectively.
+% As said, |\gitLoad| will store all information in the |aux| file, which then
+% permits the |latexgit| Python package to download (and optionally
+% post-process) the actual file.
+% In the second round of \LaTeX\ building, |\gitFile| and |\gitUrl| will then
+% return the local path to that downloaded file and the actual URL,
+% respectively.%
+%
+% \begin{itemize}%
+%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/latexgit} or
+% \url{ssh://git@github.com/thomasWeise/latexgit} or any other valid
+% repository URL.%
+%
+% \item[\marg{path}] is then the path to the file within the repository.
+% This could be, for example, |latex/latexgit.dtx|.%
+%
+% \item[\marg{postProcessing}] Can either be empty, in which case the
+% repository is downloaded and the the local path to the file is
+% returned.
+% It can also be shell command, e.g., |head -n 5|.
+% In this case, the contents of the file are piped to |stdin| of the command
+% and the text written to the |stdout| by the command is stored in a file
+% whose path is returned.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Define a query to load and post-process a file from a |git| repository.
+%% #1 is the repository URL
+%% #2 is the path to the file inside the repository
+%% #3 is a command through which the file contents should be piped
+%%%   (leave #3 empty to use the file as-is)
+\protected\gdef\gitLoad#1#2#3{%
+\edef\@latexgit@pA{#1}%  fully expand the repository URL
+\edef\@latexgit@pB{#2}%  fully expand the path into the repository
+\edef\@latexgit@pC{#3}%  fully expand the (optional) shell command
+% Write the parameters to the aux file.
+\immediate\write\@mainaux{%
+\noexpand\@latexgit@gitFile{\@latexgit@pA}{\@latexgit@pB}{\@latexgit@pC}}%
+% Increment the counter for command names by 1.
+\advance\@latexgit@counter by 1\relax%
+% We now create the name of the path command based on the structure
+% |\@latexgit@pathXXX| where |XXX| is a alphabetic sequence representing
+% the value of |\@latexgit@counter|
+\edef\@latexgit@pathCmd{@latexgit@path\alphalph{\the\@latexgit@counter}}%
+% If the path command exists, then we store it as |\gitFile|.
+\expandafter\ifcsname\@latexgit@pathCmd\endcsname\relax%
+\xdef\gitFile{\csname\@latexgit@pathCmd\endcsname}%
+\else%
+% But if it does not exist, we assign |\gitFile| to the dummy path.
+\xdef\gitFile{\@latexgit@dummyPath}%
+\fi%  If we get here, the |\gitFile| command holds a valid path.
+% We now create the name of the url command based on the structure
+% |\@latexgit@urlXXX| where |XXX| is a alphabetic sequence representing
+% the value of |\@latexgit@counter|
+\edef\@latexgit@urlCmd{@latexgit@url\alphalph{\the\@latexgit@counter}}%
+% If the url command exists, then we store it as |\gitUrl|.
+\expandafter\ifcsname\@latexgit@urlCmd\endcsname\relax%
+\xdef\gitUrl{\csname\@latexgit@urlCmd\endcsname}%
+\else%
+% But if it does not exist, we store the example url in |\gitUrl|.
+\xdef\gitUrl{http://example.com}%
+\fi%  If we get here, the |\gitUrl| holds a valid URL.
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{thebibliography}{10}
+% \providecommand{\natexlab}[1]{#1}
+% \providecommand{\url}[1]{\texttt{#1}}
+% \expandafter\ifx\csname urlstyle\endcsname\relax
+%   \providecommand{\doi}[1]{doi: #1}\else
+%   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+%
+% \bibitem[Happel(2014)]{H2021LAT1POLIDT}
+% Patrick Happel.%
+% \newblock {\textbf{lipsum}\index{lipsum} -- Access to 150 paragraphs of Lorem ipsum dummy text.}%
+% \newblock \emph{CTAN Comprehensive \TeX\ Archive Network}, \mbox{September 20, 2021}.%
+% \newblock URL \url{http://www.ctan.org/pkg/lipsum}.%
+% 
+% \bibitem[Oberdieck(2019)]{O2019TAP}
+% Heiko Oberdieck.%
+% \newblock {The \textbf{alphalph}\index{alphalph} package}.%
+% \newblock \emph{CTAN Comprehensive \TeX\ Archive Network}, \mbox{2019/12/09 v2.6}.%
+% \newblock URL \url{https://ctan.org/pkg/alphalph}%
+%
+% \bibitem[Pakin(2023)]{P2023TFP}
+% Scott Pakin.
+% \newblock {The \textbf{filecontents} package.}%
+% \newblock \emph{CTAN Comprehensive \TeX\ Archive Network}, \mbox{April 2, 2023}.%
+% \newblock URL \url{https://ctan.org/pkg/filecontents}%
+%
+% \end{thebibliography}
+% \Finale
+\endinput
