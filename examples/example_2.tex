@@ -1,0 +1,41 @@
+\documentclass{article}%
+\usepackage{latexgit}% use our package
+\usepackage{verbatim}% for loading a file verbatim
+\usepackage[colorlinks]{hyperref}%  for printing the URL
+\begin{document}%
+%
+\section{First File}%
+First, we load a file from the GitHub repository
+``\url{https://github.com/thomasWeise/latexgit\_py}'', where the Python complement
+package of our \LaTeX\ package is located. We will then include this file verbatim
+without any modification.
+
+\gitLoad{https://github.com/thomasWeise/latexgit_py}{latexgit/utils/console.py}{}%
+% now, \gitFile and \gitUrl are defined and can be used.
+\verbatiminput{\gitFile}%  print the contents of the file
+The above file was loaded from URL \url{\gitUrl}.%  print the url
+%
+\clearpage\section{Second File}%
+We now load the same file again, but this time retain only the first five lines.
+We do this by specifying that the file contents should be piped through
+``\verb=head -n 5='' before inclusion.
+\gitLoad{https://github.com/thomasWeise/latexgit_py}{%
+latexgit/utils/console.py}{head -n 5}%
+% now, \gitFile and \gitUrl are defined and can be used.
+\verbatiminput{\gitFile}%  print the contents of the file
+The above file was loaded from URL \url{\gitUrl}.%  print the url
+%
+\clearpage\section{Third File}%
+We now load a file from the ``\url{https://github.com/thomasWeise/moptipy}''
+GitHub repository. The contents of this file will be piped through the  Python code
+formatter, which retains only a snippet of the code and removes type hints and
+comments, while keeping the doc strings. (It doesn't really matter what it does,
+it is just postprocessing.)
+\gitLoad{https://github.com/thomasWeise/moptipy}{%
+moptipy/api/encoding.py}{%  3rd argument below: formatter
+python3 -m latexgit.formatters.python --labels book --args doc}%
+% now, \gitFile and \gitUrl are defined and can be used.
+\verbatiminput{\gitFile}%  print the contents of the file
+The above file was loaded from URL \url{\gitUrl}.%  print the url
+%
+\end{document}%

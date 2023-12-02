@@ -70,7 +70,13 @@ build_examples: extract
 	rm example_1.log &&\
 	rm example_1.aux &&\
 	rm example_1.latexgit.dummy &&\
-	rm example_1.out &&\
+	pdflatex example_2.tex &&\
+	python3 -m latexgit.aux example_2 &&\
+	pdflatex example_2.tex &&\
+	rm example_2.log &&\
+	rm example_2.aux &&\
+	rm example_2.latexgit.dummy &&\
+	rm example_2.out &&\
 	rm latexgit.sty &&\
 	cd .. &&\
 	echo "$(NOW): Finished building the examples."

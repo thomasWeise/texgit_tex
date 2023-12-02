@@ -64,6 +64,8 @@ frameround=tttt,%
 backgroundcolor=\color{black!10!yellow!5!white}%
 }%
 %
+\usepackage{placeins}%
+%
 \EnableCrossrefs         
 \CodelineIndex
 \RecordChanges
@@ -110,6 +112,11 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \href{mailto:tweise@hfuu.edu.cn}{tweise@hfuu.edu.cn} $\cdot$ \href{mailto:tweise@ustc.edu.cn}{tweise@hfuu.edu.cn}%
 % }}}%
 % \date{\today}
+%
+% \renewcommand{\textfraction}{0.05}%
+% \renewcommand{\topfraction}{0.85}%
+% \renewcommand{\bottomfraction}{0.95}%
+% \renewcommand{\floatpagefraction}{0.95}%
 %
 % \maketitle
 %
@@ -272,65 +279,130 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % After this, in the next pass of |pdflatex|, |\gitFile| and |\gitUrl| will
 % contain the right paths and URLs.
 %
-%
 % \section{Provided Macros}\label{sec:providedMacros}%
 %
-% Here we discuss the macros that can directly be accessed by the user to make use of the functionality of the |latexgit| package.
-% The implementation of these macros is given in \autoref{sec:implementation} and several examples can be found in \autoref{sec:examples}.
+% Here we discuss the macros that can directly be accessed by the user to
+% make use of the functionality of the |latexgit| package.
+% The implementation of these macros is given in \autoref{sec:implementation}
+% and several examples can be found in \autoref{sec:examples}.
 %
 % \DescribeMacro{\gitLoad}%
-% The macro |\gitLoad|\marg{repositoryURL}\marg{path}\marg{postProcessing} provides a local path to a file from a |git| repository.
+% The macro |\gitLoad|\marg{repositoryURL}\marg{path}\marg{postProcessing}
+% provides a local path to a file from a |git| repository.
 % \begin{itemize}%
 % \item[\marg{repositoryURL}] is the URL of the |git| repository.
-% It could, e.g., be \url{https://github.com/thomasWeise/latexgit} or \url{ssh://git@github.com/thomasWeise/latexgit} or any other valid repository URL.%
+% It could, e.g., be \url{https://github.com/thomasWeise/latexgit} or
+% \url{ssh://git@github.com/thomasWeise/latexgit} or any other valid
+% repository URL.%
+%
 % \item[\marg{path}] is then the path to the file within the repository.
 % This could be, for example, |latex/latexgit.dtx|.%
-% \item[\marg{postProcessing}] Can either be empty, in which case the repository is downloaded and the the local path to the file is returned.
+%
+% \item[\marg{postProcessing}] Can either be empty, in which case the
+% repository is downloaded and the the local path to the file is returned.
 % It can also be shell command, e.g., |head -n 5|.
-% In this case, the contents of the file are piped to |stdin| of the command and the text written to the |stdout| by the command is stored in a file whose path is returned.
+% In this case, the contents of the file are piped to |stdin|\index{stdin} of
+% the command and the text written to the |stdout|\index{stdout} by the
+% command is stored in a file whose path is returned.
 % \end{itemize}%
+%
 % After invoking this command, two new commands will be defined:%
 % \begin{itemize}%
-% \item[gitFile] returns the path to the file that was loaded and/or post-processed.%
-% \item[gitUrl] returns the fully URL to the file in the |git| repository online.
-% This command works for GitHub, but it may not provide the correct URL for other repository types.%
+% \item[\texttt{{\textbackslash}gitFile}] returns the path to the file that was loaded and/or
+% post-processed.%
+% \item[\texttt{{\textbackslash}gitUrl}] returns the fully URL to the file in the |git| repository
+% online.
+% This command works for GitHub, but it may not provide the correct URL for
+% other repository types.%
 % \end{itemize}%
+%
+% \DescribeMacro{\gitFile}%
+% The macro |\gitFile| returns the path to the file with the contents of the
+% latest |\gitLoad| request.
+% During the first |pdflatex| pass, this will be the path to a dummy file.
+% After the Python package has been applied to the |aux| file, then |\gitFile|
+% will point to the proper file during the next |pdflatex| pass.
+%
+%
+% \DescribeMacro{\gitUrl}%
+% The macro |\gitUrl| returns the URL from which the file corresponding to
+% the latest |\gitLoad| request was downloaded.
+% This command is designed to work with GitHub.
+% It will be the repository URL combine with the path of the file inside the
+% repository and the commit has code.
+% The Url thus points to the exact same version of the file that was
+% downloaded (and optionally post-processed).
+%
+% During the first |pdflatex| pass, this will be \url{https://example.com}.
+% After the Python package has been applied to the |aux| file, then
+% |\gitUrl| will point to the proper file during the next |pdflatex| pass.
 %
 % \subsection{Examples}\label{sec:examples}%
 %
 % Here we provide a set of examples for the use of the package.
-% Each example demonstrates another facet of the package and, at the same time, serves as test case.
+% Each example demonstrates another facet of the package and, at the same
+% time, serves as test case.
 %
-% In order to create some placeholder text in the examples, we use the |lipsum| command from package |lipsum|\index{lipsum}~\cite{H2021LAT1POLIDT}, which prints pseudo-Latin text known as ``Lorem Ipsum'' (see \url{http://en.wikipedia.org/wiki/Lorem_ipsum}).
+% \subsection{Minimal Working Example}%
+% This minimal working example shows how to load a file from a |git|
+% repository and directly |\input|\index{input} its contents.
+% The result can be seen in \autoref{ex:example_2:res}.
 %
-% In \autoref{ex:example_1} we place a XXX.
-% The result can be seen in \autoref{ex:example_1:res}.
-% 
-% \lstinputlisting[float,label=ex:example_1,caption={An example using the latexgit package, rendered as \autoref{ex:example_1:res}.}]{examples/example_1.tex}%
+% \lstinputlisting[float,label=ex:example_1,caption={A minimal working example for using the \texttt{latexgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
+% \lstinputlisting[float,label=ex:dummy_tex,caption={The contents of the file \texttt{dummy.tex} included from \texttt{git} in \autoref{ex:example_1}.}]{examples/dummy.tex}%
 %
 % \begin{figure}%
 % \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 9.3in 1.5in 1.6in,clip]{examples/example_1.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_1} (with trimmed page margins and bottom).}%
+% \label{ex:example_1:res}%
+% \end{figure}%
+%
+% The interesting thing is that since we directly |\input| the file, its
+% contents are interpreted as \LaTeX\ code.
+% This means that you could construct a document by inputting files from
+% different |git| repositories.
+%
+% However, this is not the envisioned use case.
+% The envisioned use case is to include source codes and snippets from source
+% codes as listings.
+% We will show how this could be done in the next example.
+% \clearpage%
+%
+% \subsection{Second Example}\FloatBarrier%
+% In \autoref{ex:example_2} we, use |latexgit| to download and present two
+% different files from two different GitHub repositories.
+% We also show how post-processing can work, once using the aforementioned
+% simple |head -n 5| command available in the Linux shell and also by
+% using the Python code formatting tool offered by the |latexgit| Python
+% package.
+% The result can be seen in \autoref{ex:example_2:res}.
+% 
+% \lstinputlisting[float,label=ex:example_2,caption={An example using the latexgit package, rendered as \autoref{ex:example_2:res}.}]{examples/example_2.tex}%
+% \FloatBarrier%
+% \begin{figure}%
+% \centering%
 % \strut\hfill\strut%
-% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_1}.
+% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_2}.
 % }{%
-% \fbox{\includegraphics[page=1,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_1.pdf}}%
+% \fbox{\includegraphics[page=1,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
 % }%
 % \strut\hfill\strut\hfill\strut%
-% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_1}.
+% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_2}.
 % }{%
-% \fbox{\includegraphics[page=2,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_1.pdf}}%
+% \fbox{\includegraphics[page=2,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
 % }%
 % \strut\hfill\strut%
 % \\%
 % \strut\hfill\strut%
-% \subcaptionbox{Page 3 of the pdf compiled from \autoref{ex:example_1}.
+% \subcaptionbox{Page 3 of the pdf compiled from \autoref{ex:example_2}.
 % }{\parbox{\linewidth}{\centering%
-% \fbox{\includegraphics[page=3,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_1.pdf}}%
+% \fbox{\includegraphics[page=3,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
 % }}%
 % \strut\hfill\strut%
 %
-% \caption{The rendered result of \autoref{ex:example_1} (with trimmed page margins and bottoms).}%
-% \label{ex:example_1:res}%
+% \caption{The rendered result of \autoref{ex:example_2} (with trimmed page margins and bottoms).}%
+% \label{ex:example_2:res}%
 % \end{figure}%
 % 
 % \afterpage{\clearpage}%
