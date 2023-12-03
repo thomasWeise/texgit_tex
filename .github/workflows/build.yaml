@@ -11,8 +11,7 @@ jobs:
         with:
           scheme: full
           run: |
-            apk add make python3 py3-pip curl
-            curl https://sh.rustup.rs -sSf | sh
+            apk add make python3 py3-pip rustup
             make
 # deploy to github pages
       - name: deploy documentation
