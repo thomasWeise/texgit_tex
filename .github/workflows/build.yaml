@@ -1,0 +1,16 @@
+name: make build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: xu-cheng/texlive-action@d9f893f837a29f066e3c70080540976b47263721
+        with:
+          scheme: full
+          run: |
+            apk add make python3 python3-pip
+            pip install latexgit
+            make
