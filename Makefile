@@ -98,7 +98,7 @@ build_website: build_documentation
 	mv latexgit.pdf website &&\
 	cp latexgit.dtx website &&\
 	cp latexgit.ins website &&\
-	touch website/.nojekyll &&
+	touch website/.nojekyll &&\
 	echo "$(NOW): Done building the website."
 
 
