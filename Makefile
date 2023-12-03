@@ -21,6 +21,7 @@ status:
 
 pre_clean: status
 	echo "$(NOW): Deleting all temporary, intermediate, and generated files before the build." && \
+    rm -rf website &&\
 	rm latexgit.aux || true &&\
 	rm latexgit.glo || true &&\
 	rm latexgit.gls || true &&\
@@ -90,10 +91,21 @@ build_documentation: extract build_examples
 	pdflatex latexgit.dtx &&\
 	echo "$(NOW): Done building the documentation."
 
+build_website: build_documentation
+	echo "$(NOW): Now building the website." &&\
+	mkdir -p website &&\
+	mv latexgit.sty website &&\
+	mv latexgit.pdf website &&\
+	cp latexgit.dtx website &&\
+	cp latexgit.ins website &&\
+	touch website/.nojekyll &&
+	echo "$(NOW): Done building the website."
+
+
 # The meta-goal for a full build
-build: build_documentation build_examples status pre_clean extract post_clean
+build: build_documentation build_examples build_website status pre_clean extract post_clean
 	echo "$(NOW): The build has completed."
 
 # .PHONY means that the targets init and test are not associated with files.
 # see https://stackoverflow.com/questions/2145590
-.PHONY: build build_documentation build_examples status pre_clean extract post_clean
+.PHONY: build build_documentation build_examples build_website status pre_clean extract post_clean

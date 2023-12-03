@@ -14,3 +14,10 @@ jobs:
             apk add make python3 py3-pip
             pip install latexgit
             make
+# deploy to github pages
+      - name: deploy documentation
+        uses: JamesIves/github-pages-deploy-action@a1ea191d508feb8485aceba848389d49f80ca2dc
+        with:
+          branch: gh-pages
+          folder: /home/runner/work/latexgit_tex/latexgit_tex/website/
+          single-commit: true
