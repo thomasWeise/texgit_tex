@@ -12,7 +12,6 @@ jobs:
           scheme: full
           run: |
             apk add make python3 py3-pip
-            pip install latexgit
             make
 # deploy to github pages
       - name: deploy documentation

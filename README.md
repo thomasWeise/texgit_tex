@@ -10,11 +10,12 @@
 
 `latexgit` is a LaTeX package that works in combination with a [preprocessor](https://thomasweise.github.io/latexgit_py) for accessing files from `git` repositories from `LaTeX`.
 
+## 2. Installation and Usage
 
-## 2. Installation
-
-TODO
-
+1. Install the Python package `latexgit` via `pip install latexgit`.
+2. Download and copy [`latexgit.sty`](https://thomasweise.github.io/latexgit_tex/latexgit.sty) from <https://thomasweise.github.io/latexgit_tex/latexgit.sty> into the folder of your LaTeX project.
+3. Find the usage of the `latexgit` LaTeX package described in [`latexgit.pdf`](https://thomasweise.github.io/latexgit_tex/latexgit.pdf`) at <https://thomasweise.github.io/latexgit_tex/latexgit.pdf>. 
+4. Optionally: Read the [documentation](https://thomasweise.github.io/latexgit_py) of the `latexgit` Python companion at <https://thomasweise.github.io/latexgit_py>.
 
 ## 3. License
 [`latexgit`](https://thomasweise.github.io/latexgit_py) is a tool for accessing files in `git` repositories from `LaTeX`.
