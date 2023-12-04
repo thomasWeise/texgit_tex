@@ -10,7 +10,7 @@
 
 
 ## 1. Introduction
-`latexgit` is a LaTeX package that works in combination with a [preprocessor](https://thomasweise.github.io/latexgit_py) for accessing files from `git` repositories from `LaTeX`.
+`latexgit` is a LaTeX package that works in combination with a [Python companion](https://thomasweise.github.io/latexgit_py) package for accessing files located in `git` repositories from within `LaTeX`.
 It works somewhat like BibTeX:
 In your LaTeX document, you first can define requests to load files from `git` repositories.
 During your first LaTeX compilation, these requests just evaluate to dummy results.
