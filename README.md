@@ -26,6 +26,18 @@ This process is described in detail in the [documentation](https://thomasweise.g
 3. Find the usage of the `latexgit` LaTeX package described in [`latexgit.pdf`](https://thomasweise.github.io/latexgit_tex/latexgit.pdf) at <https://thomasweise.github.io/latexgit_tex/latexgit.pdf>. 
 4. Optionally: Read the [documentation](https://thomasweise.github.io/latexgit_py) of the `latexgit` Python companion at <https://thomasweise.github.io/latexgit_py>.
 
+To sum up things briefly:
+If you use the command `\gitLoad{myRepoUrl}{myFilePath}{myPostProcessor}`, then our package will download the file at path `myFilePath` relative to the root of the `git` repository available at URL `myRepoUrl`.
+If `myPostProcessor` is left empty, the file is provided as-is at the path `\gitFile` which will automatically by defined by `\gitLoad`.
+If not left empty, `myPostProcessor` is executed as command in the shell, the downloaded file is piped into its `stdin`, and whatever the command writes to its `stdout` will become available as file pointed to by `\gitFile`.
+You can then include this file or load it as code listing.
+Again, please read the [documentation](https://thomasweise.github.io/latexgit_tex/latexgit.pdf).
+
+If your main document was stored as `article.tex`, you would build it using (at least) the three following steps:
+1. `pdflatex article`
+2. `python3 -m latexgit.aux article`
+3. `pdflatex article`
+
 ## 3. Files
 Below, we provide a list of files that may be interesting to look at.
 

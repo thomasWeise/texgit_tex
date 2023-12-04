@@ -31,9 +31,8 @@ GitHub repository. The contents of this file will be piped through the  Python c
 formatter, which retains only a snippet of the code and removes type hints and
 comments, while keeping the doc strings. (It doesn't really matter what it does,
 it is just postprocessing.)
-\gitLoad{https://github.com/thomasWeise/moptipy}{%
-moptipy/api/encoding.py}{%  3rd argument below: formatter
-python3 -m latexgit.formatters.python --labels book --args doc}%
+\gitLoad{https://github.com/thomasWeise/moptipy}{moptipy/api/encoding.py}{%
+python3 -m latexgit.formatters.python --labels book --args doc}%  post-processor
 % now, \gitFile and \gitUrl are defined and can be used.
 \verbatiminput{\gitFile}%  print the contents of the file
 The above file was loaded from URL \url{\gitUrl}.%  print the url

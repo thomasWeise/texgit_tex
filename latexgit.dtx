@@ -2,9 +2,14 @@
 %
 % Copyright (C) 2023 by Thomas Weise <http://iao.hfuu.edu.cn/5>
 %
-% This file may be distributed and/or modified under the conditions of the LaTeX Project Public License, either version 1.3 of this license or (at your option) any later version. The latest version of this license is in http://www.latex-project.org/lppl.txt.
-% The license can be found at https://thomasweise.github.io/latexgit_tex/LICENSE.html.
-% This work is author-maintained, i.e., it can only be maintained by Thomas Weise.
+% This file may be distributed and/or modified under the conditions of the
+% LaTeX Project Public License, either version 1.3 of this license or
+% (at your option) any later version. The latest version of this license is in
+% http://www.latex-project.org/lppl.txt.
+% The license can be found at
+% https://thomasweise.github.io/latexgit_tex/LICENSE.html.
+% This work is author-maintained, i.e., it can only be maintained by
+% Thomas Weise.
 % 
 % \fi
 %
@@ -64,6 +69,10 @@ frameround=tttt,%
 backgroundcolor=\color{black!10!yellow!5!white}%
 }%
 %
+%
+\gdef\tindex#1{\expandafter\index{#1}}%
+\gdef\tbindex#1{\expandafter\index{\textbackslash#1}}%
+%
 \usepackage{placeins}%
 %
 \EnableCrossrefs         
@@ -95,7 +104,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %   Grave accent  \`     Left brace    \{     Vertical bar  \|
 %   Right brace   \}     Tilde         \~}
 %
-% \changes{v0.8.0}{2023/11/16}{Initial Draft Version}
+% \changes{v0.8.0}{2023/12/04}{Initial Draft Version}
 %
 % \GetFileInfo{latexgit.dtx}
 %
@@ -123,16 +132,19 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \begin{abstract}
 % This \LaTeX\ package works in combination with the Python package
 % |latexgit|.
-% It offers the command |\gitLoad|\index{|\gitLoad|}, which can load a file
-% from a |git|\index{git} repository, optionally post-process it, and then
-% provide a local path to the file as macro |\gitFile|\index{|\gitFile|} and
-% the URL to the original file in |\gitUrl|\index{|\gitUrl|}.
-% This is achieved by storing the |git| requests in the |aux|\index{aux} file
-% of the project during the first |pdflatex|\index{pdflatex} pass.
+% It offers the command |\gitLoad|\tbindex{gitLoad}, which can load a file
+% from a |git|\tindex{git} repository, optionally post-process it, and then
+% provide a local path to the file as macro |\gitFile|\tbindex{gitFile} and
+% the URL to the original file in |\gitUrl|\tbindex{gitUrl}.
+% Using the |\gitFile| macro, you can then include the file in \LaTeX\
+% directly or load it as source code listing.
+% The functionality is implemented by storing the |git| requests in the
+% |aux|\tindex{aux} file of the project during the first
+% |pdflatex|\tindex{pdflatex} pass.
 % The |aux| file is then processed by the Python package which performs the
 % actual git queries, stores the result in local files, and adds the resolved
 % paths to the |aux| file.
-% During the first |pdflatex|\index{pdflatex} run, |\gitFile| and |\gitUrl|
+% During the first |pdflatex|\tindex{pdflatex} run, |\gitFile| and |\gitUrl|
 % offer dummy results.
 % However, after the resolution via the Python package, in the second
 % |pdflatex| run they then point to the right data.
@@ -144,13 +156,40 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \section{Introduction}%
 %
 % \subsection{Addressed Problem and Use Case}%
-% \LaTeX\ documents can contain source codes from different locations.
-% Especially in computer science, we want to present examples source codes in
-% our lecture scripts or slides.
-% These example codes need to be \emph{correct}.
-% They should compile.
-% However, they often are also just snippets from longer codes.
-% This package addresses the following problem:%
+% Let's say you want to make teaching material in the field of computer
+% science.
+% In a wide variety of computer science fields, you may want to include source
+% code examples in your lecture script or slides.
+% The standard way is to either write some pseudo-code or program-like
+% snippets.
+% Usually these neither compile nor are they maintained well and they are
+% often riddled with mistakes.
+% That is not nice.
+%
+% What we want is to have snippets of ``real'' code.
+% Code that we can compile, unit test, and run.
+% Now such code naturally would not be sprinkled into our \LaTeX\ teaching
+% material sources.
+% That would be a mess to organize and maintain.
+%
+% A natural location for source code examples is a separate |git| repository.
+% Maybe on GitHub, maybe somewhere else.
+% If I wanted to do a lecture on, say, optimization algorithms, I would like to
+% have the optimization algorithms
+% \href{https://thomasweise.github.io/moptipy}{implemented in an actual useful fashion}.
+% I would put them into a repository where I can build and test these real
+% codes as a complete and separate piece of work.
+%
+% Then I want to use them in my lecture scripts (written in \LaTeX) as well.
+% However, I do not want to \emph{copy} them there.
+% I want that my lecture scripts directly reference the |git| repository with
+% the real code.
+% I want them to ``include'' the examples from there.
+% If I change the code in the |git| repository and then re-compile my
+% teaching material, these changes should automatically be reflected there.
+%
+% That is the use case we tackle here.
+% We offer a solution to the question
 %
 % \begin{quote}
 % \emph{``How can we include snippets of code from a separate, complex code basis
@@ -173,16 +212,33 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \section{Usage}%
 % Using the package requires the following steps:
 % \begin{enumerate}%
-% \item Obviously, the package \emph{and} its Python-based postprocessor
-% must be installed (see \autoref{sec:installation}).
+%%
+% \item Obviously, both the
+% \href{https://thomasweise.github.io/latexgit_tex}{\LaTeX\ package}
+% \emph{and} its
+% \href{https://thomasweise.github.io/latexgit_py}{Python companion}
+% package must be installed (see \autoref{sec:installation}).
+%%
 % \item In your document, you need to load the package in the preamble
 % (see \autoref{sec:loadThePackage}).%
+%%
 % \item Then you can make |git| queries and using the paths to files holding
 % their results (see \autoref{sec:gitquery}).
+%%
 % \item Finally, the Python package can carry them out after the first
 % |pdflatex| run and in the next |pdflatex| run, |\gitFile| and |\gitUrl| are
 % defined appropriately, see \autoref{sec:pythonProgram}.
 % \end{enumerate}
+%
+% If your \LaTeX\ document is called |article.tex|, then you have at least the
+% following workflow:%
+% \begin{quote}
+% |pdflatex article|\\
+% |python3 -m latexgit.aux article|\\
+% |pdflatex article|
+% \end{quote}
+%
+% Comprehensive examples are provided in \autoref{sec:examples}.
 %
 % \subsection{Installation}%
 % \label{sec:installation}%
@@ -190,16 +246,28 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \subsubsection{\LaTeX\ Package}%
 % First, make sure that you have the |latexgit.sty| either installed or inside
 % your document's directory.
-% You can download |latexgit.dtx|\index{|latexgit.dtx|} and
-% |latexgit.ins|\index{|latexgit.ins|} from
-% \url{https://github.com/thomasWeise/latexgit_tex}\index{latexgit\_tex} and
-% then execute
+% For this, there are several options:%
+% \begin{enumerate}%
+% \item You can just download the file from
+% \url{https://thomasweise.github.io/latexgit_tex/latexgit.sty} directly.
+% You can now copy it into the folder of your document.
+%%
+% \item You can download |latexgit.dtx|\tindex{latexgit.dtx} and
+% |latexgit.ins|\tindex{latexgit.ins} from
+% \url{https://thomasweise.github.io/latexgit_tex/latexgit.dtx} and
+% \url{https://thomasweise.github.io/latexgit_tex/latexgit.ins}.
+% You can then execute
 % \begin{quote}%
-% |pdflatex latexgit.ins|\index{pdflatex}
+% |pdflatex latexgit.ins|\tindex{pdflatex}
 % \end{quote}%
-% and you should get
-% the style file |latexgit.sty|\index{|latexgit.sty|}.
-% Copy it into your document's folder.
+% and you should get the style file |latexgit.sty|\tindex{latexgit.sty}.
+% You can now copy it into the folder of your document.
+%%
+% \item Or you can download the |latexgit.tds.zip| file from
+% \url{https://thomasweise.github.io/latexgit_tex/latexgit.tds.zip} and
+% unpack it into your \TeX\ tree.
+% If you know what that is.
+% \end{enumerate}%
 %
 % \subsubsection{Python Package}%
 % \label{sec:latexgitpy}%
@@ -219,23 +287,24 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %   |\usepackage{latexgit}|
 % \end{quote}
 % \begin{sloppypar}%
-% Side note: This will automatically load the packages
-% |alphalph|\index{alphalph} and |filecontents|\index{filecontents}, see
-% \autoref{sec:implementation}.
+% The package has no options or parameters.
+% Loading it will automatically load the packages
+% |alphalph|\index{alphalph} and |filecontents|\index{filecontents} as well,
+% see \autoref{sec:implementation}.
 % \end{sloppypar}%
 %
 % \subsection{Querying a File from a git Repository}%
 % \label{sec:gitquery}%
-% To query a file stored at path |thePath| inside from a |git|\index{git}
+% To query a file stored at path |thePath| inside from a |git|\tindex{git}
 % repository available under URL |theUrl|, you would specify the command
 % \begin{quote}
-% |\gitLoad{theUrl}{theFile}{}|\index{|\gitLoad|}
+% |\gitLoad{theUrl}{theFile}{}|\tbindex{gitLoad}
 % \end{quote}
 % After this command is executed, a local path to the file becomes available
-% in the fully-expandable command |\gitFile|\index{|\gitFile|}.
+% in the fully-expandable command |\gitFile|\tbindex{gitFile}.
 % The full URL to the file in the |git| repository, including the current
 % commit id, becomes available in the fully-expandable command
-% |\gitUrl|\index{|\gitUrl|}.
+% |\gitUrl|\tbindex{gitUrl}.
 % Both |\gitFile| and |\gitUrl| will be overwritten every time |\gitLoad| is
 % invoked.
 % You can invoke |\gitLoad| any number of times.
@@ -245,23 +314,23 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % If it is not left empty, this command will be executed in the
 % shell\index{shell}.
 % The contents of the file loaded from the |git| repository will be piped to
-% the |stdin|\index{stdin} of the command.
-% The |stdout|\index{stdout} of the command will be piped to a file and
-% |\gitFile|\index{|\gitFile|} will then contain the path to this file
+% the |stdin|\tindex{stdin} of the command.
+% The |stdout|\tindex{stdout} of the command will be piped to a file and
+% |\gitFile|\tbindex{gitFile} will then contain the path to this file
 % instead.
 % For example, under Linux\index{Linux}, you could use the
 % \href{https://www.man7.org/linux/man-pages/man1/head.1.html}{|head|}\index{head}
 % command to return only the first 5~lines of a file as follows:
 % \begin{quote}
-% |\gitLoad{theUrl}{theFile}{head -n 5}|\index{|\gitLoad|}.
+% |\gitLoad{theUrl}{theFile}{head -n 5}|\tbindex{gitLoad}
 % \end{quote}
 %
 % \subsection{Executing the Python Package}
 % \label{sec:pythonProgram}
 % \begin{sloppypar}%
-% During the first |pdflatex|\index{pdflatex} run, |\gitFile| points to an
+% During the first |pdflatex|\tindex{pdflatex} run, |\gitFile| points to an
 % empty dummy file
-% (|\jobname.latexgit.dummy|)\index{|\jobname.latexgit.dummy|} and
+% (|\jobname.latexgit.dummy|)\tbindex{jobname.latexgit.dummy} and
 % |\gitUrl| points to |http://example.com|\index{http://example.com}.
 % Both commands will only expand to useful information if the Python package
 % |latexgit| is applied to the project's |aux| file.
@@ -272,7 +341,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % |python3 -m latexgit.aux myfile|
 % \end{quote}
 % More specifically, the Python package processes the |aux| files, so for a
-% specific |aux|\index{aux} file |myfile.aux|, you could also do:
+% specific |aux|\tindex{aux} file |myfile.aux|, you could also do:
 % \begin{quote}
 % |python3 -m latexgit.aux myfile.aux|
 % \end{quote}
@@ -302,8 +371,8 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \item[\marg{postProcessing}] Can either be empty, in which case the
 % repository is downloaded and the the local path to the file is returned.
 % It can also be shell command, e.g., |head -n 5|.
-% In this case, the contents of the file are piped to |stdin|\index{stdin} of
-% the command and the text written to the |stdout|\index{stdout} by the
+% In this case, the contents of the file are piped to |stdin|\tindex{stdin} of
+% the command and the text written to the |stdout|\tindex{stdout} by the
 % command is stored in a file whose path is returned.
 % \end{itemize}%
 %
@@ -343,10 +412,20 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % Here we provide a set of examples for the use of the package.
 % Each example demonstrates another facet of the package and, at the same
 % time, serves as test case.
+% The first example given in \autoref{sec:example_1} is a Minimal Working
+% Example, i.e., just provides the barest bones.
+% It shows you how to import a single file from a |git| repository.
+% The second example in \autoref{sec:example_2} shows you how to import
+% multiple different files from different repositories (which equates to just
+% using the same command multiple times) and how to use post-processors.
+% Finally, the third example in \autoref{sec:example_3} shows how to create
+% beautiful (to my standards) listings by including code from a |git|
+% repository, post-processing it, and loading it as a |listing|.
 %
 % \subsection{Minimal Working Example}%
+% \label{sec:example_1}%
 % This minimal working example shows how to load a file from a |git|
-% repository and directly |\input|\index{input} its contents.
+% repository and directly |\input|\expandafter\tbindex{input} its contents.
 % The result can be seen in \autoref{ex:example_2:res}.
 %
 % \lstinputlisting[classoffset=2,morekeywords={A,B,C,D},keywordstyle=\ttfamily\bfseries\color{blue!90!black},classoffset=0,float,label=ex:example_1,caption={A minimal working example for using the \texttt{latexgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
@@ -375,7 +454,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % Well, during the first \LaTeX\ or |pdflatex| run, it just points to a dummy
 % file with the name |\jobname.latexgit.dummy|, where
-% |\jobname|\index{|\jobname|} evaluates to the name of the main \LaTeX\
+% |\jobname|\tbindex{jobname} evaluates to the name of the main \LaTeX\
 % document, say |article| for |article.tex|.
 % At that point, the dummy file's content is a single space character followed
 % by a newline.
@@ -390,15 +469,22 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % This command then downloads the file from |git| and puts it into a path that
 % can locally accessed by \LaTeX.
-% Usually, it will create a folder |__git__|\index{|__git__|} in your
+% Usually, it will create a folder |__git__|\tindex{\_\_git\_\_} in your
 % project's directory and place the file there.
 %
 % Anyway, during the second \LaTeX\ or |pdflatex| pass, |\gitFile| points to a
 % valid file path with actual contents.
-% By doing |\input{\gitFile}|\index{|\input|}, we here include this file
+% By doing |\input{\gitFile}|\tbindex{input}, we here include this file
 % (remember, its contents are given in \autoref{ex:dummy_tex}) as if it was
 % part of our normal \LaTeX\ project.
 % The result of this pass is shown in \autoref{ex:example_1:res}.
+%
+% If this example was stored as |example_1.tex|, then it could be built via
+% \begin{quote}
+% |pdflatex example_1|\\
+% |python3 -m latexgit.aux example_1|\\
+% |pdflatex example_1|
+% \end{quote}
 %
 % \begin{figure}%
 % \centering%
@@ -427,9 +513,18 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % The envisioned use case is to include source codes and snippets from source
 % codes as listings.
 % We will show how this could be done in the next example.
+%
+% Side note: Our Python companion package |latexgit| downloads the |git|
+% repositories into a folder called |__git__|\tindex{\_\_git\_\_} by default.
+% If you do not delete the folder, the same repository will not be downloaded
+% again but the downloaded copy will be used.
+% This significantly increases speed and reduces bandwidth when applying the
+% |latexgit| command several times.
 % \clearpage%
 %
-% \subsection{Second Example}\FloatBarrier%
+% \subsection{The Second Example: Multiple Files and Post-Processing}%
+% \label{sec:example_2}%
+% \FloatBarrier%
 % In \autoref{ex:example_2} we, use |latexgit| to download and present two
 % different files from two different GitHub repositories.
 % We also show how post-processing can work, once using the aforementioned
@@ -440,22 +535,115 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % 
 % \lstinputlisting[float,label=ex:example_2,caption={An example using the latexgit package, rendered as \autoref{ex:example_2:res}.}]{examples/example_2.tex}%
 % \FloatBarrier%
+%
+% The file |example_2.tex| shown in \autoref{ex:example_2} begins by loading
+% our |latexgit| package as well as package |verbatim|, which is later used
+% to display the included files.
+% The document creates three sections, each of which is used to display one
+% imported file.
+%
+% The first section loads one Python source file from our Python companion
+% package \href{https://thomasweise.github.io/latexgit_py}{latexgit\_py}.
+% The sources of this package are available in the GitHub repository
+% \url{https://github.com/thomasWeise/latexgit\_py}.
+% We download the file |latexgit/utils/console.py|, which is just a small
+% utility for printing log strings to the output together with a time mark.
+% The full git request contains these two components.
+%
+% Issuing this request will set the command |\gitFile| to the local file
+% containing the downloaded contents of |latexgit/utils/console.py| from the
+% repository \url{https://github.com/thomasWeise/latexgit\_py}.
+% The command |\gitUrl| will expand to the URL pointing to the downloaded
+% \emph{version} of the file in the original repository.
+% This command, at the present time, is only really valid for GitHub.
+% It builds a URL relative to the original repository based on the commit ID
+% that was valid when the file was downloaded from the repository.
+% Therefore, the URL then points to the \emph{exact same} contents that were
+% put into the file.
+% Anyway, the file contents and the generated URL are displayed in
+% \autoref{ex:example_2:1}.
+%
+% The second section of the example document queries the same file again.
+% However, this time, the third parameter of |\gitLoad| is specified.
+% If the third parameter is left blank, the downloaded file will be provided
+% as-is.
+% However, especially if we would like to include some snippets of a more
+% complex source file, we sometimes do not want to have the complete original
+% contents.
+% In this case, we can specify a post-processing command as third parameter.
+% This command will be executed in the shell\index{shell}
+% The contents of the downloaded file will then be piped into the
+% |stdin|\tindex{stdin} of the command and everything that the command writes
+% to its |stdout|\tindex{stdout} will be collected in a file.
+% |\gitFile| then returns the path to that file.
+%
+% Since you can provide arbitrary commands as post-processors, this allows you
+% to do, well, arbitrary post-processing.
+% This could include re-formatting of code or selecting only specific lines
+% from the file.
+% The command can have arguments, separated by spaces, allowing you to pass
+% information such as line indices or other instructions to your
+% post-processing command.
+%
+% In the example, we use the standard Linux command |head -n 5|, which writes
+% the first five lines that were written to its |stdin| to its |stdout|.
+%
+% The resulting output in \autoref{ex:example_2:2} looks thus similar to
+% \autoref{ex:example_2:1}, but only imports ths first five lines from the
+% downloaded file.
+%
+% If this example was stored as |example_2.tex|, then it could be built via
+% \begin{quote}
+% |pdflatex example_2|\\
+% |python3 -m latexgit.aux example_2|\\
+% |pdflatex example_2|
+% \end{quote}
+%
+% Side note: Such post-processing steps are cached by the Python companion
+% package |latexgit| in the |__git__|\tindex{\_\_git\_\_} folder as well.
+%
+% Finally, in the third section, of \autoref{ex:example_2}, we import a file
+% from the sources of our Python package for metaheuristic optimization
+% (\href{https://thomasweise.github.io/moptipy}{moptipy}).
+% The sources of this package are located on GitHub at
+% \url{https://github.com/thomasWeise/moptipy}.
+% We download the file |moptipy/api/encoding.py|, which offers a convenient
+% API for implementing an \emph{encoding} which translates from the search to
+% the solution space (but that would lead too far here).
+% Either way, this is a file that has lots of content.
+% So we want to select certain contents while ignoring other.
+% We also remove all Python type hints and all comments from the source and
+% then reformat it.
+%
+% Luckily, our |latexgit| Python package also offers a Python code formatter,
+% namely the executable module \href{https://thomasweise.github.io/latexgit_py/latexgit.formatters.html#module-latexgit.formatters.python}{latexgit.formatters.python}.
+% This module takes a set of parameters such as limiting |labels| that denote
+% the start and end of code snippets (in this case, the label ``|book|'') to
+% include as well |args| telling the system which part of the ``omittable''
+% code to preserve (in this case, preserve |doc|strings and delete everything
+% else that is non-essential).
+% If you are interested in such post-processing, feel invited to check out
+% the \href{https://thomasweise.github.io/latexgit_py}{documentation} of the
+% Python companion package at \url{https://thomasweise.github.io/latexgit_py}.
+% Either way, the file is downloaded, piped through this post-processor, and
+% the result is included as shown in \autoref{ex:example_2:3}.
+%
 % \begin{figure}%
 % \centering%
 % \strut\hfill\strut%
-% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_2}.
+% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_2}.\label{ex:example_2:1}%
 % }{%
 % \fbox{\includegraphics[page=1,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
 % }%
 % \strut\hfill\strut\hfill\strut%
-% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_2}.
+% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_2}.\label{ex:example_2:2}%
 % }{%
 % \fbox{\includegraphics[page=2,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
 % }%
 % \strut\hfill\strut%
 % \\%
 % \strut\hfill\strut%
-% \subcaptionbox{Page 3 of the pdf compiled from \autoref{ex:example_2}.
+% \subcaptionbox{Page 3 of the pdf compiled from \autoref{ex:example_2}.\label{ex:example_2:3}%
 % }{\parbox{\linewidth}{\centering%
 % \fbox{\includegraphics[page=3,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
 % }}%
@@ -464,6 +652,62 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \caption{The rendered result of \autoref{ex:example_2} (with trimmed page margins and bottoms).}%
 % \label{ex:example_2:res}%
 % \end{figure}%
+%
+% \FloatBarrier%
+% \subsection{The Third Example: Using the \texttt{listings} Package}%
+% \label{sec:example_3}%
+% \FloatBarrier%
+% Finally, as third example, let us show the interaction with the package
+% |listings|.
+% This is not much different from using the package |verbatim| in the second
+% example above.
+% I just wanted to show you how it looks like.
+% Also, I wanted to show the intended use of |\gitUrl|:
+% You can use it to put some small ``(src)'' link in the listing's caption.
+% This way, you can create teaching material where every listing is linked to
+% the correct version of source code online without splattering long URLs into
+% your text.
+% Anyway.
+% The source code of the third example is given in \autoref{ex:example_3} and
+% the compiled result as \autoref{ex:example_3:res}.
+%
+% \lstinputlisting[float,label=ex:example_3,caption={An example using the \texttt{listings} package, rendered as \autoref{ex:example_3:res}.}]{examples/example_3.tex}%
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.4in 5.6in 1.5in 1.6in,clip]{examples/example_3.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_3} (with trimmed page margins and bottom).}%
+% \label{ex:example_3:res}%
+% \end{figure}%
+%
+% If this example was stored as |example_3.tex|, then it could be built via
+% \begin{quote}
+% |pdflatex example_3|\\
+% |python3 -m latexgit.aux example_3|\\
+% |pdflatex example_3|
+% \end{quote}
+%
+% Side note: If you actually check the \href{https://thomasweise.github.io/moptipy/_modules/moptipy/algorithms/so/rls.html}{source code}
+% of the RLS algorithm, which is linked to by the ``(\href{https://thomasweise.github.io/moptipy/_modules/moptipy/algorithms/so/rls.html}{src})''
+% in the caption of the example and that is displayed in the example, you will
+% find that it actually uses Python type hints.
+% It also has a comprehensive doc-string and is commented well.
+% In source code of a real project, we do want this.
+% In a listing in a book, we do not.
+% The post-processor command
+% \begin{quote}
+% |python3 -m latexgit.formatters.python --labels book|
+% \end{quote}%
+% only keeps the code between the labels ``|# start book|'' and
+% ``|# end book|.''
+% It also removes all non-essential stuff such as type hints, comments, and
+% the doc-string.
+% Then it re-formats the code to save space.
+% Again, check out the documentation of our |latexgit| Python companion
+% package at \url{https://thomasweise.github.io/latexgit_py}.
+% This is the main intended use case of our package:
+% Be able to have nicely documented ``real'' code and to use parts of it
+% in teaching materials.
 % 
 % \afterpage{\clearpage}%
 %

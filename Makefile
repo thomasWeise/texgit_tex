@@ -89,6 +89,13 @@ build_examples: extract python_dependencies
 	rm example_2.aux &&\
 	rm example_2.latexgit.dummy &&\
 	rm example_2.out &&\
+	pdflatex example_3.tex &&\
+	python3 -m latexgit.aux example_3 &&\
+	pdflatex example_3.tex &&\
+	rm example_3.log &&\
+	rm example_3.aux &&\
+	rm example_3.latexgit.dummy &&\
+	rm example_3.out &&\
 	rm latexgit.sty &&\
 	cd .. &&\
 	echo "$(NOW): Finished building the examples."
