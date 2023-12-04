@@ -34,6 +34,7 @@ You can then include this file or load it as code listing.
 Again, please read the [documentation](https://thomasweise.github.io/latexgit_tex/latexgit.pdf).
 
 If your main document was stored as `article.tex`, you would build it using (at least) the three following steps:
+
 1. `pdflatex article`
 2. `python3 -m latexgit.aux article`
 3. `pdflatex article`
