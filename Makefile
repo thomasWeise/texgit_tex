@@ -141,7 +141,7 @@ build_tds: build_documentation build_website
 	echo "$(NOW): Now creating latexgit.tds.zip."
 	export tempDir=`mktemp -d` &&\
 	export oldDir="$(CWD)" &&\
-	echo "$(NOW): Created temp directory '$$tempDir'. Creating virtual environment." &&\
+	echo "$(NOW): Created temp directory '$$tempDir'. Now building tds." &&\
 	mkdir -p "$$tempDir/tex/latex/latexgit/" &&\
 	cp website/latexgit.sty "$$tempDir/tex/latex/latexgit/" &&\
 	mkdir -p "$$tempDir/doc/latex/latexgit/" &&\
