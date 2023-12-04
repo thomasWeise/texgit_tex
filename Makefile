@@ -50,7 +50,7 @@ python_dependencies: pre_clean
 	pip freeze &&\
 	echo "$(NOW): Finished printing all installed packages."
 
-post_clean: extract build_documentation build_examples build_website pre_clean python_dependencies status
+post_clean: extract build_documentation build_examples build_tds build_website pre_clean python_dependencies status
 	echo "$(NOW): Deleting all temporary and intermediate files after the build." && \
 	rm latexgit.aux &&\
 	rm latexgit.glo &&\
@@ -115,12 +115,13 @@ build_website: build_documentation
 	pygmentize -f html -l make -O full -O style=default -o website/Makefile.html Makefile &&\
 	echo "$(NOW): Finished creating additional files, now building index.html from README.md." &&\
 	export PART_A='<!DOCTYPE html><html><title>' &&\
-	export PART_B='</title><body>' &&\
+	export PART_B='</title><body style="margin-left:5%;margin-right:5%">' &&\
 	export PART_C='</body></html>' &&\
 	export BASE_URL='https\:\/\/thomasweise\.github\.io\/latexgit_tex\/' &&\
-	echo "$${PART_A}Contributing to latexgit$${PART_B}$(shell (python3 -m markdown -o html ./README.md))$$PART_C" > ./website/index.html &&\
+	echo "$${PART_A}latexgit $(VERSION)$${PART_B}$(shell (python3 -m markdown -o html ./README.md))$$PART_C" > ./website/index.html &&\
 	sed -i "s/\"$$BASE_URL/\".\//g" ./website/index.html &&\
 	sed -i "s/=$$BASE_URL/=.\//g" ./website/index.html &&\
+	sed -i "s/<\/h1>/<\/h1><h2>version\&nbsp;$(VERSION) build on\&nbsp;$(NOW)<\/h2>/g" ./website/index.html &&\
 	echo "$(NOW): Finished copying README.md to index.html, now minifying all files." &&\
 	cd "website/" &&\
 	find -type f -name "*.html" -exec python3 -c "print('{}');import minify_html;f=open('{}','r');s=f.read();f.close();s=minify_html.minify(s,do_not_minify_doctype=True,ensure_spec_compliant_unquoted_attribute_values=True,keep_html_and_head_opening_tags=False,minify_css=True,minify_js=True,remove_bangs=True,remove_processing_instructions=True);f=open('{}','w');f.write(s);f.close()" \; &&\
@@ -130,13 +131,37 @@ build_website: build_documentation
 	mv latexgit.pdf website &&\
 	cp latexgit.dtx website &&\
 	cp latexgit.ins website &&\
+	cp Makefile website &&\
+	cp requirements.txt website &&\
+	cp requirements-dev.txt website &&\
 	touch website/.nojekyll &&\
 	echo "$(NOW): Done building the website."
 
+build_tds: build_documentation build_website
+	echo "$(NOW): Now creating latexgit.tds.zip."
+	export tempDir=`mktemp -d` &&\
+	export oldDir="$(CWD)" &&\
+	echo "$(NOW): Created temp directory '$$tempDir'. Creating virtual environment." &&\
+	mkdir -p "$$tempDir/tex/latex/latexgit/" &&\
+	cp website/latexgit.sty "$$tempDir/tex/latex/latexgit/" &&\
+	mkdir -p "$$tempDir/doc/latex/latexgit/" &&\
+	cp README.md "$$tempDir/doc/latex/latexgit/" &&\
+	cp website/index.html "$$tempDir/doc/latex/latexgit/README.html" &&\
+	cp website/latexgit.pdf "$$tempDir/doc/latex/latexgit/" &&\
+	mkdir -p "$$tempDir/source/latex/latexgit/" &&\
+	cp latexgit.ins "$$tempDir/source/latex/latexgit/" &&\
+	cp latexgit.dtx "$$tempDir/source/latex/latexgit/" &&\
+	cd "$$tempDir" &&\
+	zip -9 -r "latexgit.tds.zip" tex doc source &&\
+	mv "latexgit.tds.zip" "$$oldDir/website" &&\
+	rm -rf "$$tempDir" &&\
+	cd "$$oldDir" &&\
+	echo "$(NOW): Done building latexgit.tds.zip."
+
 # The meta-goal for a full build
-build: build_documentation build_examples build_website extract status pre_clean post_clean python_dependencies
+build: build_documentation build_examples build_tds build_website extract status pre_clean post_clean python_dependencies
 	echo "$(NOW): The build has completed."
 
 # .PHONY means that the targets init and test are not associated with files.
 # see https://stackoverflow.com/questions/2145590
-.PHONY: build build_documentation build_examples build_website extract status pre_clean post_clean python_dependencies
+.PHONY: build build_documentation build_examples build_tds build_website extract status pre_clean post_clean python_dependencies

@@ -3,7 +3,7 @@
 % Copyright (C) 2023 by Thomas Weise <http://iao.hfuu.edu.cn/5>
 %
 % This file may be distributed and/or modified under the conditions of the LaTeX Project Public License, either version 1.3 of this license or (at your option) any later version. The latest version of this license is in http://www.latex-project.org/lppl.txt.
-% The license can be found at https://thomasweise.github.io/latexgit/LICENSE.html.
+% The license can be found at https://thomasweise.github.io/latexgit_tex/LICENSE.html.
 % This work is author-maintained, i.e., it can only be maintained by Thomas Weise.
 % 
 % \fi
@@ -202,6 +202,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % Copy it into your document's folder.
 %
 % \subsubsection{Python Package}%
+% \label{sec:latexgitpy}%
 % The Python\index{Python} package is available at
 % \url{https://github.com/thomasWeise/latexgit_py}\index{latexgit\_py},
 % \url{https://thomasweise.github.io/latexgit_py}, and
@@ -348,8 +349,56 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % repository and directly |\input|\index{input} its contents.
 % The result can be seen in \autoref{ex:example_2:res}.
 %
-% \lstinputlisting[float,label=ex:example_1,caption={A minimal working example for using the \texttt{latexgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
+% \lstinputlisting[classoffset=2,morekeywords={A,B,C,D},keywordstyle=\ttfamily\bfseries\color{blue!90!black},classoffset=0,float,label=ex:example_1,caption={A minimal working example for using the \texttt{latexgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
+%
+% As you can see in \autoref{ex:example_1}, we first load the package
+% |latexgit| in line~2.
+% Inside the document, we define a |git| request via the |\gitLoad| command.
+% This command takes the URL of a |git| repository as first parameter.
+% in this case, this is \url{https://github.com/thomasWeise/latexgit_tex},
+% which happens to be the URL where you can find the repository of this
+% package on GitHub.
+% The second parameter is a path to the file in this repository relative to
+% the repository root.
+% In this case, this is the path to the file |examples/dummy.tex|, whose
+% contents you can find in \autoref{ex:dummy_tex}.
+%
 % \lstinputlisting[float,label=ex:dummy_tex,caption={The contents of the file \texttt{dummy.tex} included from \texttt{git} in \autoref{ex:example_1}.}]{examples/dummy.tex}%
+%
+% The third parameter shall be ignored for now.
+%
+% After defining the request, we can now use two commands, |\gitFile| and
+% |\gitUrl|.
+% In this Minimal Working Example, we shall only consider the first one.
+% This command expands to a local path of a file with the contents downloaded
+% from the |git| repository.
+%
+% Well, during the first \LaTeX\ or |pdflatex| run, it just points to a dummy
+% file with the name |\jobname.latexgit.dummy|, where
+% |\jobname|\index{|\jobname|} evaluates to the name of the main \LaTeX\
+% document, say |article| for |article.tex|.
+% At that point, the dummy file's content is a single space character followed
+% by a newline.
+%
+% After the first |pdflatex| pass, you can apply the Python\index{Python}
+% processor (see \autoref{sec:latexgitpy}) as follows:
+% \begin{quote}%
+% |python3 -m latexgit.aux jobname|
+% \end{quote}%
+% Where |jobname| shall be replaced with the main file name, again |article|
+% for |article.tex|, for instance.
+%
+% This command then downloads the file from |git| and puts it into a path that
+% can locally accessed by \LaTeX.
+% Usually, it will create a folder |__git__|\index{|__git__|} in your
+% project's directory and place the file there.
+%
+% Anyway, during the second \LaTeX\ or |pdflatex| pass, |\gitFile| points to a
+% valid file path with actual contents.
+% By doing |\input{\gitFile}|\index{|\input|}, we here include this file
+% (remember, its contents are given in \autoref{ex:dummy_tex}) as if it was
+% part of our normal \LaTeX\ project.
+% The result of this pass is shown in \autoref{ex:example_1:res}.
 %
 % \begin{figure}%
 % \centering%
@@ -358,8 +407,19 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \label{ex:example_1:res}%
 % \end{figure}%
 %
-% The interesting thing is that since we directly |\input| the file, its
-% contents are interpreted as \LaTeX\ code.
+% If we look back at the \autoref{ex:example_1} of our main file, you will
+% notice the four blue marks {\bfseries\color{blue!90!black}A},
+% {\bfseries\color{blue!90!black}B}, {\bfseries\color{blue!90!black}C}, and
+% {\bfseries\color{blue!90!black}D}.
+% These are just normal letters, colored and emphasized for your convenience.
+% I put them there so that you can see where the action takes place.
+% |\gitLoad| produces no output, so ``ABC'' come out next to each other.
+% |\input{\gitFile}| between {\bfseries\color{blue!90!black}C} and
+% {\bfseries\color{blue!90!black}D} loads and directly includes the example
+% file, so this is where its content appear.
+%
+% One small interesting thing is that, since we directly |\input| the file,
+% its contents are interpreted as \LaTeX\ code.
 % This means that you could construct a document by inputting files from
 % different |git| repositories.
 %
@@ -414,16 +474,28 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % \section{Implementation}%
 % \label{sec:implementation}%
-% The names of all internal elements of the package are prefixed with |@latexgit@|.
+% The names of all internal elements of the package are prefixed
+% with |@latexgit@|.
 % This naming convention should prevent any name clashes with other packages.
 %
 % Our |latexgit| package requires only one other package:%
 % \begin{enumerate}%
-% \item |alphalph|\index{alphalph}~\cite{O2019TAP} is required to translate \TeX\ counters to alphabetic series for counters that are outside of the range~$1\dots26$.
-% Basically, for each file we include from |git|, we store the corresponding local path in a command of the structure |\@latexgit@pathXXX| where the |XXX| is an alphabetical sequence which is increasing in the form ``\alphalph{1},'', ``\alphalph{2},'' \dots, ``\alphalph{25},'' ``\alphalph{26},'' ``\alphalph{27},'' \dots, ``\alphalph{51},'' ``\alphalph{52},'' ``\alphalph{53},'' ``\alphalph{701},'' ``\alphalph{702},''  ``\alphalph{703},''  ``\alphalph{704},'' \dots%
+% \item |alphalph|\index{alphalph}~\cite{O2019TAP} is required to translate
+% \TeX\ counters to alphabetic series for counters that are outside of the
+% range~$1\dots26$.
+% Basically, for each file we include from |git|, we store the corresponding
+% local path in a command of the structure |\@latexgit@pathXXX| where the
+% |XXX| is an alphabetical sequence which is increasing in the form
+% ``\alphalph{1},'', ``\alphalph{2},'' \dots, ``\alphalph{25},''
+% ``\alphalph{26},'' ``\alphalph{27},'' \dots, ``\alphalph{51},''
+% ``\alphalph{52},'' ``\alphalph{53},'' ``\alphalph{701},''
+% ``\alphalph{702},''  ``\alphalph{703},''  ``\alphalph{704},'' \dots%
 %
-% \item |filecontents|\index{filecontents}~\cite{P2023TFP} is used to allow us to generate the dummy file on the fly.
-% This package is obsolete for the most recent \LaTeX\ version, where it simply does nothing, but may help us to get our package to work on older systems.
+% \item |filecontents|\index{filecontents}~\cite{P2023TFP} is used to allow us
+% to generate the dummy file on the fly.
+% This package is obsolete for the most recent \LaTeX\ version, where it
+% simply does nothing, but may help us to get our package to work on older
+% systems.
 % \end{enumerate}%
 %    \begin{macrocode}
 \RequirePackage{alphalph}%  Convert counters to alphabetical series.
@@ -447,7 +519,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 
 \end{filecontents*}
 %
-% This command does nothing and is just a placeholder in the aux files.
+% This command does nothing and is just a placeholder in the |aux| files.
 \protected\gdef\@latexgit@gitFile#1#2#3{}%
 %    \end{macrocode}
 %
@@ -535,12 +607,6 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %   \providecommand{\doi}[1]{doi: #1}\else
 %   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 %
-% \bibitem[Happel(2014)]{H2021LAT1POLIDT}
-% Patrick Happel.%
-% \newblock {\textbf{lipsum}\index{lipsum} -- Access to 150 paragraphs of Lorem ipsum dummy text.}%
-% \newblock \emph{CTAN Comprehensive \TeX\ Archive Network}, \mbox{September 20, 2021}.%
-% \newblock URL \url{http://www.ctan.org/pkg/lipsum}.%
-% 
 % \bibitem[Oberdieck(2019)]{O2019TAP}
 % Heiko Oberdieck.%
 % \newblock {The \textbf{alphalph}\index{alphalph} package}.%
