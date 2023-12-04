@@ -1,3 +1,5 @@
+[![make build](https://github.com/thomasWeise/latexgit_tex/actions/workflows/build.yaml/badge.svg)](https://github.com/thomasWeise/latexgit_tex/actions/workflows/build.yaml)
+
 # latexgit: Accessing Git Repositories from LaTeX
 
 - [Introduction](#1-introduction)
@@ -20,24 +22,24 @@ This process is described in detail in the [documentation](https://thomasweise.g
 
 ## 2. Installation and Usage
 1. Install the Python package `latexgit` via `pip install latexgit`
-2. Download and copy [`latexgit.sty`](https://thomasweise.github.io/latexgit_tex/latexgit.sty) from <https://thomasweise.github.io/latexgit_tex/latexgit.sty> into the folder of your LaTeX project *or* unpack [`latexgit.tds.zip`](https://thomasweise.github.io/latexgit.tds.zip) into your TeX tree<sup>[1](https://ctan.org/TDS-guidelines)</sup> as described [here](https://texfaq.org/FAQ-inst-tds-zip) or [here](https://tex.stackexchange.com/questions/30307). 
+2. Download and copy [`latexgit.sty`](https://thomasweise.github.io/latexgit_tex/latexgit.sty) from <https://thomasweise.github.io/latexgit_tex/latexgit.sty> into the folder of your LaTeX project *or* unpack [`latexgit.tds.zip`](https://thomasweise.github.io/latexgit_tex/latexgit.tds.zip) into your TeX tree<sup>[1](https://ctan.org/TDS-guidelines)</sup> as described [here](https://texfaq.org/FAQ-inst-tds-zip) or [here](https://tex.stackexchange.com/questions/30307). 
 3. Find the usage of the `latexgit` LaTeX package described in [`latexgit.pdf`](https://thomasweise.github.io/latexgit_tex/latexgit.pdf) at <https://thomasweise.github.io/latexgit_tex/latexgit.pdf>. 
 4. Optionally: Read the [documentation](https://thomasweise.github.io/latexgit_py) of the `latexgit` Python companion at <https://thomasweise.github.io/latexgit_py>.
 
 ## 3. Files
 Below, we provide a list of files that may be interesting to look at.
 
-1. `latexgit.dtx` is the main source file of the package [[html](https://thomasweise.github.io/latexgit_dtx.html)] | [[raw](https://thomasweise.github.io/latexgit.dtx)]
-2. `latexgit.ins` is the installation script of the package [[html](https://thomasweise.github.io/latexgit_ins.html)] | [[raw](https://thomasweise.github.io/latexgit.ins)]
-3. `latexgit.sty` is the compiled style file [[html](https://thomasweise.github.io/latexgit_sty.html)] | [[raw](https://thomasweise.github.io/latexgit.sty)]
-4. [`latexgit.tds.zip`](https://thomasweise.github.io/latexgit.tds.zip) is a [TDS packaged](https://ctan.org/TDS-guidelines) version of our package.
+1. `latexgit.dtx` is the main source file of the package [[html](https://thomasweise.github.io/latexgit_tex/latexgit_dtx.html)] | [[raw](https://thomasweise.github.io/latexgit_tex/latexgit.dtx)]
+2. `latexgit.ins` is the installation script of the package [[html](https://thomasweise.github.io/latexgit_tex/latexgit_ins.html)] | [[raw](https://thomasweise.github.io/latexgit_tex/latexgit.ins)]
+3. `latexgit.sty` is the compiled style file [[html](https://thomasweise.github.io/latexgit_tex/latexgit_sty.html)] | [[raw](https://thomasweise.github.io/latexgit_tex/latexgit.sty)]
+4. [`latexgit.tds.zip`](https://thomasweise.github.io/latexgit_tex/latexgit.tds.zip) is a [TDS packaged](https://ctan.org/TDS-guidelines) version of our package.
    In other words, it is an <em>a `.zip` file that is ready to unzip into a user's TeX tree</em><sup>[1](https://ctan.org/TDS-guidelines)</sup>.
    This may be done as described [here](https://texfaq.org/FAQ-inst-tds-zip) or [here](https://tex.stackexchange.com/questions/30307).
-5. [`latexgit.pdf`](https://thomasweise.github.io/latexgit.pdf) is the documentation of the package [[pdf](https://thomasweise.github.io/latexgit.pdf)]
-6. [`LICENSE.html`](https://thomasweise.github.io/LICENSE.html) holds the license information for the package [[html](https://thomasweise.github.io/LICENSE.html)]
-7. `Makefile` is the make file with the build process [[html](https://thomasweise.github.io/Makefile.html)] | [[raw](https://thomasweise.github.io/Makefile)]
-8. `requirements.txt` holds the Python requirements for using the package [[html](https://thomasweise.github.io/requirements.html)] | [[txt](https://thomasweise.github.io/requirements.txt)]
-9. `requirements-dev.txt` holds the Python requirements for building the package [[html](https://thomasweise.github.io/requirements-dev.html)] | [[txt](https://thomasweise.github.io/requirements-dev.txt)]
+5. [`latexgit.pdf`](https://thomasweise.github.io/latexgit_tex/latexgit.pdf) is the documentation of the package [[pdf](https://thomasweise.github.io/latexgit_tex/latexgit.pdf)]
+6. [`LICENSE.html`](https://thomasweise.github.io/latexgit_tex/LICENSE.html) holds the license information for the package [[html](https://thomasweise.github.io/latexgit_tex/LICENSE.html)]
+7. `Makefile` is the make file with the build process [[html](https://thomasweise.github.io/latexgit_tex/Makefile.html)] | [[raw](https://thomasweise.github.io/latexgit_tex/Makefile)]
+8. `requirements.txt` holds the Python requirements for using the package [[html](https://thomasweise.github.io/latexgit_tex/requirements.html)] | [[txt](https://thomasweise.github.io/latexgit_tex/requirements.txt)]
+9. `requirements-dev.txt` holds the Python requirements for building the package [[html](https://thomasweise.github.io/latexgit_tex/requirements-dev.html)] | [[txt](https://thomasweise.github.io/latexgit_tex/requirements-dev.txt)]
 
 ## 4. License
 [`latexgit`](https://thomasweise.github.io/latexgit_py) is a tool for accessing files in `git` repositories from `LaTeX`.

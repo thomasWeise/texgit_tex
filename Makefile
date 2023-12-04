@@ -115,7 +115,7 @@ build_website: build_documentation
 	pygmentize -f html -l make -O full -O style=default -o website/Makefile.html Makefile &&\
 	echo "$(NOW): Finished creating additional files, now building index.html from README.md." &&\
 	export PART_A='<!DOCTYPE html><html><title>' &&\
-	export PART_B='</title><body style="margin-left:5%;margin-right:5%">' &&\
+	export PART_B='</title><style>code {background-color:rgb(204 210 95 / 0.3);white-space:nowrap;border-radius:3px}</style><body style="margin-left:5%;margin-right:5%">' &&\
 	export PART_C='</body></html>' &&\
 	export BASE_URL='https\:\/\/thomasweise\.github\.io\/latexgit_tex\/' &&\
 	echo "$${PART_A}latexgit $(VERSION)$${PART_B}$(shell (python3 -m markdown -o html ./README.md))$$PART_C" > ./website/index.html &&\
