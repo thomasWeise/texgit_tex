@@ -44,9 +44,9 @@ export PYTHON_INTERPRETER="$venvDir/bin/python3"
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Setting python interpreter to '$PYTHON_INTERPRETER'."
 
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Initialization: first install required packages from requirements.txt."
-pip install --no-input --timeout 360 --retries 100 -r requirements.txt && ## nosem \
+pip install --no-input --timeout 360 --retries 100 -r requirements.txt
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished installing required packages from requirements.txt, now installing packages required for development from requirements-dev.txt."
-pip install --no-input --timeout 360 --retries 100 -r requirements-dev.txt && ## nosem \
+pip install --no-input --timeout 360 --retries 100 -r requirements-dev.txt
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished installing requirements from requirements-dev.txt, now printing all installed packages."
 pip freeze
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished printing all installed packages."
