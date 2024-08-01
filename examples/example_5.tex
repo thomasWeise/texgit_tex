@@ -1,0 +1,18 @@
+\documentclass{article}%
+\usepackage{latexgit}% use our package
+\usepackage{xcolor}% to be able to use colors
+\usepackage[colorlinks]{hyperref}%  for printing the URL
+\usepackage{listings}% importing external code
+\lstset{language={},basicstyle=\small\ttfamily,%
+numbers=left,numberstyle=\tiny,frame=shadowbox,frameround=tttt,%
+backgroundcolor=\color{black!10!yellow!5!white}}%
+%
+\begin{document}%
+%
+Check the output of a simple command in \autoref{lst:out}:
+%
+\gitExec{}{}{python3 --version}%
+\lstinputlisting[float,label={lst:out},caption={%
+The result of \texttt{python3 {-}{-} version}.}]{\gitFile}
+%
+\end{document}%

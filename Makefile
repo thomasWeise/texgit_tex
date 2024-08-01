@@ -103,6 +103,20 @@ build_examples: extract python_dependencies
 	rm example_4.aux &&\
 	rm example_4.latexgit.dummy &&\
 	rm example_4.out &&\
+	pdflatex example_5.tex &&\
+	python3 -m latexgit.aux example_5 &&\
+	pdflatex example_5.tex &&\
+	rm example_5.log &&\
+	rm example_5.aux &&\
+	rm example_5.latexgit.dummy &&\
+	rm example_5.out &&\
+	pdflatex example_6.tex &&\
+	python3 -m latexgit.aux example_6 &&\
+	pdflatex example_6.tex &&\
+	rm example_6.log &&\
+	rm example_6.aux &&\
+	rm example_6.latexgit.dummy &&\
+	rm example_6.out &&\
 	rm latexgit.sty &&\
 	cd .. &&\
 	echo "$(NOW): Finished building the examples."

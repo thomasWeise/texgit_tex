@@ -842,8 +842,6 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % (if the example code from \autoref{ex:example_4} was stored in a file called
 % |example_4.tex|, that is.)
 %
-% \FloatBarrier%
-%
 % \begin{figure}%
 % \centering%
 % \strut\hfill\strut%
@@ -859,6 +857,65 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \strut\hfill\strut%
 % \caption{The rendered result of \autoref{ex:example_4} (with trimmed page margins and bottoms).}%
 % \label{ex:example_4:res}%
+% \end{figure}%
+%
+% \FloatBarrier%
+% \subsection{The Fifth Example: Capturing the Output of a Program}%
+% \label{sec:example_5}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_5,caption={An example of capturing the output of a program, rendered as \autoref{ex:example_5:res}.}]{examples/example_5.tex}%
+%
+% The goal of the fifth example is to show that we can capture the output of
+% a program.
+% In \autoref{ex:example_5}, we just invoke |python3 --version| and capture
+% the output in a file.
+% We then load this file as listing.
+% The results are shown in \autoref{ex:example_5:res}% and can be obtained via
+% \begin{quote}
+% |pdflatex example_5|\\
+% |python3 -m latexgit.aux example_5|\\
+% |pdflatex example_5|
+% \end{quote}
+% (if the example code from \autoref{ex:example_5} was stored in a file called
+% |example_5.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 7.9in 1.5in 1.8in,clip]{examples/example_5.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_5} (with trimmed page margins and bottoms).}%
+% \label{ex:example_5:res}%
+% \end{figure}%
+%
+%
+% \FloatBarrier%
+% \subsection{The Sixth Example: Capturing the Output of a Program Executed Inside a git Repository}%
+% \label{sec:example_6}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_6,caption={An example of capturing the output of a program executed inside a git repository, rendered as \autoref{ex:example_6:res}.}]{examples/example_5.tex}%
+%
+% The goal of the fifth example is to show that we can capture the output of
+% a program -- but this time we execute it inside a git repository.
+% In \autoref{ex:example_6}, we invoke a program which is part of the examples
+% suite of the \href{https://github.com/thomasWeise/pycommons}{pycommons}
+% utility package.
+% We capture its standard output in a file.
+% We then load this file as listing.
+% The results are shown in \autoref{ex:example_6:res}% and can be obtained via
+% \begin{quote}
+% |pdflatex example_6|\\
+% |python3 -m latexgit.aux example_6|\\
+% |pdflatex example_6|
+% \end{quote}
+% (if the example code from \autoref{ex:example_6} was stored in a file called
+% |example_6.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 7.5in 1.5in 1.8in,clip]{examples/example_6.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_6} (with trimmed page margins and bottoms).}%
+% \label{ex:example_6:res}%
 % \end{figure}%
 %
 % \afterpage{\clearpage}%
@@ -917,6 +974,8 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % This command does nothing and is just a placeholder in the |aux| files.
 \protected\gdef\@latexgit@gitFile#1#2#3{}%
+% This command as well.
+\protected\gdef\@latexgit@process#1#2#3{}%
 %    \end{macrocode}
 %
 % \begin{macro}{\gitLoad}
