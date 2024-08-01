@@ -6,5 +6,4 @@
 # You can find it at https://thomasweise.github.io/latexgit_py,
 # https://github.com/thomasWeise/latexgit_py, or at
 # https://pypi.org/project/latexgit.
-latexgit == 0.8.2
-
+latexgit == 0.8.14

@@ -1,6 +1,6 @@
 % \iffalse meta-comment
 %
-% Copyright (C) 2023 by Thomas Weise <http://iao.hfuu.edu.cn/5>
+% Copyright (C) 2023--2024 by Thomas Weise <http://iao.hfuu.edu.cn/5>
 %
 % This file may be distributed and/or modified under the conditions of the
 % LaTeX Project Public License, either version 1.3 of this license or
@@ -19,11 +19,12 @@
 \ProvidesFile{latexgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{latexgit}[2023/12/05 0.8.1 A version with slightly improved documentation.]%
+%<package>\ProvidesPackage{latexgit}[2023/12/05 0.8.2 Improved latexgit.tds.zip.]%
+%<package>\ProvidesPackage{latexgit}[2024/08/01 0.8.3 Supporting arbitrary commands.]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{latexgit}[2014/06/17]
+\usepackage{latexgit}[2024/08/01]
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -106,6 +107,8 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % \changes{0.8.0}{2023/12/04}{initial draft version}
 % \changes{0.8.1}{2023/12/05}{slightly improved documentation}
+% \changes{0.8.2}{2023/12/05}{improved latexgit.tds.zip}
+% \changes{0.8.3}{2024/08/01}{supporting arbitrary commands}
 %
 % \GetFileInfo{latexgit.dtx}
 %
@@ -139,6 +142,12 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % the URL to the original file in |\gitUrl|\tbindex{gitUrl}.
 % Using the |\gitFile| macro, you can then include the file in \LaTeX\
 % directly or load it as source code listing.
+% It also offers the command |\gitExec|\tbindex{gitExec}, which can execute
+% an arbitrary command, either in the current directory or inside a directory
+% of a |git|\tindex{git} repository and fetch the standard output into a
+% local file, the path to which is made available to the file again as macro
+% |\gitFile|\tbindex{gitFile} and the URL to the repository in which the
+% command was executed becomes |\gitUrl|\tbindex{gitUrl}.
 % The functionality is implemented by storing the |git| requests in the
 % |aux|\tindex{aux} file of the project during the first
 % |pdflatex|\tindex{pdflatex} pass.
@@ -197,6 +206,10 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % (located in a |git| repository) into our \LaTeX\ documents?''}
 % \end{quote}
 %
+% Additionally, sometimes we want to execute the code from that repository and
+% capture the standard output. This output could then be displayed as listing
+% next to the code. This package also provides this functionality.
+%
 % \subsection{Provided Functionality}%
 % \label{sec:functionality}%
 % It does so by offering a combination of a \LaTeX\ package (this package
@@ -206,9 +219,15 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % (its second argument) from a specific |git| repository (its first argument)
 % and, optionally, pipe the file contents through a program for
 % post-processing (the third argument, which can be left empty).
-% Such requests are stored in the |aux| file during the first |pdflatex| pass,
-% then resolved by the Python program, and their results become available in
-% the second |pdflatex| pass via the commands |\gitFile| and |\gitUrl|.
+% It also provides the command |\gitExec|, which, too, has three arguments.
+% This time, the first two arguments (the git repository URL and the path to
+% a directory inside the repository in which the command should be executed)
+% can be left empty. The third argument, however, is the command line to be
+% executed whose standard output should be fetched.
+% Both types of  requests are stored in the |aux| file during the first
+% |pdflatex| pass, then resolved by the Python program, and their results
+% become available in the second |pdflatex| pass via the commands |\gitFile|
+% and |\gitUrl|.
 %
 % \section{Usage}%
 % Using the package requires the following steps:
@@ -296,18 +315,19 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % \subsection{Querying a File from a git Repository}%
 % \label{sec:gitquery}%
-% To query a file stored at path |thePath| inside from a |git|\tindex{git}
-% repository available under URL |theUrl|, you would specify the command
+% To query a file stored at path |path| inside from a |git|\tindex{git}
+% repository available under URL |repositoryURL|, you would specify the
+% command
 % \begin{quote}
-% |\gitLoad{theUrl}{theFile}{}|\tbindex{gitLoad}
+% |\gitLoad{repositoryURL}{path}{}|\tbindex{gitLoad}
 % \end{quote}
 % After this command is executed, a local path to the file becomes available
 % in the fully-expandable command |\gitFile|\tbindex{gitFile}.
 % The full URL to the file in the |git| repository, including the current
 % commit id, becomes available in the fully-expandable command
 % |\gitUrl|\tbindex{gitUrl}.
-% Both |\gitFile| and |\gitUrl| will be overwritten every time |\gitLoad| is
-% invoked.
+% Both |\gitFile| and |\gitUrl| will be overwritten every time |\gitLoad| or
+% |\gitExec| (see later) are invoked.
 % You can invoke |\gitLoad| any number of times.
 %
 % The third parameter, left empty in the above example, can specify an
@@ -323,8 +343,38 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \href{https://www.man7.org/linux/man-pages/man1/head.1.html}{|head|}\index{head}
 % command to return only the first 5~lines of a file as follows:
 % \begin{quote}
-% |\gitLoad{theUrl}{theFile}{head -n 5}|\tbindex{gitLoad}
+% |\gitLoad{repositoryURL}{path}{head -n 5}|\tbindex{gitLoad}
 % \end{quote}
+%
+% \subsection{Executing a Command (optionally inside a git Repository}%
+% \label{sec:gitexec}%
+% Sometimes, we want to execute a program and fetch its standard output.
+% \begin{quote}
+% |\gitExec{repositoryURL}{path}{theCommand}|\tbindex{gitExec}
+% \end{quote}
+% The most common use case of our package is that you want to execute a
+% program which is part of a |git| repository.
+% In this case, you would put the URL of the repository in |repositoryURL|
+% and the relative path to the directory inside the repository in which the
+% command should be invoked as |path|.
+% If you want to invoke the command in the root folder of the repository,
+% put |.| as |path|.
+% The |theCommand| then holds the command line to be executed.
+% \emph{Notice:}~You can also leave \emph{both} |repositoryURL| and
+% |path| blank.
+% In this case, the command is executed in the current folder.
+% (The use case for this is to fetch the output of stuff like
+% |python3 --version|.)
+% Anyway, after this command is executed, a local path to the file with the
+% captured standard output becomes available in the fully-expandable command
+% |\gitFile|\tbindex{gitFile}.
+% If the command was executed in a |git| repository, then the URL to the |git|
+% repository becomes available in the fully-expandable command
+% |\gitUrl|\tbindex{gitUrl} (otherwise, this command expands to the empty
+% string).
+% Both |\gitFile| and |\gitUrl| will be overwritten every time |\gitLoad| or
+% |\gitExec| are invoked.
+% You can invoke |\gitLoad| any number of times.
 %
 % \subsection{Executing the Python Package}
 % \label{sec:pythonProgram}
@@ -379,9 +429,51 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % After invoking this command, two new commands will be defined:%
 % \begin{itemize}%
-% \item[\texttt{{\textbackslash}gitFile}] returns the path to the file that was loaded and/or
-% post-processed.%
-% \item[\texttt{{\textbackslash}gitUrl}] returns the fully URL to the file in the |git| repository
+% \item[\texttt{{\textbackslash}gitFile}] returns the path to the file
+% that was loaded and/or post-processed.%
+% \item[\texttt{{\textbackslash}gitUrl}] returns the full URL to the
+% file in the |git| repository
+% online.
+% This command works for GitHub, but it may not provide the correct URL for
+% other repository types.%
+% \end{itemize}%
+%
+% \DescribeMacro{\gitExec}%
+% The macro |\gitExec|\marg{repositoryURL}\marg{path}\marg{theCommand}
+% provides a local path to a file containing the captures standard output
+% of a command (that may have been executed inside a directory inside a
+% |git| repository).
+% \begin{itemize}%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/latexgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/latexgit\_tex} or any other valid
+% repository URL.
+% You can also leave this parameter empty if no |git| repository should
+% be used.%
+%
+% \item[\marg{path}] is the path to a directory within the repository.
+% This could be, for example, |latex| or |.|.
+% If |path| is provided, then this will be the working directory where
+% the command is executed.
+% If you want to execute a command in the root directory of a |git|
+% repository, you can put |.| here.
+%
+% \item[\marg{theCommand}] This is the command which should be executed.
+% If |repositoryURL| and |path| are provided, then the repository will be
+% downloaded and |path| will be resolved relative to the repository root
+% directory. |theCommand| will then be executed in this directory.
+% If neither |repositoryURL| nor |path| are provided, |theCommand| is
+% executed in the current directory.
+% Either way, its |stdout|\tindex{stdout} is captured in a file whose path
+% is returned.
+% \end{itemize}%
+%
+% After invoking this command, two new commands will be defined:%
+% \begin{itemize}%
+% \item[\texttt{{\textbackslash}gitFile}] returns the path to the file
+% in which the standard output is stored.%
+% \item[\texttt{{\textbackslash}gitUrl}] returns the full URL to the |git|
+% repository, if any was specified, or the empty string otherwise.
 % online.
 % This command works for GitHub, but it may not provide the correct URL for
 % other repository types.%
@@ -389,7 +481,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % \DescribeMacro{\gitFile}%
 % The macro |\gitFile| returns the path to the file with the contents of the
-% latest |\gitLoad| request.
+% latest |\gitLoad| or |\gitExec| request.
 % During the first |pdflatex| pass, this will be the path to a dummy file.
 % After the Python package has been applied to the |aux| file, then |\gitFile|
 % will point to the proper file during the next |pdflatex| pass.
@@ -398,6 +490,8 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \DescribeMacro{\gitUrl}%
 % The macro |\gitUrl| returns the URL from which the file corresponding to
 % the latest |\gitLoad| request was downloaded.
+% Alternatively, it returns the URL of the |git| repository of the last
+% |\gitExec| invocation.
 % This command is designed to work with GitHub.
 % It will be the repository URL combine with the path of the file inside the
 % repository and the commit has code.
@@ -736,7 +830,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % the |git| repository.
 % In \autoref{ex:example_4}, we can then simply call |\moptipySrc| and it will
 % do the whole process of loading a file from the right repository,
-% post-processing it, putting a floatin listing, and even putting a small
+% post-processing it, putting a floating listing, and even putting a small
 % ``(\href{https://thomasweise.github.io/moptpiy}{src})'' into the caption of
 % the listing.
 % The results are shown in \autoref{ex:example_4:res}% and can be obtained via
@@ -899,6 +993,83 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 }%
 %    \end{macrocode}
 % \end{macro}
+%
+% \begin{macro}{\gitExec}
+% The macro |\gitExec|\marg{repositoryURL}\marg{path}\marg{theCommand}
+% defines a command to be executed either inside a |git| repository or
+% in the current directory.
+% The query is stored in the |aux| file of the project and carried out by the
+% Python companion package (see \autoref{sec:pythonProgram}).
+% This macro will define two other macros, |\gitFile| and |\gitUrl|.
+% During the first \LaTeX\ build, these macros will return a path to a dummy
+% file which only has a single space character in it followed by a newline and
+% the URL \url{https://example.com}, respectively.
+% As said, |\gitExec| will store all information in the |aux| file, which then
+% permits the |latexgit| Python package to download (and optionally
+% post-process) the actual file.
+% In the second round of \LaTeX\ building, |\gitFile| and |\gitUrl| will then
+% return the local path to the file with the standard output of the executed
+% command and the URL to the |git| repository, respectively.%
+%
+% \begin{itemize}%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/latexgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/latexgit\_tex} or any other valid
+% repository URL.%
+% You can leave this argument empty if you want to execute the command in the
+% current directory.
+%
+% \item[\marg{path}] is then the path to the directory within the repository.
+% This could be, for example, |latex|.
+% The command is executed at this directory.
+% Use |.| for the repository root.
+% Leave this empty if no repository is used.
+%
+% \item[\marg{gitExec}] The command line to be executed.
+% It can also be shell command, e.g., |python3 --version|.
+% The standard output produced by this command is captured as file.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Define a query to execute a command, optionally in a |git| repository.
+%% #1 is the repository URL, or empty if no repository is needed
+%% #2 is the path to a directory inside the repository or empty
+%% #3 is a command to be executed
+\protected\gdef\gitExec#1#2#3{%
+\edef\@latexgit@pA{#1}%  fully expand the repository URL
+\edef\@latexgit@pB{#2}%  fully expand the path into the repository
+\edef\@latexgit@pC{#3}%  fully expand the (optional) shell command
+% Write the parameters to the aux file.
+\immediate\write\@mainaux{%
+\noexpand\@latexgit@process{\@latexgit@pA}{\@latexgit@pB}{\@latexgit@pC}}%
+% Increment the counter for command names by 1.
+\advance\@latexgit@counter by 1\relax%
+% We now create the name of the path command based on the structure
+% |\@latexgit@pathXXX| where |XXX| is a alphabetic sequence representing
+% the value of |\@latexgit@counter|
+\edef\@latexgit@pathCmd{@latexgit@path\alphalph{\the\@latexgit@counter}}%
+% If the path command exists, then we store it as |\gitFile|.
+\expandafter\ifcsname\@latexgit@pathCmd\endcsname\relax%
+\xdef\gitFile{\csname\@latexgit@pathCmd\endcsname}%
+\else%
+% But if it does not exist, we assign |\gitFile| to the dummy path.
+\xdef\gitFile{\@latexgit@dummyPath}%
+\fi%  If we get here, the |\gitFile| command holds a valid path.
+% We now create the name of the url command based on the structure
+% |\@latexgit@urlXXX| where |XXX| is a alphabetic sequence representing
+% the value of |\@latexgit@counter|
+\edef\@latexgit@urlCmd{@latexgit@url\alphalph{\the\@latexgit@counter}}%
+% If the url command exists, then we store it as |\gitUrl|.
+\expandafter\ifcsname\@latexgit@urlCmd\endcsname\relax%
+\xdef\gitUrl{\csname\@latexgit@urlCmd\endcsname}%
+\else%
+% But if it does not exist, we store the empty url in |\gitUrl|.
+\xdef\gitUrl{}%
+\fi%  If we get here, the |\gitUrl| holds a valid URL or is empty.
+}%
+%    \end{macrocode}
+% \end{macro}
+%
 %
 %
 % \begin{thebibliography}{10}

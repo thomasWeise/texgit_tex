@@ -165,6 +165,8 @@ build_tds: build_documentation build_website
 	mkdir -p "$$tempDir/source/latex/latexgit/" &&\
 	cp latexgit.ins "$$tempDir/source/latex/latexgit/" &&\
 	cp latexgit.dtx "$$tempDir/source/latex/latexgit/" &&\
+	mkdir -p "$$tempDir/source/latex/latexgit/examples" &&\
+	cp examples/*.tex "$$tempDir/source/latex/latexgit/examples" &&\
 	cd "$$tempDir" &&\
 	zip -9 -r "latexgit.tds.zip" tex doc source &&\
 	mv "latexgit.tds.zip" "$$oldDir/website" &&\
