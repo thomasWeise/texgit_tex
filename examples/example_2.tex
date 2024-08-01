@@ -10,7 +10,7 @@ First, we load a file from the GitHub repository
 package of our \LaTeX\ package is located. We will then include this file verbatim
 without any modification.
 
-\gitLoad{https://github.com/thomasWeise/latexgit_py}{latexgit/utils/console.py}{}%
+\gitLoad{https://github.com/thomasWeise/pycommons}{pycommons/io/console.py}{}%
 % now, \gitFile and \gitUrl are defined and can be used.
 \verbatiminput{\gitFile}%  print the contents of the file
 The above file was loaded from URL \url{\gitUrl}.%  print the url
@@ -19,8 +19,8 @@ The above file was loaded from URL \url{\gitUrl}.%  print the url
 We now load the same file again, but this time retain only the first five lines.
 We do this by specifying that the file contents should be piped through
 ``\verb=head -n 5='' before inclusion.
-\gitLoad{https://github.com/thomasWeise/latexgit_py}{%
-latexgit/utils/console.py}{head -n 5}%
+\gitLoad{https://github.com/thomasWeise/pycommons}{%
+pycommons/io/console.py}{head -n 5}%
 % now, \gitFile and \gitUrl are defined and can be used.
 \verbatiminput{\gitFile}%  print the contents of the file
 The above file was loaded from URL \url{\gitUrl}.%  print the url
