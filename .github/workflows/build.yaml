@@ -12,7 +12,7 @@ jobs:
           scheme: full
           run: |
             apk add make python3 py3-pip rust cargo zip
-            make
+            ./make.sh
 # deploy to github pages
       - name: deploy documentation
         uses: JamesIves/github-pages-deploy-action@a1ea191d508feb8485aceba848389d49f80ca2dc

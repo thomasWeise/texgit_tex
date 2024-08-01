@@ -50,7 +50,7 @@ Below, we provide a list of files that may be interesting to look at.
    This may be done as described [here](https://texfaq.org/FAQ-inst-tds-zip) or [here](https://tex.stackexchange.com/questions/30307).
 5. [`latexgit.pdf`](https://thomasweise.github.io/latexgit_tex/latexgit.pdf) is the documentation of the package [[pdf](https://thomasweise.github.io/latexgit_tex/latexgit.pdf)]
 6. [`LICENSE.html`](https://thomasweise.github.io/latexgit_tex/LICENSE.html) holds the license information for the package [[html](https://thomasweise.github.io/latexgit_tex/LICENSE.html)]
-7. `Makefile` is the make file with the build process [[html](https://thomasweise.github.io/latexgit_tex/Makefile.html)] | [[raw](https://thomasweise.github.io/latexgit_tex/Makefile)]
+7. `make.sh` is the make script with the build process [[html](https://thomasweise.github.io/latexgit_tex/make.html)] | [[raw](https://thomasweise.github.io/latexgit_tex/make.sh)]
 8. `requirements.txt` holds the Python requirements for using the package [[html](https://thomasweise.github.io/latexgit_tex/requirements.html)] | [[txt](https://thomasweise.github.io/latexgit_tex/requirements.txt)]
 9. `requirements-dev.txt` holds the Python requirements for building the package [[html](https://thomasweise.github.io/latexgit_tex/requirements-dev.html)] | [[txt](https://thomasweise.github.io/latexgit_tex/requirements-dev.txt)]
 
