@@ -11,7 +11,7 @@ jobs:
         with:
           scheme: full
           run: |
-            apk add make python3 py3-pip rust cargo zip
+            apk add libc6-dev make python3 py3-pip rust cargo zip
             ./make.sh
 # deploy to github pages
       - name: deploy documentation
