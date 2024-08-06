@@ -100,6 +100,13 @@ rm example_6.log
 rm example_6.aux
 rm example_6.latexgit.dummy
 rm example_6.out
+pdflatex example_7.tex
+python3 -m latexgit.aux example_7
+pdflatex example_7.tex
+rm example_7.log
+rm example_7.aux
+rm example_7.latexgit.dummy
+rm example_7.out
 rm latexgit.sty
 cd ..
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished building the examples."

@@ -1,0 +1,30 @@
+\documentclass{article}%
+\usepackage{latexgit}% use our package
+\usepackage{xcolor}% to be able to use colors
+\usepackage[colorlinks]{hyperref}%  for printing the URL
+\usepackage{listings}% importing external code
+\lstset{language={},basicstyle=\tiny,literate={π}{{$\pi$}}1,%
+numbers=left,numberstyle=\tiny,frame=shadowbox,frameround=tttt,%
+backgroundcolor=\color{black!10!yellow!5!white}}%
+%
+\begin{document}%
+%
+Check the output of three programs executed inside a git
+repository in \autoref{lst:out1}, \autoref{lst:out2}, and \autoref{lst:out3}:
+%
+\gitExec{https://github.com/thomasWeise/pycommons}{examples}{python3 temp.py}%
+\lstinputlisting[label={lst:out1},caption={%
+The result of command executed inside a git repository.}]{\gitFile}
+%
+\gitExec{https://github.com/thomasWeise/programmingWithPythonCode}{%
+00_veryFirstProject}{python3 very_first_program.py}%
+\lstinputlisting[label={lst:out2},caption={%
+The first program, which prints ``Hello World!''.}]{\gitFile}
+%
+\gitExec{https://github.com/thomasWeise/programmingWithPythonCode}{%
+01_variables}{python3 pi_liu_hui.py}%
+\lstinputlisting[label={lst:out3},caption={%
+The second program, which uses LIU Hui's method to approximate~$\pi$.}]{%
+\gitFile}
+%
+\end{document}%
