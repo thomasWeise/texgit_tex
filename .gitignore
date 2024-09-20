@@ -8,6 +8,7 @@
 *.toc
 *.fmt
 *.fot
+*.hd
 *.cb
 *.cb2
 .*.lb
