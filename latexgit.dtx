@@ -19,11 +19,11 @@
 \ProvidesFile{latexgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{latexgit}[2024/08/07 0.8.5 Improved Examples.]%
+%<package>\ProvidesPackage{latexgit}[2024/09/20 0.8.6 Documentation for the Case of Virtual Environments.]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{latexgit}[2024/08/01]
+\usepackage{latexgit}[2024/09/20]
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -110,6 +110,7 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 % \changes{0.8.3}{2024/08/01}{supporting arbitrary commands via the new latexgit\_py version}
 % \changes{0.8.4}{2024/08/02}{improved build process}
 % \changes{0.8.5}{2024/08/07}{improved examples: added an example with multiple git command results}
+% \changes{0.8.6}{2024/09/20}{the use case of virtual environments in conjunction with the latexgit Python package of version 0.8.17 or greater is documented}
 %
 % \GetFileInfo{latexgit.dtx}
 %
@@ -400,6 +401,30 @@ backgroundcolor=\color{black!10!yellow!5!white}%
 %
 % After this, in the next pass of |pdflatex|, |\gitFile| and |\gitUrl| will
 % contain the right paths and URLs.
+%
+% \subsection{A Note on Virtual Environments}%
+% The following only applies if you have installed this package inside a virtual
+% environment. It also only applies in conjunction with version
+% \href{https://pypi.org/project/latexgit/0.8.17/}{0.8.17} or newer of the latexgit
+% Python package.
+%
+% If you are running this package inside a virtual environment, it is important
+% that you create this environment using the |--copies| setting and \emph{not} using
+% the (default) |--symlinks| parameter.
+% In other words, you should have created the virtual environment as follows,
+% where |venvDir| is the directory inside of which the virtual environment is
+% created.
+%
+% \begin{center}
+% |python3 -m venv --copies venvDir|
+% \end{center}
+%
+% If you create the environment like this (and activated), then our package will
+% automatically pick it up and use its Python interpreter for any invocation of
+% |python3| or |python3.x| (where |x| is the minor version of the interpreter).
+% If you use the |--symlinks| parameter to create the environment, then invocations
+% of the Python interpreter from our package may instead result in the system's
+% Python interpreter.
 %
 % \section{Provided Macros}\label{sec:providedMacros}%
 %
