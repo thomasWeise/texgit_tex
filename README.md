@@ -27,9 +27,9 @@ This process is described in detail in the [documentation](https://thomasweise.g
 4. Optionally: Read the [documentation](https://thomasweise.github.io/latexgit_py) of the `latexgit` Python companion at <https://thomasweise.github.io/latexgit_py>.
 
 To sum up things briefly:
-If you use the command `\gitLoad{myRepoUrl}{myFilePath}{myPostProcessor}`, then our package will download the file at path `myFilePath` relative to the root of the `git` repository available at URL `myRepoUrl`.
-If `myPostProcessor` is left empty, the file is provided as-is at the path `\gitFile` which will automatically by defined by `\gitLoad`.
-If not left empty, `myPostProcessor` is executed as command in the shell, the downloaded file is piped into its `stdin`, and whatever the command writes to its `stdout` will become available as file pointed to by `\gitFile`.
+If you use the command `\gitLoad{id}{myRepoUrl}{myFilePath}{myPostProcessor}`, then our package will download the file at path `myFilePath` relative to the root of the `git` repository available at URL `myRepoUrl`.
+If `myPostProcessor` is left empty, the file is provided as-is at the path `\gitFile{id}`.
+If not left empty, `myPostProcessor` is executed as command in the shell, the downloaded file is piped into its `stdin`, and whatever the command writes to its `stdout` will become available as file pointed to by `\gitFile{id}`.
 You can then include this file or load it as code listing.
 Again, please read the [documentation](https://thomasweise.github.io/latexgit_tex/latexgit.pdf).
 
