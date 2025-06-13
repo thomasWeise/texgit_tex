@@ -15,7 +15,7 @@ for i in range(1000):  # Draw 1000 almost-random ellipses
 # Write some text.
 pdf.set_font("helvetica", style="B", size=60)  # Set the font.
 pdf.set_text_color(255, 255, 255)  # Set text color to white.
-pdf.cell(200, 10 * i, text="Hello World!", align="C")
+pdf.cell(200, 10, text="Hello World!", align="C")
 
 # Here is the important part! argv[1] is our \gitArg result!
 pdf.output(argv[1])     # Save the PDF to the specified file.
