@@ -4,7 +4,8 @@
 \usepackage[colorlinks]{hyperref}%  for printing the URL
 \usepackage{listings}% importing external code
 \lstset{language={},basicstyle=\tiny,%
-numbers=left,numberstyle=\tiny,frame=shadowbox,frameround=tttt,%
+breaklines=true,numbers=left,numberstyle=\tiny,%
+frame=shadowbox,frameround=tttt,%
 backgroundcolor=\color{black!10!yellow!5!white}}%
 %
 \begin{document}%
@@ -12,8 +13,8 @@ backgroundcolor=\color{black!10!yellow!5!white}}%
 Check the output of a command executed inside a git
 repository in \autoref{lst:out}:
 %
-\gitExec{https://github.com/thomasWeise/pycommons}{examples}{python3 temp.py}%
+\gitExec{R9}{https://github.com/thomasWeise/pycommons}{examples}{python3 temp.py}%
 \lstinputlisting[float,label={lst:out},caption={%
-The result of command executed inside a git repository.}]{\gitFile}
+The result of command executed inside a git repository.}]{\gitFile{R9}}
 %
 \end{document}%

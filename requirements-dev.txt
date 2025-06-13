@@ -3,10 +3,10 @@
 #
 
 # minify_html is needed to minify html output.
-minify_html == 0.15.0
+minify_html == 0.16.4
 
 # for converting the additional markdown files to HTML
-markdown == 3.7
+markdown == 3.8
 
 # for converting files to HTML
-Pygments == 2.18.0
+Pygments == 2.19.1

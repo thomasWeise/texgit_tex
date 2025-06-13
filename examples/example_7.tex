@@ -5,26 +5,26 @@
 \usepackage{listings}% importing external code
 \lstset{language={},basicstyle=\tiny,literate={π}{{$\pi$}}1,%
 numbers=left,numberstyle=\tiny,frame=shadowbox,frameround=tttt,%
-backgroundcolor=\color{black!10!yellow!5!white}}%
+breaklines=true,backgroundcolor=\color{black!10!yellow!5!white}}%
 %
 \begin{document}%
 %
 Check the output of three programs executed inside a git
 repository in \autoref{lst:out1}, \autoref{lst:out2}, and \autoref{lst:out3}:
 %
-\gitExec{https://github.com/thomasWeise/pycommons}{examples}{python3 temp.py}%
+\gitExec{R10}{https://github.com/thomasWeise/pycommons}{examples}{python3 temp.py}%
 \lstinputlisting[label={lst:out1},caption={%
-The result of command executed inside a git repository.}]{\gitFile}
+The result of command executed inside a git repository.}]{\gitFile{R10}}
 %
-\gitExec{https://github.com/thomasWeise/programmingWithPythonCode}{%
-00_veryFirstProject}{python3 very_first_program.py}%
+\gitExec{R11}{https://github.com/thomasWeise/programmingWithPythonCode}{%
+veryFirstProject}{python3 very_first_program.py}%
 \lstinputlisting[label={lst:out2},caption={%
-The first program, which prints ``Hello World!''.}]{\gitFile}
+The first program, which prints ``Hello World!''.}]{\gitFile{R11}}
 %
-\gitExec{https://github.com/thomasWeise/programmingWithPythonCode}{%
-03_conditionals}{python3 if_elif_example.py}%
+\gitExec{R12}{https://github.com/thomasWeise/programmingWithPythonCode}{%
+conditionals}{python3 if_elif_example.py}%
 \lstinputlisting[label={lst:out3},caption={%
 The second program with if end else-if.}]{%
-\gitFile}
+\gitFile{R12}}
 %
 \end{document}%

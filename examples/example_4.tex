@@ -11,15 +11,16 @@ numbers=left,numberstyle=\tiny,frame=shadowbox,frameround=tttt,%
 backgroundcolor=\color{black!10!yellow!5!white}}%
 %
 \gdef\moptipySrc#1#2#3{%
-\gitLoad{https://github.com/thomasWeise/moptipy}{moptipy/#3}{%
+\gitLoad{#1}{https://github.com/thomasWeise/moptipy}{moptipy/#3}{%
 python3 -m latexgit.formatters.python --labels book}%
-\lstinputlisting[float,label={#1},caption={#2~(\href{\gitUrl}{src})}]{\gitFile}}
+\lstinputlisting[float,label={#1},caption={%
+#2~(\href{\gitUrl{#1}}{src})}]{\gitFile{#1}}}
 %
 \begin{document}%
 %
-Behold the beautiful \autoref{a} and \autoref{b}.%
+Behold the beautiful \autoref{R6} and \autoref{R7}.%
 %
-\moptipySrc{a}{Randomized Sampling}{algorithms/random_sampling.py}
-\moptipySrc{b}{Randomized Local Search}{algorithms/so/rls.py}
+\moptipySrc{R6}{Randomized Sampling}{algorithms/random_sampling.py}
+\moptipySrc{R7}{Randomized Local Search}{algorithms/so/rls.py}
 %
 \end{document}%
