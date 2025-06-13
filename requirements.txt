@@ -6,4 +6,4 @@
 # You can find it at https://thomasweise.github.io/latexgit_py,
 # https://github.com/thomasWeise/latexgit_py, or at
 # https://pypi.org/project/latexgit.
-latexgit == 0.9.1
+latexgit == 0.9.2

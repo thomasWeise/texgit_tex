@@ -193,6 +193,11 @@ literate=%
 % This way, we can, for example, instruct a program to create a graphic
 % and store it in a certain file that we can later load from
 % |\gitFile{id}|\tbindex{gitFile}.
+% \item |\gitIf{id}{ifDone}{ifNotDone}| executes the code |ifDone| starting
+% in the second |pdflatex| pass, i.e., after the Python |latexgit| package has
+% been applied to the |aux| file generated during the first |pdflatex| pass.
+% During the first |pdflatex| pass and before the Python |latexgit| package
+% was applied, |ifNotDone| will be executed.
 % \end{itemize}
 % The functionality of the package is implemented by storing the |git|
 % requests in the |aux|\tindex{aux} file of the project during the first
@@ -605,7 +610,8 @@ literate=%
 %
 % \DescribeMacro{\gitFile}%
 % The macro |\gitFile|\marg{id} returns the path to the file with the
-% contents of the |\gitLoad|, |\gitExec|, or |\gitArg| request using ID~|id|.
+% contents of the |\gitLoad{id}...|, |\gitExec{id}....|, or
+% |\gitArg{id}...| request using ID~|id|.
 % During the first |pdflatex| pass, this will be the path to a dummy file.
 % After the Python package has been applied to the |aux| file, then
 % |\gitFile{id}| will point to the proper file during the next |pdflatex|
@@ -613,19 +619,36 @@ literate=%
 %
 %
 % \DescribeMacro{\gitUrl}%
-% The macro |\gitUrl| returns the URL from which the file corresponding to
-% the latest |\gitLoad| request was downloaded.
-% Alternatively, it returns the URL of the |git| repository of the last
-% |\gitExec| invocation.
+% The macro |\gitUrl|\marg{id} returns the URL from which the file
+% corresponding to the |\gitLoad{id}...| request was downloaded.
 % This command is designed to work with GitHub.
 % It will be the repository URL combine with the path of the file inside the
 % repository and the commit has code.
 % The Url thus points to the exact same version of the file that was
 % downloaded (and optionally post-processed).
 %
-% During the first |pdflatex| pass, this will be \url{https://example.com}.
-% After the Python package has been applied to the |aux| file, then
-% |\gitUrl| will point to the proper file during the next |pdflatex| pass.
+%
+% \DescribeMacro{\gitIf}%
+% The macro |\gitIf|\marg{id}{ifDone}{ifNotDone} executes the code provided as
+% |ifDone| if the request with ID~|id| has already been executed and completed
+% by the |latexgit| Python package.
+% Otherwise, it will execute the code provided as |ifNotDone|.
+% As stated before, during the first |pdflatex| pass, all results of
+% |\gitFile| and |\gitUrl| are dummies, either empty files or dummy URLs.
+% However, some \LaTeX\ commands cannot deal with that.
+% For example, say that we execute a program to generate a PDF graphic and
+% store it in an argument file.
+% During the first |pdflatex| run, this file is empty.
+% If we try to |\includegraphics| it, this will crash.
+% So we would place the |\includegraphics| into a |\gitIf| block and only
+% execute it once the request is completed.
+% After the first |pdflatex| run, we would execute the Python package
+% |latexgit|.
+% This package will complete the request and the argument file will then be
+% a proper graphic.
+% In the second |pdflatex| pass, the |\includegraphics| code could be
+% executed.
+% An example for this is given in \autoref{sec:example_8}.
 %
 % \subsection{Examples}\label{sec:examples}%
 %
@@ -1032,7 +1055,7 @@ literate=%
 % \label{sec:example_6}%
 % \FloatBarrier%
 %
-% \lstinputlisting[float,label=ex:example_6,caption={An example of capturing the output of a program executed inside a git repository, rendered as \autoref{ex:example_6:res}.}]{examples/example_5.tex}%
+% \lstinputlisting[float,label=ex:example_6,caption={An example of capturing the output of a program executed inside a git repository, rendered as \autoref{ex:example_6:res}.}]{examples/example_6.tex}%
 %
 % The goal of the sixth example is to show that we can capture the output of
 % a program -- but this time we execute it inside a |git| repository.
@@ -1062,10 +1085,10 @@ literate=%
 %
 %
 % \subsection{The Seventh Example: Capturing the Output of Multiple Programs Executed Inside Different git Repositories}%
-% \label{sec:example_6}%
+% \label{sec:example_7}%
 % \FloatBarrier%
 %
-% \lstinputlisting[float,label=ex:example_7,caption={An example of capturing the output of three programs executed inside different git repositories, rendered as \autoref{ex:example_7:res}.}]{examples/example_5.tex}%
+% \lstinputlisting[float,label=ex:example_7,caption={An example of capturing the output of three programs executed inside different git repositories, rendered as \autoref{ex:example_7:res}.}]{examples/example_7.tex}%
 %
 % The goal of the seventh example is to show that we can capture the output of
 % multiple programs from inside different |git| repositories.
@@ -1091,6 +1114,64 @@ literate=%
 % \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 6.1in 1.5in 1.5in,clip]{examples/example_7.pdf}}
 % \caption{The rendered result of \autoref{ex:example_7} (with trimmed page margins and bottoms).}%
 % \label{ex:example_7:res}%
+% \end{figure}%
+%
+% \afterpage{\clearpage}%
+%
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Eight Example: Using Argument Files}%
+% \label{sec:example_8}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_8,caption={An example of running a script residing in git and passing an automatically generated file path to it as input, rendered as \autoref{ex:example_8:res}.}]{examples/example_8.tex}%
+% \lstinputlisting[float,language=Python,label=py:make_pdf,caption={The Python script invoked in \autoref{ex:example_8} to create a graphic and store it in an argument file.}]{examples/make_pdf.py}%
+%
+% \begin{sloppypar}%
+% The goal of the eighth example is to show how to use argument files.
+% In \autoref{ex:example_8}, we first create an argument file via
+% |\gitArg{R13}{test}{.pdf}|.
+% This file will have the name prefix |test| and the suffix |.pdf|.
+% It will be available under the ID~|R13|.
+% The command |\gitExec{R14}{...}{...}{python3 make_pdf.py (?R13?)}| invokes
+% the Python program |make_pdf.py| residing in a certain directory of a |git|
+% repository (actually, our repository here).
+% The agument |(?R13?)| passed to the program will be resolved to the argument
+% file path before invoking the program.
+% The program is illustrated in \autoref{py:make_pdf}.
+% It generates a PDF graphic and stores it in the file that it received as
+% argument.
+% We can then include this graphic using |\includegraphics| and passing in
+% |\gitFile{R13}|.
+% \end{sloppypar}%
+%
+% However, |\gitFile{R13}| will only be valid after we applied the Python
+% |latexgit| command \emph{after} the first |pdflatex| pass.
+% Therefore, during the first |pdflatex| pass, this file will be empty.
+% |\includegraphics| would fail.
+% Therefore, we protect this code to be only executed once the file has been
+% filled with data.
+% This is done by placing it into the
+% |\gitIf{R14}{<exec if done>}{<otherwise>}| block.
+% We could use either |R13| or |R14| as condition, since |R13| corresponds to
+% the argument file and |R14| to the script execution.
+%
+% The results are shown in \autoref{ex:example_8:res} and can be obtained via
+% \begin{quote}
+% |pdflatex example_8|\\
+% |python3 -m latexgit.aux example_8|\\
+% |pdflatex example_8|
+% \end{quote}
+% (if the example code from \autoref{ex:example_8} was stored in a file called
+% |example_8.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.7\linewidth,trim=1in 1in 1in 1in,clip]{examples/example_8.pdf}}
+% \caption{The rendered result of \autoref{ex:example_8} (with trimmed page margins and bottoms).}%
+% \label{ex:example_8:res}%
 % \end{figure}%
 %
 % \afterpage{\clearpage}%
@@ -1141,7 +1222,7 @@ literate=%
 % This command as well.
 \protected\gdef\@latexgit@process#1#2#3#4{}%
 % This command as well.
-\protected\gdef\@latexgit@gitAux#1#2#3{}%
+\protected\gdef\@latexgit@argFile#1#2#3{}%
 %    \end{macrocode}
 %
 % \begin{macro}{\gitLoad}
@@ -1256,6 +1337,48 @@ literate=%
 \immediate\write\@mainaux{%
 \noexpand\@latexgit@process{\@latexgit@pA}{\@latexgit@pB}{%
 \@latexgit@pC}{\@latexgit@pD}}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\gitArg}
+% The macro |\gitArg|\marg{id}\marg{prefix}\marg{suffix}
+% allocates a unique file name with the given |prefix| and |suffix|
+% that can be passed as argument in invocations of |\gitExec|.
+% The results of this macro will become available via the macro
+% |\gitFile{id}|.
+% During the first \LaTeX\ build, this macro will return a path to a dummy
+% file which only has a single space character in it followed by a newline.
+% As said, |\gitExec| will store all information in the |aux| file, which then
+% permits the |latexgit| Python package to download (and optionally
+% post-process) the actual file.
+% In the second round of \LaTeX\ building, |\gitFile{id}| will then return the
+% local path to the file with the standard output of the executed
+% command.%
+%
+% \begin{itemize}\sloppy%
+% \item[\marg{id}] the uniquely chosen ID for this request.
+% Imagine this being something like a label.
+%
+% \item[\marg{prefix}] is the optional prefix, which can be left empty.
+%
+% \item[\marg{suffix}] is the optional suffix, which can be left empty.
+%
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Define a query to allocate a file.
+%% #1 is the request ID
+%% #2 is the prefix
+%% #3 is the suffix
+\protected\gdef\gitArg#1#2#3{%
+\edef\@latexgit@pA{#1}%  the request ID
+\edef\@latexgit@pB{#2}%  fully expand the prefix
+\edef\@latexgit@pC{#3}%  fully expand the suffix
+% Write the parameters to the aux file.
+\immediate\write\@mainaux{%
+\noexpand\@latexgit@argFile{\@latexgit@pA}{\@latexgit@pB}{%
+\@latexgit@pC}}%
 }%
 %    \end{macrocode}
 % \end{macro}

@@ -108,6 +108,13 @@ rm example_7.log
 rm example_7.aux
 rm example_7.latexgit.dummy
 rm example_7.out
+pdflatex example_8.tex
+"$PYTHON_INTERPRETER" -m latexgit.aux example_8
+pdflatex example_8.tex
+rm example_8.log
+rm example_8.aux
+rm example_8.latexgit.dummy
+rm example_8.out
 rm latexgit.sty
 cd ..
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished building the examples."
@@ -120,38 +127,38 @@ makeindex -s gind.ist -o latexgit.ind latexgit.idx
 pdflatex latexgit.dtx
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building the documentation."
 
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the website." 
-mkdir -p website 
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now copying LICENSE and other files." 
-pygmentize -f html -l latex -O full -O style=default -o website/latexgit_sty.html latexgit.sty 
-pygmentize -f html -l latex -O full -O style=default -o website/latexgit_dtx.html latexgit.dtx 
-pygmentize -f html -l latex -O full -O style=default -o website/latexgit_ins.html latexgit.ins 
-pygmentize -f html -l text -O full -O style=default -o website/LICENSE.html LICENSE 
-pygmentize -f html -l text -O full -O style=default -o website/requirements.html requirements.txt 
-pygmentize -f html -l text -O full -O style=default -o website/requirements-dev.html requirements-dev.txt 
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the website."
+mkdir -p website
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now copying LICENSE and other files."
+pygmentize -f html -l latex -O full -O style=default -o website/latexgit_sty.html latexgit.sty
+pygmentize -f html -l latex -O full -O style=default -o website/latexgit_dtx.html latexgit.dtx
+pygmentize -f html -l latex -O full -O style=default -o website/latexgit_ins.html latexgit.ins
+pygmentize -f html -l text -O full -O style=default -o website/LICENSE.html LICENSE
+pygmentize -f html -l text -O full -O style=default -o website/requirements.html requirements.txt
+pygmentize -f html -l text -O full -O style=default -o website/requirements-dev.html requirements-dev.txt
 pygmentize -f html -l Bash -O full -O style=default -o website/make.html make.sh
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished creating additional files, now building index.html from README.md." 
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished creating additional files, now building index.html from README.md."
 PART_A='<!DOCTYPE html><html><title>'
 PART_B='</title><style>code {background-color:rgb(204 210 95 / 0.3);white-space:nowrap;border-radius:3px}</style><body style="margin-left:5%;margin-right:5%">'
 PART_C='</body></html>'
 BASE_URL='https\:\/\/thomasweise\.github\.io\/latexgit_tex\/'
 echo "${PART_A}latexgit ${version}${PART_B}$("$PYTHON_INTERPRETER" -m markdown -o html ./README.md)$PART_C" > ./website/index.html
-sed -i "s/\"$BASE_URL/\".\//g" ./website/index.html 
-sed -i "s/=$BASE_URL/=.\//g" ./website/index.html 
+sed -i "s/\"$BASE_URL/\".\//g" ./website/index.html
+sed -i "s/=$BASE_URL/=.\//g" ./website/index.html
 sed -i "s/<\/h1>/<\/h1><h2>version\&nbsp;${version} build on\&nbsp;$(date +'%0Y-%0m-%0d %0R:%0S')<\/h2>/g" ./website/index.html
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished copying README.md to index.html, now minifying all files." 
-cd "website/" 
-find -type f -name "*.html" -exec "$PYTHON_INTERPRETER" -c "print('{}');import minify_html;f=open('{}','r');s=f.read();f.close();s=minify_html.minify(s,do_not_minify_doctype=True,ensure_spec_compliant_unquoted_attribute_values=True,keep_html_and_head_opening_tags=False,minify_css=True,minify_js=True,remove_bangs=True,remove_processing_instructions=True);f=open('{}','w');f.write(s);f.close()" \;
-cd "../" 
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished minifying all files, now copying or moving remaining files." 
-mv latexgit.sty website 
-mv latexgit.pdf website 
-cp latexgit.dtx website 
-cp latexgit.ins website 
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished copying README.md to index.html, now minifying all files."
+cd "website/"
+find -type f -name "*.html" -exec "$PYTHON_INTERPRETER" -c "print('{}');import minify_html;f=open('{}','r');s=f.read();f.close();s=minify_html.minify(s,allow_noncompliant_unquoted_attribute_values=False,allow_optimal_entities=True,allow_removing_spaces_between_attributes=True,keep_closing_tags=False,keep_comments=False,keep_html_and_head_opening_tags=False,keep_input_type_text_attr=False,keep_ssi_comments=False,minify_css=True,minify_doctype=False,minify_js=True,preserve_brace_template_syntax=False,preserve_chevron_percent_template_syntax=False,remove_bangs=True,remove_processing_instructions=True);f=open('{}','w');f.write(s);f.close()" \;
+cd "../"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished minifying all files, now copying or moving remaining files."
+mv latexgit.sty website
+mv latexgit.pdf website
+cp latexgit.dtx website
+cp latexgit.ins website
 cp make.sh website
-cp requirements.txt website 
-cp requirements-dev.txt website 
-touch website/.nojekyll 
+cp requirements.txt website
+cp requirements-dev.txt website
+touch website/.nojekyll
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building the website."
 
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Deactivating virtual environment."
