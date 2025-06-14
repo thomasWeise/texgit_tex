@@ -60,12 +60,14 @@ echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished extracting the package."
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the examples."
 cp latexgit.sty examples
 cd examples
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 1."
 pdflatex example_1.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_1
 pdflatex example_1.tex
 rm example_1.log
 rm example_1.aux
 rm example_1.latexgit.dummy
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 2."
 pdflatex example_2.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_2
 pdflatex example_2.tex
@@ -73,6 +75,7 @@ rm example_2.log
 rm example_2.aux
 rm example_2.latexgit.dummy
 rm example_2.out
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 3."
 pdflatex example_3.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_3
 pdflatex example_3.tex
@@ -80,6 +83,7 @@ rm example_3.log
 rm example_3.aux
 rm example_3.latexgit.dummy
 rm example_3.out
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 4."
 pdflatex example_4.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_4
 pdflatex example_4.tex
@@ -87,6 +91,7 @@ rm example_4.log
 rm example_4.aux
 rm example_4.latexgit.dummy
 rm example_4.out
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 5."
 pdflatex example_5.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_5
 pdflatex example_5.tex
@@ -94,6 +99,7 @@ rm example_5.log
 rm example_5.aux
 rm example_5.latexgit.dummy
 rm example_5.out
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 6."
 pdflatex example_6.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_6
 pdflatex example_6.tex
@@ -101,6 +107,7 @@ rm example_6.log
 rm example_6.aux
 rm example_6.latexgit.dummy
 rm example_6.out
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 7."
 pdflatex example_7.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_7
 pdflatex example_7.tex
@@ -108,6 +115,7 @@ rm example_7.log
 rm example_7.aux
 rm example_7.latexgit.dummy
 rm example_7.out
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 8."
 pdflatex example_8.tex
 "$PYTHON_INTERPRETER" -m latexgit.aux example_8
 pdflatex example_8.tex
