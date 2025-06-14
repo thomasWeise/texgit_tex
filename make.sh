@@ -145,6 +145,7 @@ pygmentize -f html -l text -O full -O style=default -o website/LICENSE.html LICE
 pygmentize -f html -l text -O full -O style=default -o website/requirements.html requirements.txt
 pygmentize -f html -l text -O full -O style=default -o website/requirements-dev.html requirements-dev.txt
 pygmentize -f html -l Bash -O full -O style=default -o website/make.html make.sh
+pygmentize -f html -l Bash -O full -O style=default -o website/make.html make_venv.sh
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished creating additional files, now building index.html from README.md."
 PART_A='<!DOCTYPE html><html><title>'
 PART_B='</title><style>code {background-color:rgb(204 210 95 / 0.3);white-space:nowrap;border-radius:3px}</style><body style="margin-left:5%;margin-right:5%">'
@@ -164,6 +165,7 @@ mv latexgit.pdf website
 cp latexgit.dtx website
 cp latexgit.ins website
 cp make.sh website
+cp make_venv.sh website
 cp requirements.txt website
 cp requirements-dev.txt website
 touch website/.nojekyll
