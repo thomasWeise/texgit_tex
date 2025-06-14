@@ -19,11 +19,11 @@
 \ProvidesFile{latexgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{latexgit}[2025/06/12 0.9.0 Overhaul of entire API.]%
+%<package>\ProvidesPackage{latexgit}[2025/06/14 0.9.1 improved documentation.]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{latexgit}[2025/06/12]
+\usepackage{latexgit}[2025/06/14]
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -41,6 +41,11 @@ pdfkeywords={LaTeX, package, latexgit}
 ]{hyperref}%
 \usepackage{breakurl}%
 \usepackage[square,numbers,comma,sort&compress]{natbib}%
+%
+\RequirePackage[utf8]{inputenc}%
+\RequirePackage[T1]{fontenc}%
+\RequirePackage{CJKutf8}%
+\AtBeginDocument{\CJK{UTF8}{gkai}}%
 %
 \newcommand{\exampleautorefname}{Example}%
 \renewcommand{\sectionautorefname}{Section}%
@@ -140,19 +145,21 @@ literate=%
 % \changes{0.8.5}{2024/08/07}{improved examples: added an example with multiple git command results}
 % \changes{0.8.6}{2024/09/20}{the use case of virtual environments in conjunction with the |latexgit| Python package of version 0.8.17 or greater is documented}
 % \changes{0.9.0}{2025/06/12}{complete overhaul of the API}
+% \changes{0.9.1}{2025/06/14}{improved documentation}
 %
 % \GetFileInfo{latexgit.dtx}
 %
 % \DoNotIndex{\def,\if,\fi}
 %
 % \title{The \textsf{latexgit} Package}
-% \author{Thomas Weise\\%
+% \author{Thomas Weise~(汤卫思教授)\\%
 % \resizebox{0.95\textwidth}{!}{%
-% \parbox{\linewidth}{%
+% \parbox{1.05\linewidth}{%
 % \centering%
-% Institute of Applied Optimization\\%
-% School of Artificial Intelligence and Big Data\\%
-% Hefei University, Hefei 230601, Anhui, China\\%
+% Institute of Applied Optimization~(应用优化研究所, IAO)\\%
+% School of Artificial Intelligence and Big Data~(人工智能与大数据学院)\\%
+% Hefei University~(合肥大学)\\%
+% Hefei 230601, Anhui, China~(中国安徽省合肥市)\\%
 % \href{mailto:tweise@hfuu.edu.cn}{tweise@hfuu.edu.cn} $\cdot$ \href{mailto:tweise@ustc.edu.cn}{tweise@ustc.edu.cn}%
 % }}}%
 % \date{\today}
@@ -165,26 +172,47 @@ literate=%
 % \maketitle
 %
 % \begin{abstract}
+% This package allows you to download and access files that reside in a
+% |git| repository from within your \LaTeX\ code.
+% This can be used, for example, to include program code from an actual
+% software in life repository in your \LaTeX\ documents.
+% It allows you to postprocess these files, e.g., to apply programs that
+% remove comments or reformat code and then to include these postprocessed
+% files.
+% It furthermore allows you to execute programs (or scripts from |git|
+% repositories) on your machine and include their output into your \LaTeX\
+% documents.
+% Finally, it also allows you to allocate files and pass them as parameters
+% to the programs that you execute.
+% With this, you could create PDF figures on the fly and then include them
+% into your \LaTeX\ documents.
+%
 % This \LaTeX\ package works \emph{only} in combination with the Python
 % package |latexgit|.
-% It offers the following commands:%
+% To implement its functionality, it offers the following commands:%
+%
 % \begin{itemize}\sloppy
+%
 % \item |\gitLoad{id}{repoURL}{pathInRepo}{postproc}|\tbindex{gitLoad}
 % loads a file |pathInRepo| from the |git|\tindex{git} repository |repoURL|,
-% \emph{optionally} post-process it by piping its contents into the standard
+% \emph{optionally} post-processes it by piping its contents into the standard
 % input of a command |postproc| capturing its standard output.
+%
 % \item |\gitFile{id}|\tbindex{gitFile} provides a local path to a file
 % created this way.
 % Using the |\gitFile{id}| macro, you can then include the file in \LaTeX\
 % directly or load it as source code listing.
+%
 % \item |\gitUrl{id}|\tbindex{gitUrl} provides the URL to the original file
 % in the |git| repository.
+%
 % \item |\gitExec{id}{repoURL}{pathInRepo}{command}|\tbindex{gitExec}
 % executes an arbitrary command |command|, either in the current directory or
 % inside a directory |pathInRepo| of the |git|\tindex{git} repository
-% |repoURL| and fetch the standard output into a local file, the path to which
+% |repoURL| and fetches the standard output into a local file, the path to which
 % is made available to the file again as macro
 % |\gitFile{id}|\tbindex{gitFile}.
+%
 % \item |\gitArg{id}{prefix}{suffix}|\tbindex{gitArg} allocates an additional
 % file, whose name will be composed of the optional |prefix| and |suffix|.
 % Such files can be passed as arguments to |\gitExec| or
@@ -193,25 +221,26 @@ literate=%
 % This way, we can, for example, instruct a program to create a graphic
 % and store it in a certain file that we can later load from
 % |\gitFile{id}|\tbindex{gitFile}.
+%
 % \item |\gitIf{id}{ifDone}{ifNotDone}| executes the code |ifDone| starting
 % in the second |pdflatex| pass, i.e., after the Python |latexgit| package has
 % been applied to the |aux| file generated during the first |pdflatex| pass.
 % During the first |pdflatex| pass and before the Python |latexgit| package
 % was applied, |ifNotDone| will be executed.
 % \end{itemize}
+%
 % The functionality of the package is implemented by storing the |git|
 % requests in the |aux|\tindex{aux} file of the project during the first
 % |pdflatex|\tindex{pdflatex} pass.
 % The |aux| file is then processed by the Python package which performs the
-% actual |git| queries, stores the result in local files, and adds the
-% resolved paths to the |aux| file.
-% During the first |pdflatex|\tindex{pdflatex} run, |\gitFile| and |\gitUrl|
-% offer dummy results.
-% To check whether we are in the first \LaTeX\ pass, where the commands have
-% not yet been executed, or in at least the second pass, where their results
-% are available, the command |\gitIf{id}{ifDone}{ifNotDone}| is provided.
-% However, after the resolution via the Python package, in the second
-% |pdflatex| run they then point to the right data.
+% actual |git| queries, program executions, stores the result in local files,
+% and adds the resolved paths to the |aux| file.
+% Thus, during the first |pdflatex|\tindex{pdflatex} run, |\gitFile| and
+% |\gitUrl| offer dummy results.
+% During the second and later pass, after the Python program |latexgit| has
+% been applied to the |aux| file, they then provide the actual paths and
+% URLs.
+% In the essense, |latexgit| works somewhat like \BibTeX.
 % \end{abstract}
 %
 % \setcounter{tocdepth}{2}
@@ -257,14 +286,32 @@ literate=%
 % We offer a solution to the question
 %
 % \begin{quote}
-% \emph{``How can we include snippets of code from a separate, complex code basis
-% (located in a |git| repository) into our \LaTeX\ documents?''}
+% \emph{``How can we include snippets of code from a separate, complex code
+% basis (located in a |git| repository) into our \LaTeX\ documents?''}
 % \end{quote}
 %
 % Additionally, sometimes we want to execute the code from that repository and
 % capture the standard output.
 % This output could then be displayed as listing next to the code.
 % This package also provides this functionality.
+%
+% Maybe we either have local programs or programs in a |git| repository that
+% create complex figures or graphics.
+% Our package also offers us the ability execute such programs, tell them
+% where to store their output, and then allowing us to include this output
+% into our \LaTeX\ documents, say, via |\includegraphics|.
+%
+% Our package furthermore \emph{caches} such outputs.
+% If you refer to multiple files from one repository, this repository will be
+% cloned only once.
+% If you need to perform several \LaTeX\ passes, say, because you have a
+% bibliography and a glossary and whatnot, then you need to run |latexgit|
+% after \emph{each} pass.
+% However, |latexgit| will only clone the repositories and execute the
+% programs once, during its first pass.
+% All results are cached, usually in a directory called |__git__|.
+% Unless you delete this directory, the cache will persist, even if you
+% change your \LaTeX\ document and perform an entirely new compilation.
 %
 % \subsection{Provided Functionality}%
 % \label{sec:functionality}%
@@ -276,14 +323,18 @@ literate=%
 % \url{https://pypi.org/projects/latexgit} with sources available at
 % \url{https://github.com/thomasWeise/latexgit_py}.
 % \end{itemize}
-% This \LaTeX\ provides the command |\gitLoad| that can load a specific file
-% from a specific |git| repository and, optionally, pipe the file contents
-% through a program for % post-processing.
+%
+% This \LaTeX\ package provides the command |\gitLoad| that can load a
+% specific file from a specific |git| repository and, optionally, pipe the
+% file contents through a program for post-processing.
+%
 % It also provides the command |\gitExec|, which can execute either a local
 % program or a program loaded from a git repository and fetch its output.
+%
 % The additional command |\gitArg| allows you to create files whose paths
 % are passed as arguments to programs, which may be useful to create graphics
 % and other non-textual output.
+%
 % All three types of requests are stored in the |aux| file during the first
 % |pdflatex| pass, then resolved by the Python program, and their results
 % become available in the second |pdflatex| pass via the commands |\gitFile|

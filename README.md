@@ -10,7 +10,39 @@
 
 
 ## 1. Introduction
-`latexgit` is a LaTeX package that works in combination with a [Python companion](https://thomasweise.github.io/latexgit_py) package for accessing files located in `git` repositories from within `LaTeX`.
+This package allows you to download and access files that reside in a `git` repository from within your LaTeX code.
+This can be used, for example, to include program code from an actual software in life repository in your LaTeX documents.
+It allows you to postprocess these files, e.g., to apply programs that remove comments or reformat code and then to include these postprocessed files.
+It furthermore allows you to execute programs (or scripts from `git` repositories) on your machine and include their output into your LaTeX
+documents.
+Finally, it also allows you to allocate files and pass them as parameters to the programs that you execute.
+With this, you could create PDF figures on the fly and then include them into your LaTeX documents.
+
+This LaTeX package works \emph{only} in combination with the Python package [`latexgit`](https://github.com/thomasWeise/latexgit_py).
+To implement its functionality, it offers the following commands:
+
+- `\gitLoad{id}{repoURL}{pathInRepo}{postproc}` loads a file `pathInRepo` from the `git` repository `repoURL`, *optionally* post-processes it by piping its contents into the standard input of a command `postproc` capturing its standard output.
+
+- `\gitFile{id}` provides a local path to a file created this way.
+   Using the `\gitFile{id}` macro, you can then include the file in LaTeX directly or load it as source code listing.
+
+- `\gitUrl{id}` provides the URL to the original file in the `git` repository.
+
+- `\gitExec{id}{repoURL}{pathInRepo}{command}` executes an arbitrary command `command`, either in the current directory or inside a directory `pathInRepo` of the `git` repository `repoURL` and fetches the standard output into a local file, the path to which is made available to the file again as macro `\gitFile{id}`.
+
+- `\gitArg{id}{prefix}{suffix}` allocates an additional file, whose name will be composed of the optional `prefix` and `suffix`. 
+  Such files can be passed as arguments to `\gitExec` or `\gitLoad`\tbindex{gitLoad} by including `(?id?)` in their commands' argument list. 
+  This way, we can, for example, instruct a program to create a graphic and store it in a certain file that we can later load from `\gitFile{id}`.
+
+- `\gitIf{id}{ifDone}{ifNotDone}` executes the code `ifDone` starting  in the second `pdflatex` pass, i.e., after the Python `latexgit` package has been applied to the `aux` file generated during the first `pdflatex` pass.
+  During the first `pdflatex` pass and before the Python `latexgit` package was applied, `ifNotDone` will be executed.
+
+The functionality of the package is implemented by storing the `git` requests in the `aux` file of the project during the first `pdflatex` pass.
+The `aux` file is then processed by the Python package [`latexgit`](https://github.com/thomasWeise/latexgit_py) which performs the actual `git` queries, program executions, stores the result in local files, and adds the resolved paths to the `aux` file.
+Thus, during the first `pdflatex` run, `\gitFile` and `\gitUrl` offer dummy results.
+During the second and later pass, after the Python program `latexgit` has been applied to the `aux` file, they then provide the actual paths and URLs.
+
+`latexgit` is a LaTeX package that works in combination with a [Python companion](https://thomasweise.github.io/latexgit_py) package for accessing files located in `git` repositories from within LaTeX.
 It works somewhat like BibTeX:
 In your LaTeX document, you first can define requests to load files from `git` repositories.
 During your first LaTeX compilation, these requests just evaluate to dummy results.

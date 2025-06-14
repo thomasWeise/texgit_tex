@@ -1,3 +1,7 @@
+__git__
+examples/__git__
+.venv
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
