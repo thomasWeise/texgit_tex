@@ -19,11 +19,11 @@
 \ProvidesFile{latexgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{latexgit}[2025/06/15 0.9.2 gitExec with empty ID permitted]%
+%<package>\ProvidesPackage{latexgit}[2025/06/17 0.9.3 better documentation]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{latexgit}[2025/06/15]
+\usepackage{latexgit}[2025/06/17]
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -147,6 +147,7 @@ literate=%
 % \changes{0.9.0}{2025/06/12}{complete overhaul of the API}
 % \changes{0.9.1}{2025/06/14}{improved documentation}
 % \changes{0.9.2}{2025/06/15}{gitExec with empty ID permitted}
+% \changes{0.9.3}{2025/06/17}{better documentation}%
 %
 % \GetFileInfo{latexgit.dtx}
 %
@@ -535,9 +536,10 @@ literate=%
 % After this, in the next pass of |pdflatex|, |\gitFile{id}| and |\gitUrl{id}|
 % will contain the right paths and URLs.
 %
-% \subsection{A Note on Virtual Environments}%
+% \subsection{A Note on Python Virtual Environments}%
 % The following only applies if you have installed this package inside a
-% virtual environment. It also only applies in conjunction with version
+% virtual environment.
+% It also only applies in conjunction with version
 % \href{https://pypi.org/project/latexgit/0.8.17/}{0.8.17} or newer of
 % the |latexgit| Python package.
 %
@@ -1113,7 +1115,7 @@ literate=%
 % \label{sec:example_6}%
 % \FloatBarrier%
 %
-% \lstinputlisting[float,label=ex:example_6,caption={An example of capturing the output of a program executed inside a git repository, rendered as \autoref{ex:example_6:res}.}]{examples/example_6.tex}%
+% \lstinputlisting[float,label=ex:example_6,breaklines=True,caption={An example of capturing the output of a program executed inside a git repository, rendered as \autoref{ex:example_6:res}.}]{examples/example_6.tex}%
 %
 % The goal of the sixth example is to show that we can capture the output of
 % a program -- but this time we execute it inside a |git| repository.
@@ -1146,7 +1148,7 @@ literate=%
 % \label{sec:example_7}%
 % \FloatBarrier%
 %
-% \lstinputlisting[float,label=ex:example_7,caption={An example of capturing the output of three programs executed inside different git repositories, rendered as \autoref{ex:example_7:res}.}]{examples/example_7.tex}%
+% \lstinputlisting[float,label=ex:example_7,breaklines=True,caption={An example of capturing the output of three programs executed inside different git repositories, rendered as \autoref{ex:example_7:res}.}]{examples/example_7.tex}%
 %
 % The goal of the seventh example is to show that we can capture the output of
 % multiple programs from inside different |git| repositories.
@@ -1233,6 +1235,18 @@ literate=%
 % \end{figure}%
 %
 % \afterpage{\clearpage}%
+%
+% \section{A Note on LaTeX Floating Environments}
+% \LaTeX\ offers us floating environments for laying out tables and figures.
+% Such environments, e.g., |\begin{figure}...\end{figure}| or
+% |\begin{table}...\end{table}| are automatically arranged by \LaTeX.
+% This means that their order can change depending how they layout engine
+% determines where to put them.
+% This means that, if you put |\gitLoad|, |\gitArg|, or |\gitExec| commands
+% into such environments, their execution order can change.
+% It is therefore recommended to put these commands always outside of these
+% environments.
+% Then the execution order is always the same and clear.
 %
 % \clearpage%
 %

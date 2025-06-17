@@ -195,7 +195,22 @@ zip -9 -r "latexgit.tds.zip" tex doc source
 mv "latexgit.tds.zip" "$currentDir/website"
 rm -rf "$tempDir"
 cd "$currentDir"
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building latexgit.tds.zip."
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building latexgit.zip package."
+
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now creating latexgit.zip."
+tempDir="$(mktemp -d)"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Created temp directory '$tempDir'. Now building zip."
+mkdir -p "$tempDir/latexgit/"
+cp README.md "$tempDir/latexgit/"
+cp latexgit.ins "$tempDir/latexgit/"
+cp latexgit.dtx "$tempDir/latexgit/"
+cp website/latexgit.pdf "$tempDir/latexgit/latexgit-doc.pdf"
+cd "$tempDir"
+zip -9 -r "latexgit.zip" *
+mv "latexgit.zip" "$currentDir/website"
+rm -rf "$tempDir"
+cd "$currentDir"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building latexgit.zip."
 
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Deleting all temporary and intermediate files after the build."
 rm latexgit.aux || true
