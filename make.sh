@@ -62,14 +62,14 @@ cp texgit.sty examples
 cd examples
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 1."
 pdflatex example_1.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_1
+"$PYTHON_INTERPRETER" -m texgit.run example_1
 pdflatex example_1.tex
 rm example_1.log
 rm example_1.aux
 rm example_1.texgit.dummy
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 2."
 pdflatex example_2.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_2
+"$PYTHON_INTERPRETER" -m texgit.run example_2
 pdflatex example_2.tex
 rm example_2.log
 rm example_2.aux
@@ -77,7 +77,7 @@ rm example_2.texgit.dummy
 rm example_2.out
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 3."
 pdflatex example_3.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_3
+"$PYTHON_INTERPRETER" -m texgit.run example_3
 pdflatex example_3.tex
 rm example_3.log
 rm example_3.aux
@@ -85,7 +85,7 @@ rm example_3.texgit.dummy
 rm example_3.out
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 4."
 pdflatex example_4.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_4
+"$PYTHON_INTERPRETER" -m texgit.run example_4
 pdflatex example_4.tex
 rm example_4.log
 rm example_4.aux
@@ -93,7 +93,7 @@ rm example_4.texgit.dummy
 rm example_4.out
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 5."
 pdflatex example_5.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_5
+"$PYTHON_INTERPRETER" -m texgit.run example_5
 pdflatex example_5.tex
 rm example_5.log
 rm example_5.aux
@@ -101,7 +101,7 @@ rm example_5.texgit.dummy
 rm example_5.out
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 6."
 pdflatex example_6.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_6
+"$PYTHON_INTERPRETER" -m texgit.run example_6
 pdflatex example_6.tex
 rm example_6.log
 rm example_6.aux
@@ -109,7 +109,7 @@ rm example_6.texgit.dummy
 rm example_6.out
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 7."
 pdflatex example_7.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_7
+"$PYTHON_INTERPRETER" -m texgit.run example_7
 pdflatex example_7.tex
 rm example_7.log
 rm example_7.aux
@@ -117,7 +117,7 @@ rm example_7.texgit.dummy
 rm example_7.out
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the example 8."
 pdflatex example_8.tex
-"$PYTHON_INTERPRETER" -m texgit.aux example_8
+"$PYTHON_INTERPRETER" -m texgit.run example_8
 pdflatex example_8.tex
 rm example_8.log
 rm example_8.aux

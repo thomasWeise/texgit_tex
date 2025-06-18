@@ -47,7 +47,7 @@ It works somewhat like BibTeX:
 In your LaTeX document, you first can define requests to load files from `git` repositories.
 During your first LaTeX compilation, these requests just evaluate to dummy results.
 They are, however, stored in that `aux` file of your project, say `article.aux`.
-Then you execute `python3 -m texgit.aux article` (pretty much as you would execute `bibtex article` for building a bibliography).
+Then you execute `python3 -m texgit.run article` (pretty much as you would execute `bibtex article` for building a bibliography).
 This Python package will then perform the actual `git` requests and update the `aux` file.
 In your next LaTeX pass, you can now access the contents of these files.
 This process is described in detail in the [documentation](https://thomasweise.github.io/texgit_tex/texgit.pdf). 
@@ -68,7 +68,7 @@ Again, please read the [documentation](https://thomasweise.github.io/texgit_tex/
 If your main document was stored as `article.tex`, you would build it using (at least) the three following steps:
 
 1. `pdflatex article`
-2. `python3 -m texgit.aux article`
+2. `python3 -m texgit.run article`
 3. `pdflatex article`
 
 ## 3. Files

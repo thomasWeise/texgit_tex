@@ -374,7 +374,7 @@ literate=%
 % following workflow:%
 % \begin{quote}
 % |pdflatex article|\\
-% |python3 -m texgit.aux article|\\
+% |python3 -m texgit.run article|\\
 % |pdflatex article|
 % \end{quote}
 %
@@ -526,12 +526,12 @@ literate=%
 % If the name of your \TeX\ file is |myfile.tex|, then you would execute
 % \end{sloppypar}%
 % \begin{quote}
-% |python3 -m texgit.aux myfile|
+% |python3 -m texgit.run myfile|
 % \end{quote}
 % More specifically, the Python package processes the |aux| files, so for a
 % specific |aux|\tindex{aux} file |myfile.aux|, you could also do:
 % \begin{quote}
-% |python3 -m texgit.aux myfile.aux|
+% |python3 -m texgit.run myfile.aux|
 % \end{quote}
 %
 % After this, in the next pass of |pdflatex|, |\gitFile{id}| and |\gitUrl{id}|
@@ -771,7 +771,7 @@ literate=%
 % After the first |pdflatex| pass, you can apply the Python\index{Python}
 % processor (see \autoref{sec:texgitpy}) as follows:
 % \begin{quote}%
-% |python3 -m texgit.aux jobname|
+% |python3 -m texgit.run jobname|
 % \end{quote}%
 % Where |jobname| shall be replaced with the main file name, again |article|
 % for |article.tex|, for instance.
@@ -791,7 +791,7 @@ literate=%
 % If this example was stored as |example_1.tex|, then it could be built via
 % \begin{quote}
 % |pdflatex example_1|\\
-% |python3 -m texgit.aux example_1|\\
+% |python3 -m texgit.run example_1|\\
 % |pdflatex example_1|
 % \end{quote}
 %
@@ -906,7 +906,7 @@ literate=%
 % If this example was stored as |example_2.tex|, then it could be built via
 % \begin{quote}
 % |pdflatex example_2|\\
-% |python3 -m texgit.aux example_2|\\
+% |python3 -m texgit.run example_2|\\
 % |pdflatex example_2|
 % \end{quote}
 %
@@ -996,7 +996,7 @@ literate=%
 % If this example was stored as |example_3.tex|, then it could be built via
 % \begin{quote}
 % |pdflatex example_3|\\
-% |python3 -m texgit.aux example_3|\\
+% |python3 -m texgit.run example_3|\\
 % |pdflatex example_3|
 % \end{quote}
 %
@@ -1055,7 +1055,7 @@ literate=%
 % The results are shown in \autoref{ex:example_4:res}% and can be obtained via
 % \begin{quote}
 % |pdflatex example_4|\\
-% |python3 -m texgit.aux example_4|\\
+% |python3 -m texgit.run example_4|\\
 % |pdflatex example_4|
 % \end{quote}
 % (if the example code from \autoref{ex:example_4} was stored in a file called
@@ -1095,7 +1095,7 @@ literate=%
 % The results are shown in \autoref{ex:example_5:res}% and can be obtained via
 % \begin{quote}
 % |pdflatex example_5|\\
-% |python3 -m texgit.aux example_5|\\
+% |python3 -m texgit.run example_5|\\
 % |pdflatex example_5|
 % \end{quote}
 % (if the example code from \autoref{ex:example_5} was stored in a file called
@@ -1128,7 +1128,7 @@ literate=%
 % The results are shown in \autoref{ex:example_6:res}% and can be obtained via
 % \begin{quote}
 % |pdflatex example_6|\\
-% |python3 -m texgit.aux example_6|\\
+% |python3 -m texgit.run example_6|\\
 % |pdflatex example_6|
 % \end{quote}
 % (if the example code from \autoref{ex:example_6} was stored in a file called
@@ -1164,7 +1164,7 @@ literate=%
 % The results are shown in \autoref{ex:example_7:res} and can be obtained via
 % \begin{quote}
 % |pdflatex example_7|\\
-% |python3 -m texgit.aux example_7|\\
+% |python3 -m texgit.run example_7|\\
 % |pdflatex example_7|
 % \end{quote}
 % (if the example code from \autoref{ex:example_7} was stored in a file called
@@ -1222,7 +1222,7 @@ literate=%
 % The results are shown in \autoref{ex:example_8:res} and can be obtained via
 % \begin{quote}
 % |pdflatex example_8|\\
-% |python3 -m texgit.aux example_8|\\
+% |python3 -m texgit.run example_8|\\
 % |pdflatex example_8|
 % \end{quote}
 % (if the example code from \autoref{ex:example_8} was stored in a file called
