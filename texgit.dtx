@@ -7,7 +7,7 @@
 % (at your option) any later version. The latest version of this license is in
 % http://www.latex-project.org/lppl.txt.
 % The license can be found at
-% https://thomasweise.github.io/latexgit_tex/LICENSE.html.
+% https://thomasweise.github.io/texgit_tex/LICENSE.html.
 % This work is author-maintained, i.e., it can only be maintained by
 % Thomas Weise.
 %
@@ -16,14 +16,14 @@
 % \iffalse
 %
 %<*driver>
-\ProvidesFile{latexgit.dtx}
+\ProvidesFile{texgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{latexgit}[2025/06/17 0.9.3 better documentation]%
+%<package>\ProvidesPackage{texgit}[2025/06/18 0.9.4 name change to texgit]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{latexgit}[2025/06/17]
+\usepackage{texgit}[2025/06/18]
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -37,7 +37,7 @@ bookmarksopen=false,%
 hyperfootnotes=true,%
 citecolor={blue!50!black},%
 filecolor=black,%
-pdfkeywords={LaTeX, package, latexgit}
+pdfkeywords={LaTeX, package, texgit}
 ]{hyperref}%
 \usepackage{breakurl}%
 \usepackage[square,numbers,comma,sort&compress]{natbib}%
@@ -114,7 +114,7 @@ literate=%
 %
 %
 \begin{document}
-  \DocInput{latexgit.dtx}
+  \DocInput{texgit.dtx}
   \PrintChanges
   \PrintIndex
 \end{document}
@@ -139,21 +139,22 @@ literate=%
 %
 % \changes{0.8.0}{2023/12/04}{the initial draft version}
 % \changes{0.8.1}{2023/12/05}{slightly improved documentation}
-% \changes{0.8.2}{2023/12/05}{improved latexgit.tds.zip}
-% \changes{0.8.3}{2024/08/01}{supporting arbitrary commands via the new |latexgit_py| version}
+% \changes{0.8.2}{2023/12/05}{improved texgit.tds.zip}
+% \changes{0.8.3}{2024/08/01}{supporting arbitrary commands via the new |texgit_py| version}
 % \changes{0.8.4}{2024/08/02}{improved build process}
 % \changes{0.8.5}{2024/08/07}{improved examples: added an example with multiple git command results}
-% \changes{0.8.6}{2024/09/20}{the use case of virtual environments in conjunction with the |latexgit| Python package of version 0.8.17 or greater is documented}
+% \changes{0.8.6}{2024/09/20}{the use case of virtual environments in conjunction with the |texgit| Python package of version 0.8.17 or greater is documented}
 % \changes{0.9.0}{2025/06/12}{complete overhaul of the API}
 % \changes{0.9.1}{2025/06/14}{improved documentation}
 % \changes{0.9.2}{2025/06/15}{gitExec with empty ID permitted}
 % \changes{0.9.3}{2025/06/17}{better documentation}%
+% \changes{0.9.4}{2025/06/18}{name change to texgit}%
 %
-% \GetFileInfo{latexgit.dtx}
+% \GetFileInfo{texgit.dtx}
 %
 % \DoNotIndex{\def,\if,\fi}
 %
-% \title{The \textsf{latexgit} Package}
+% \title{The \textsf{texgit} Package}
 % \author{Thomas Weise~(汤卫思教授)\\%
 % \resizebox{0.95\textwidth}{!}{%
 % \parbox{1.05\linewidth}{%
@@ -190,7 +191,7 @@ literate=%
 % into your \LaTeX\ documents.
 %
 % This \LaTeX\ package works \emph{only} in combination with the Python
-% package |latexgit|.
+% package |texgit|.
 % To implement its functionality, it offers the following commands:%
 %
 % \begin{itemize}\sloppy
@@ -231,9 +232,9 @@ literate=%
 % |\gitFile{id}|\tbindex{gitFile}.
 %
 % \item |\gitIf{id}{ifDone}{ifNotDone}| executes the code |ifDone| starting
-% in the second |pdflatex| pass, i.e., after the Python |latexgit| package has
+% in the second |pdflatex| pass, i.e., after the Python |texgit| package has
 % been applied to the |aux| file generated during the first |pdflatex| pass.
-% During the first |pdflatex| pass and before the Python |latexgit| package
+% During the first |pdflatex| pass and before the Python |texgit| package
 % was applied, |ifNotDone| will be executed.
 % \end{itemize}
 %
@@ -245,10 +246,10 @@ literate=%
 % and adds the resolved paths to the |aux| file.
 % Thus, during the first |pdflatex|\tindex{pdflatex} run, |\gitFile| and
 % |\gitUrl| offer dummy results.
-% During the second and later pass, after the Python program |latexgit| has
+% During the second and later pass, after the Python program |texgit| has
 % been applied to the |aux| file, they then provide the actual paths and
 % URLs.
-% In the essense, |latexgit| works somewhat like \BibTeX.
+% In the essense, |texgit| works somewhat like \BibTeX.
 % \end{abstract}
 %
 % \setcounter{tocdepth}{2}
@@ -313,9 +314,9 @@ literate=%
 % If you refer to multiple files from one repository, this repository will be
 % cloned only once.
 % If you need to perform several \LaTeX\ passes, say, because you have a
-% bibliography and a glossary and whatnot, then you need to run |latexgit|
+% bibliography and a glossary and whatnot, then you need to run |texgit|
 % after \emph{each} pass.
-% However, |latexgit| will only clone the repositories and execute the
+% However, |texgit| will only clone the repositories and execute the
 % programs once, during its first pass.
 % All results are cached, usually in a directory called |__git__|.
 % Unless you delete this directory, the cache will persist, even if you
@@ -326,10 +327,10 @@ literate=%
 % Our package offers a combination of
 % \begin{itemize}
 % \item a \LaTeX\ package -- this package here -- with its sources at
-% \url{https://github.com/thomasWeise/latexgit_tex}, and
+% \url{https://github.com/thomasWeise/texgit_tex}, and
 % \item a Python\index{Python} program, published at
-% \url{https://pypi.org/projects/latexgit} with sources available at
-% \url{https://github.com/thomasWeise/latexgit_py}.
+% \url{https://pypi.org/projects/texgit} with sources available at
+% \url{https://github.com/thomasWeise/texgit_py}.
 % \end{itemize}
 %
 % This \LaTeX\ package provides the command |\gitLoad| that can load a
@@ -353,9 +354,9 @@ literate=%
 % \begin{enumerate}%
 %%
 % \item Obviously, both the
-% \href{https://thomasweise.github.io/latexgit_tex}{\LaTeX\ package}
+% \href{https://thomasweise.github.io/texgit_tex}{\LaTeX\ package}
 % \emph{and} its
-% \href{https://thomasweise.github.io/latexgit_py}{Python companion}
+% \href{https://thomasweise.github.io/texgit_py}{Python companion}
 % package must be installed (see \autoref{sec:installation}).
 %%
 % \item In your document, you need to load the package in the preamble
@@ -373,7 +374,7 @@ literate=%
 % following workflow:%
 % \begin{quote}
 % |pdflatex article|\\
-% |python3 -m latexgit.aux article|\\
+% |python3 -m texgit.aux article|\\
 % |pdflatex article|
 % \end{quote}
 %
@@ -383,47 +384,47 @@ literate=%
 % \label{sec:installation}%
 %
 % \subsubsection{\LaTeX\ Package}%
-% First, make sure that you have the |latexgit.sty| either installed or inside
+% First, make sure that you have the |texgit.sty| either installed or inside
 % your document's directory.
 % For this, there are several options:%
 % \begin{enumerate}%
 % \item You can just download the file from
-% \url{https://thomasweise.github.io/latexgit_tex/latexgit.sty} directly.
+% \url{https://thomasweise.github.io/texgit_tex/texgit.sty} directly.
 % You can now copy it into the folder of your document.
 %%
-% \item You can download |latexgit.dtx|\tindex{latexgit.dtx} and
-% |latexgit.ins|\tindex{latexgit.ins} from
-% \url{https://thomasweise.github.io/latexgit_tex/latexgit.dtx} and
-% \url{https://thomasweise.github.io/latexgit_tex/latexgit.ins}.
+% \item You can download |texgit.dtx|\tindex{texgit.dtx} and
+% |texgit.ins|\tindex{texgit.ins} from
+% \url{https://thomasweise.github.io/texgit_tex/texgit.dtx} and
+% \url{https://thomasweise.github.io/texgit_tex/texgit.ins}.
 % You can then execute
 % \begin{quote}%
-% |pdflatex latexgit.ins|\tindex{pdflatex}
+% |pdflatex texgit.ins|\tindex{pdflatex}
 % \end{quote}%
-% and you should get the style file |latexgit.sty|\tindex{latexgit.sty}.
+% and you should get the style file |texgit.sty|\tindex{texgit.sty}.
 % You can now copy it into the folder of your document.
 %%
-% \item Or you can download the |latexgit.tds.zip| file from
-% \url{https://thomasweise.github.io/latexgit_tex/latexgit.tds.zip} and
+% \item Or you can download the |texgit.tds.zip| file from
+% \url{https://thomasweise.github.io/texgit_tex/texgit.tds.zip} and
 % unpack it into your \TeX\ tree.
 % If you know what that is.
 % \end{enumerate}%
 %
 % \subsubsection{Python Package}%
-% \label{sec:latexgitpy}%
+% \label{sec:texgitpy}%
 % The Python\index{Python} package is available at
-% \url{https://github.com/thomasWeise/latexgit_py}\index{latexgit\_py},
-% \url{https://thomasweise.github.io/latexgit_py}, and
-% \url{https://pypi.org/project/latexgit}.
+% \url{https://github.com/thomasWeise/texgit_py}\index{texgit\_py},
+% \url{https://thomasweise.github.io/texgit_py}, and
+% \url{https://pypi.org/project/texgit}.
 % You can most easily install it from PyPI\index{PyPI} by doing
 % \begin{quote}
-% |pip install latexgit|
+% |pip install texgit|
 % \end{quote}
 %
 % \subsection{Loading the Package}%
 % \label{sec:loadThePackage}%
 % Load this package using%
 % \begin{quote}
-%   |\usepackage{latexgit}|
+%   |\usepackage{texgit}|
 % \end{quote}
 % \begin{sloppypar}%
 % The package has no options or parameters.
@@ -517,20 +518,20 @@ literate=%
 % \begin{sloppypar}%
 % During the first |pdflatex|\tindex{pdflatex} run, |\gitFile{id}| points to
 % an empty dummy file
-% (|\jobname.latexgit.dummy|)\tbindex{jobname.latexgit.dummy} and
+% (|\jobname.texgit.dummy|)\tbindex{jobname.texgit.dummy} and
 % |\gitUrl{id}| points to |http://example.com|\index{http://example.com}.
 % Both commands will only expand to useful information if the Python package
-% |latexgit| is applied to the project's |aux| file.
+% |texgit| is applied to the project's |aux| file.
 % This works very similar to \BibTeX.
 % If the name of your \TeX\ file is |myfile.tex|, then you would execute
 % \end{sloppypar}%
 % \begin{quote}
-% |python3 -m latexgit.aux myfile|
+% |python3 -m texgit.aux myfile|
 % \end{quote}
 % More specifically, the Python package processes the |aux| files, so for a
 % specific |aux|\tindex{aux} file |myfile.aux|, you could also do:
 % \begin{quote}
-% |python3 -m latexgit.aux myfile.aux|
+% |python3 -m texgit.aux myfile.aux|
 % \end{quote}
 %
 % After this, in the next pass of |pdflatex|, |\gitFile{id}| and |\gitUrl{id}|
@@ -540,8 +541,8 @@ literate=%
 % The following only applies if you have installed this package inside a
 % virtual environment.
 % It also only applies in conjunction with version
-% \href{https://pypi.org/project/latexgit/0.8.17/}{0.8.17} or newer of
-% the |latexgit| Python package.
+% \href{https://pypi.org/project/texgit/0.8.17/}{0.8.17} or newer of
+% the |texgit| Python package.
 %
 % If you are running this package inside a virtual environment, it is
 % important that you create this environment using the |--copies| setting and
@@ -564,7 +565,7 @@ literate=%
 % \section{Provided Macros}\label{sec:providedMacros}%
 %
 % Here we discuss the macros that can directly be accessed by the user to
-% make use of the functionality of the |latexgit| package.
+% make use of the functionality of the |texgit| package.
 % The implementation of these macros is given in \autoref{sec:implementation}
 % and several examples can be found in \autoref{sec:examples}.
 %
@@ -574,16 +575,16 @@ literate=%
 % \begin{itemize}\sloppy%
 %
 % \item[\marg{id}] is the request ID chosen by the user.
-% It must be unique over all requests made to |latexgit|.
+% It must be unique over all requests made to |texgit|.
 % Imagine it something like a label.
 %
 % \item[\marg{repositoryURL}] is the URL of the |git| repository.
-% It could, e.g., be \url{https://github.com/thomasWeise/latexgit\_tex} or
-% \url{ssh://git@github.com/thomasWeise/latexgit\_tex} or any other valid
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
 % repository URL.
 %
 % \item[\marg{path}] is then the path to the file within the repository.
-% This could be, for example, |latex/latexgit.dtx|.%
+% This could be, for example, |latex/texgit.dtx|.%
 %
 % \item[\marg{postProcessing}] Can either be empty, in which case the
 % repository is downloaded and the the local path to the file is returned.
@@ -612,12 +613,12 @@ literate=%
 % \begin{itemize}\sloppy%
 %
 % \item[\marg{id}] is the request ID chosen by the user.
-% It must be unique over all requests made to |latexgit|.
+% It must be unique over all requests made to |texgit|.
 % Imagine it something like a label.
 %
 % \item[\marg{repositoryURL}] is the URL of the |git| repository.
-% It could, e.g., be \url{https://github.com/thomasWeise/latexgit\_tex} or
-% \url{ssh://git@github.com/thomasWeise/latexgit\_tex} or any other valid
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
 % repository URL.
 % You can also leave this parameter empty if no |git| repository should
 % be used.%
@@ -658,7 +659,7 @@ literate=%
 % \begin{itemize}%
 %
 % \item[\marg{id}] is the request ID chosen by the user.
-% It must be unique over all requests made to |latexgit|.
+% It must be unique over all requests made to |texgit|.
 % Imagine it something like a label.
 %
 % \item[\marg{prefix}] is a prefix for the file name to be generated.
@@ -691,7 +692,7 @@ literate=%
 % \DescribeMacro{\gitIf}%
 % The macro |\gitIf|\marg{id}{ifDone}{ifNotDone} executes the code provided as
 % |ifDone| if the request with ID~|id| has already been executed and completed
-% by the |latexgit| Python package.
+% by the |texgit| Python package.
 % Otherwise, it will execute the code provided as |ifNotDone|.
 % As stated before, during the first |pdflatex| pass, all results of
 % |\gitFile| and |\gitUrl| are dummies, either empty files or dummy URLs.
@@ -703,7 +704,7 @@ literate=%
 % So we would place the |\includegraphics| into a |\gitIf| block and only
 % execute it once the request is completed.
 % After the first |pdflatex| run, we would execute the Python package
-% |latexgit|.
+% |texgit|.
 % This package will complete the request and the argument file will then be
 % a proper graphic.
 % In the second |pdflatex| pass, the |\includegraphics| code could be
@@ -734,15 +735,15 @@ literate=%
 % repository and directly |\input|\expandafter\tbindex{input} its contents.
 % The result can be seen in \autoref{ex:example_2:res}.
 %
-% \lstinputlisting[classoffset=2,morekeywords={A,B,C,D},breaklines=True,keywordstyle=\ttfamily\bfseries\color{blue!90!black},classoffset=0,float,label=ex:example_1,caption={A minimal working example for using the \texttt{latexgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
+% \lstinputlisting[classoffset=2,morekeywords={A,B,C,D},breaklines=True,keywordstyle=\ttfamily\bfseries\color{blue!90!black},classoffset=0,float,label=ex:example_1,caption={A minimal working example for using the \texttt{texgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
 %
 % As you can see in \autoref{ex:example_1}, we first load the package
-% |latexgit| in line~2.
+% |texgit| in line~2.
 % Inside the document, we define a |git| request via the |\gitLoad| command.
 % This command takes the ID of the request as first parameter.
 % Here, we chose |R1|.
 % Its second parameter is the URL of a |git| repository.
-% In this case, this is \url{https://github.com/thomasWeise/latexgit_tex},
+% In this case, this is \url{https://github.com/thomasWeise/texgit_tex},
 % which happens to be the URL where you can find the repository of this
 % package on GitHub.
 % The third parameter is a path to the file in this repository relative to
@@ -761,16 +762,16 @@ literate=%
 % from the |git| repository.
 %
 % Well, during the first \LaTeX\ or |pdflatex| run, it just points to a dummy
-% file with the name |\jobname.latexgit.dummy|, where
+% file with the name |\jobname.texgit.dummy|, where
 % |\jobname|\tbindex{jobname} evaluates to the name of the main \LaTeX\
 % document, say |article| for |article.tex|.
 % At that point, the dummy file's content is a single space character followed
 % by a newline.
 %
 % After the first |pdflatex| pass, you can apply the Python\index{Python}
-% processor (see \autoref{sec:latexgitpy}) as follows:
+% processor (see \autoref{sec:texgitpy}) as follows:
 % \begin{quote}%
-% |python3 -m latexgit.aux jobname|
+% |python3 -m texgit.aux jobname|
 % \end{quote}%
 % Where |jobname| shall be replaced with the main file name, again |article|
 % for |article.tex|, for instance.
@@ -790,7 +791,7 @@ literate=%
 % If this example was stored as |example_1.tex|, then it could be built via
 % \begin{quote}
 % |pdflatex example_1|\\
-% |python3 -m latexgit.aux example_1|\\
+% |python3 -m texgit.aux example_1|\\
 % |pdflatex example_1|
 % \end{quote}
 %
@@ -822,31 +823,31 @@ literate=%
 % codes as listings.
 % We will show how this could be done in the next example.
 %
-% \emph{Side note:}~Our Python companion package |latexgit| downloads the
+% \emph{Side note:}~Our Python companion package |texgit| downloads the
 % |git| repositories into a folder called |__git__|\tindex{\_\_git\_\_} by
 % default.
 % If you do not delete the folder, the same repository will not be downloaded
 % again but the downloaded copy will be used.
 % This significantly increases speed and reduces bandwidth when applying the
-% |latexgit| command several times.
+% |texgit| command several times.
 % \clearpage%
 %
 % \subsection{The Second Example: Multiple Files and Post-Processing}%
 % \label{sec:example_2}%
 % \FloatBarrier%
-% In \autoref{ex:example_2} we, use |latexgit| to download and present two
+% In \autoref{ex:example_2} we, use |texgit| to download and present two
 % different files from two different GitHub repositories.
 % We also show how post-processing can work, once using the aforementioned
 % simple |head -n 5| command available in the Linux shell and also by
-% using the Python code formatting tool offered by the |latexgit| Python
+% using the Python code formatting tool offered by the |texgit| Python
 % package.
 % The result can be seen in \autoref{ex:example_2:res}.
 %
-% \lstinputlisting[float,label=ex:example_2,caption={An example using the latexgit package, rendered as \autoref{ex:example_2:res}.}]{examples/example_2.tex}%
+% \lstinputlisting[float,label=ex:example_2,caption={An example using the texgit package, rendered as \autoref{ex:example_2:res}.}]{examples/example_2.tex}%
 % \FloatBarrier%
 %
 % The file |example_2.tex| shown in \autoref{ex:example_2} begins by loading
-% our |latexgit| package as well as package |verbatim|, which is later used
+% our |texgit| package as well as package |verbatim|, which is later used
 % to display the included files.
 % The document creates three sections, each of which is used to display one
 % imported file.
@@ -905,12 +906,12 @@ literate=%
 % If this example was stored as |example_2.tex|, then it could be built via
 % \begin{quote}
 % |pdflatex example_2|\\
-% |python3 -m latexgit.aux example_2|\\
+% |python3 -m texgit.aux example_2|\\
 % |pdflatex example_2|
 % \end{quote}
 %
 % \emph{Side note:}~Such post-processing steps are cached by the Python
-% companion package |latexgit| in the |__git__|\tindex{\_\_git\_\_} folder
+% companion package |texgit| in the |__git__|\tindex{\_\_git\_\_} folder
 % as well.
 %
 % Finally, in the third section, of \autoref{ex:example_2}, we import a file
@@ -926,16 +927,16 @@ literate=%
 % We also remove all Python type hints and all comments from the source and
 % then reformat it.
 %
-% Luckily, our |latexgit| Python package also offers a Python code formatter,
-% namely the executable module \href{https://thomasweise.github.io/latexgit_py/latexgit.formatters.html#module-latexgit.formatters.python}{latexgit.formatters.python}.
+% Luckily, our |texgit| Python package also offers a Python code formatter,
+% namely the executable module \href{https://thomasweise.github.io/texgit_py/texgit.formatters.html#module-texgit.formatters.python}{texgit.formatters.python}.
 % This module takes a set of parameters such as limiting |labels| that denote
 % the start and end of code snippets (in this case, the label ``|book|'') to
 % include as well |args| telling the system which part of the ``omittable''
 % code to preserve (in this case, preserve |doc|strings and delete everything
 % else that is non-essential).
 % If you are interested in such post-processing, feel invited to check out
-% the \href{https://thomasweise.github.io/latexgit_py}{documentation} of the
-% Python companion package at \url{https://thomasweise.github.io/latexgit_py}.
+% the \href{https://thomasweise.github.io/texgit_py}{documentation} of the
+% Python companion package at \url{https://thomasweise.github.io/texgit_py}.
 % Either way, the file is downloaded, piped through this post-processor, and
 % the result is included as shown in \autoref{ex:example_2:3}.
 %
@@ -995,7 +996,7 @@ literate=%
 % If this example was stored as |example_3.tex|, then it could be built via
 % \begin{quote}
 % |pdflatex example_3|\\
-% |python3 -m latexgit.aux example_3|\\
+% |python3 -m texgit.aux example_3|\\
 % |pdflatex example_3|
 % \end{quote}
 %
@@ -1008,15 +1009,15 @@ literate=%
 % In a listing in a book, we do not.
 % The post-processor command
 % \begin{quote}
-% |python3 -m latexgit.formatters.python --labels book|
+% |python3 -m texgit.formatters.python --labels book|
 % \end{quote}%
 % only keeps the code between the labels ``|# start book|'' and
 % ``|# end book|.''
 % It also removes all non-essential stuff such as type hints, comments, and
 % the doc-string.
 % Then it re-formats the code to save space.
-% Again, check out the documentation of our |latexgit| Python companion
-% package at \url{https://thomasweise.github.io/latexgit_py}.
+% Again, check out the documentation of our |texgit| Python companion
+% package at \url{https://thomasweise.github.io/texgit_py}.
 % This is the main intended use case of our package:
 % Be able to have nicely documented ``real'' code and to use parts of it
 % in teaching materials.
@@ -1028,10 +1029,10 @@ literate=%
 % \label{sec:example_4}%
 % \FloatBarrier%
 %
-% \lstinputlisting[float,label=ex:example_4,caption={An example using commands from the latexgit package in macros, rendered as \autoref{ex:example_4:res}.}]{examples/example_4.tex}%
+% \lstinputlisting[float,label=ex:example_4,caption={An example using commands from the texgit package in macros, rendered as \autoref{ex:example_4:res}.}]{examples/example_4.tex}%
 %
 % The goal of the fourth example is to show that we can also put the commands
-% from our |latexgit| package into \LaTeX\ macros.
+% from our |texgit| package into \LaTeX\ macros.
 % We define a new command |\moptipySrc| with three parameters.
 % \href{https://thomasweise.github.io/moptpiy}{moptipy} is a Python package
 % that implements lots of metaheuristic algorithms.
@@ -1044,7 +1045,7 @@ literate=%
 % label to put for the listing, whose second command is the caption to use,
 % and whose third command is the path relative to the folder ``moptipy'' in
 % the |git| repository.
-% We also use this first parameter, the label, as ID for our |latexgit|
+% We also use this first parameter, the label, as ID for our |texgit|
 % commands.
 % In \autoref{ex:example_4}, we can then simply call |\moptipySrc| and it will
 % do the whole process of loading a file from the right repository,
@@ -1054,7 +1055,7 @@ literate=%
 % The results are shown in \autoref{ex:example_4:res}% and can be obtained via
 % \begin{quote}
 % |pdflatex example_4|\\
-% |python3 -m latexgit.aux example_4|\\
+% |python3 -m texgit.aux example_4|\\
 % |pdflatex example_4|
 % \end{quote}
 % (if the example code from \autoref{ex:example_4} was stored in a file called
@@ -1094,7 +1095,7 @@ literate=%
 % The results are shown in \autoref{ex:example_5:res}% and can be obtained via
 % \begin{quote}
 % |pdflatex example_5|\\
-% |python3 -m latexgit.aux example_5|\\
+% |python3 -m texgit.aux example_5|\\
 % |pdflatex example_5|
 % \end{quote}
 % (if the example code from \autoref{ex:example_5} was stored in a file called
@@ -1127,7 +1128,7 @@ literate=%
 % The results are shown in \autoref{ex:example_6:res}% and can be obtained via
 % \begin{quote}
 % |pdflatex example_6|\\
-% |python3 -m latexgit.aux example_6|\\
+% |python3 -m texgit.aux example_6|\\
 % |pdflatex example_6|
 % \end{quote}
 % (if the example code from \autoref{ex:example_6} was stored in a file called
@@ -1163,7 +1164,7 @@ literate=%
 % The results are shown in \autoref{ex:example_7:res} and can be obtained via
 % \begin{quote}
 % |pdflatex example_7|\\
-% |python3 -m latexgit.aux example_7|\\
+% |python3 -m texgit.aux example_7|\\
 % |pdflatex example_7|
 % \end{quote}
 % (if the example code from \autoref{ex:example_7} was stored in a file called
@@ -1210,7 +1211,7 @@ literate=%
 % \end{sloppypar}%
 %
 % However, |\gitFile{R13}| will only be valid after we applied the Python
-% |latexgit| command \emph{after} the first |pdflatex| pass.
+% |texgit| command \emph{after} the first |pdflatex| pass.
 % Therefore, during the first |pdflatex| pass, this file will be empty.
 % |\includegraphics| would fail.
 % Therefore, we protect this code to be only executed once the file has been
@@ -1221,7 +1222,7 @@ literate=%
 % The results are shown in \autoref{ex:example_8:res} and can be obtained via
 % \begin{quote}
 % |pdflatex example_8|\\
-% |python3 -m latexgit.aux example_8|\\
+% |python3 -m texgit.aux example_8|\\
 % |pdflatex example_8|
 % \end{quote}
 % (if the example code from \autoref{ex:example_8} was stored in a file called
@@ -1255,10 +1256,10 @@ literate=%
 % \section{Implementation}%
 % \label{sec:implementation}%
 % The names of all internal elements of the package are prefixed
-% with |@latexgit@|.
+% with |@texgit@|.
 % This naming convention should prevent any name clashes with other packages.
 %
-% Our |latexgit| package requires only one other package:%
+% Our |texgit| package requires only one other package:%
 % \begin{enumerate}%
 % \item |filecontents|\index{filecontents}~\cite{P2023TFP} is used to allow us
 % to generate the dummy file on the fly.
@@ -1277,24 +1278,24 @@ literate=%
 % The dummy file is referenced by all invocations of |\gitFile| until the
 % Python package has been applied to the |.aux| file and has loaded the
 % actual files.
-\xdef\@latexgit@dummyPath{\jobname.latexgit.dummy}%  the dummy file
+\xdef\@texgit@dummyPath{\jobname.texgit.dummy}%  the dummy file
 %
 % Create the dummy file that replaces files before they are loaded.
 % This file only has one line with one single space.
-\expandafter\begin\expandafter{filecontents*}{\@latexgit@dummyPath}
+\expandafter\begin\expandafter{filecontents*}{\@texgit@dummyPath}
 
 \end{filecontents*}
 %
 % The dummy URL that is returned by |\gitURL| unless a proper URL is
 % available.
-\xdef\@latexgit@dummyUrl{https://example.com}%  the dummy URL
+\xdef\@texgit@dummyUrl{https://example.com}%  the dummy URL
 %
 % This command does nothing and is just a placeholder in the |aux| files.
-\protected\gdef\@latexgit@gitFile#1#2#3#4{}%
+\protected\gdef\@texgit@gitFile#1#2#3#4{}%
 % This command as well.
-\protected\gdef\@latexgit@process#1#2#3#4{}%
+\protected\gdef\@texgit@process#1#2#3#4{}%
 % This command as well.
-\protected\gdef\@latexgit@argFile#1#2#3{}%
+\protected\gdef\@texgit@argFile#1#2#3{}%
 %    \end{macrocode}
 %
 % \begin{macro}{\gitLoad}
@@ -1308,7 +1309,7 @@ literate=%
 % file which only has a single space character in it followed by a newline and
 % the dummy URL \url{https://example.com}, respectively.
 % As said, |\gitLoad| will store all information in the |aux| file, which then
-% permits the |latexgit| Python package to download (and optionally
+% permits the |texgit| Python package to download (and optionally
 % post-process) the actual file.
 % In the second round of \LaTeX\ building, |\gitFile{id}| and |\gitUrl{id}| will
 % then return the local path to that downloaded file and the actual URL,
@@ -1319,12 +1320,12 @@ literate=%
 % Imagine this being something like a label.
 %
 % \item[\marg{repositoryURL}] is the URL of the |git| repository.
-% It could, e.g., be \url{https://github.com/thomasWeise/latexgit\_tex} or
-% \url{ssh://git@github.com/thomasWeise/latexgit\_tex} or any other valid
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
 % repository URL.%
 %
 % \item[\marg{path}] is then the path to the file within the repository.
-% This could be, for example, |latex/latexgit.dtx|.%
+% This could be, for example, |latex/texgit.dtx|.%
 %
 % \item[\marg{postProcessing}] Can either be empty, in which case the
 % repository is downloaded and the the local path to the file is
@@ -1343,14 +1344,14 @@ literate=%
 %% #4 is a command through which the file contents should be piped
 %%%   (leave #4 empty to use the file as-is)
 \protected\gdef\gitLoad#1#2#3#4{%
-\edef\@latexgit@pA{#1}%  fully expand the request ID
-\edef\@latexgit@pB{#2}%  fully expand the repository URL
-\edef\@latexgit@pC{#3}%  fully expand the path into the repository
-\edef\@latexgit@pD{#4}%  fully expand the (optional) shell command
+\edef\@texgit@pA{#1}%  fully expand the request ID
+\edef\@texgit@pB{#2}%  fully expand the repository URL
+\edef\@texgit@pC{#3}%  fully expand the path into the repository
+\edef\@texgit@pD{#4}%  fully expand the (optional) shell command
 % Write the parameters to the aux file.
 \immediate\write\@mainaux{%
-\noexpand\@latexgit@gitFile{\@latexgit@pA}{\@latexgit@pB}{%
-\@latexgit@pC}{\@latexgit@pD}}%
+\noexpand\@texgit@gitFile{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}{\@texgit@pD}}%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -1366,7 +1367,7 @@ literate=%
 % During the first \LaTeX\ build, this macro will return a path to a dummy
 % file which only has a single space character in it followed by a newline.
 % As said, |\gitExec| will store all information in the |aux| file, which then
-% permits the |latexgit| Python package to download (and optionally
+% permits the |texgit| Python package to download (and optionally
 % post-process) the actual file.
 % In the second round of \LaTeX\ building, |\gitFile{id}| will then return the
 % local path to the file with the standard output of the executed
@@ -1377,8 +1378,8 @@ literate=%
 % Imagine this being something like a label.
 %
 % \item[\marg{repositoryURL}] is the URL of the |git| repository.
-% It could, e.g., be \url{https://github.com/thomasWeise/latexgit\_tex} or
-% \url{ssh://git@github.com/thomasWeise/latexgit\_tex} or any other valid
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
 % repository URL.%
 % You can leave this argument empty if you want to execute the command in the
 % current directory.
@@ -1394,8 +1395,8 @@ literate=%
 % The standard output produced by this command is captured as file.
 % \end{itemize}%
 %    \begin{macrocode}
-\newcount\@latexgit@counter%  The counter for the dummy arguments of \gitExec
-\@latexgit@counter0\relax%    We start the counter at 0.
+\newcount\@texgit@counter%  The counter for the dummy arguments of \gitExec
+\@texgit@counter0\relax%    We start the counter at 0.
 %%
 %% Define a query to execute a command, optionally in a |git| repository.
 %% #1 is the request ID, leave empty if you do not want to access the output
@@ -1403,18 +1404,18 @@ literate=%
 %% #3 is the path to a directory inside the repository or empty
 %% #4 is a command to be executed
 \protected\gdef\gitExec#1#2#3#4{%
-\edef\@latexgit@pA{#1}%  the request ID
-\ifx\@latexgit@pA\empty\relax\edef\@latexgit@pA{%
-@latexgit@dummy@\the\@latexgit@counter}%
-\global\advance\@latexgit@counter by 1% step the counter for the next dummy
+\edef\@texgit@pA{#1}%  the request ID
+\ifx\@texgit@pA\empty\relax\edef\@texgit@pA{%
+@texgit@dummy@\the\@texgit@counter}%
+\global\advance\@texgit@counter by 1% step the counter for the next dummy
 \fi%
-\edef\@latexgit@pB{#2}%  fully expand the repository URL, or empty
-\edef\@latexgit@pC{#3}%  fully expand the path into the repository, or empty
-\edef\@latexgit@pD{#4}%  fully expand the (optional) shell command
+\edef\@texgit@pB{#2}%  fully expand the repository URL, or empty
+\edef\@texgit@pC{#3}%  fully expand the path into the repository, or empty
+\edef\@texgit@pD{#4}%  fully expand the (optional) shell command
 % Write the parameters to the aux file.
 \immediate\write\@mainaux{%
-\noexpand\@latexgit@process{\@latexgit@pA}{\@latexgit@pB}{%
-\@latexgit@pC}{\@latexgit@pD}}%
+\noexpand\@texgit@process{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}{\@texgit@pD}}%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -1428,7 +1429,7 @@ literate=%
 % During the first \LaTeX\ build, this macro will return a path to a dummy
 % file which only has a single space character in it followed by a newline.
 % As said, |\gitExec| will store all information in the |aux| file, which then
-% permits the |latexgit| Python package to download (and optionally
+% permits the |texgit| Python package to download (and optionally
 % post-process) the actual file.
 % In the second round of \LaTeX\ building, |\gitFile{id}| will then return the
 % local path to the file with the standard output of the executed
@@ -1450,13 +1451,13 @@ literate=%
 %% #2 is the prefix
 %% #3 is the suffix
 \protected\gdef\gitArg#1#2#3{%
-\edef\@latexgit@pA{#1}%  the request ID
-\edef\@latexgit@pB{#2}%  fully expand the prefix
-\edef\@latexgit@pC{#3}%  fully expand the suffix
+\edef\@texgit@pA{#1}%  the request ID
+\edef\@texgit@pB{#2}%  fully expand the prefix
+\edef\@texgit@pC{#3}%  fully expand the suffix
 % Write the parameters to the aux file.
 \immediate\write\@mainaux{%
-\noexpand\@latexgit@argFile{\@latexgit@pA}{\@latexgit@pB}{%
-\@latexgit@pC}}%
+\noexpand\@texgit@argFile{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}}%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -1483,7 +1484,7 @@ literate=%
 %% #3 the code to execute if the request of the given ID has NOT been
 %%    executed.
 \gdef\gitIf#1#2#3{%
-\expandafter\ifx\csname @latexgit@path@#1\endcsname\relax%
+\expandafter\ifx\csname @texgit@path@#1\endcsname\relax%
 \expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi{#3}{#2}%
 }%
 %    \end{macrocode}
@@ -1503,8 +1504,8 @@ literate=%
 %% Get the file path associated with the request ID.
 %% #1 is the request ID
 \gdef\gitFile#1{%
-\expandafter\ifx\csname @latexgit@path@#1\endcsname\relax%
-\@latexgit@dummyPath\else\csname @latexgit@path@#1\endcsname\fi%
+\expandafter\ifx\csname @texgit@path@#1\endcsname\relax%
+\@texgit@dummyPath\else\csname @texgit@path@#1\endcsname\fi%
 }%
 %    \end{macrocode}
 % \end{macro}
@@ -1523,8 +1524,8 @@ literate=%
 %% Get the URL associated with the request ID.
 %% #1 is the request ID
 \gdef\gitUrl#1{%
-\expandafter\ifx\csname @latexgit@url@#1\endcsname\relax%
-\@latexgit@dummyUrl\else\csname @latexgit@url@#1\endcsname\fi%
+\expandafter\ifx\csname @texgit@url@#1\endcsname\relax%
+\@texgit@dummyUrl\else\csname @texgit@url@#1\endcsname\fi%
 }%
 %    \end{macrocode}
 % \end{macro}

@@ -311,8 +311,8 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
-latexgit.sty
-latexgit.pdf
+texgit.sty
+texgit.pdf
 
 # the generated website
 website

@@ -1,9 +1,9 @@
 #
-# Dependencies Required to Use `latexgit`
+# Dependencies Required to Use `texgit`
 #
 
-# Basically, we only need the `latexgit` Python companion package.
-# You can find it at https://thomasweise.github.io/latexgit_py,
-# https://github.com/thomasWeise/latexgit_py, or at
-# https://pypi.org/project/latexgit.
-latexgit == 0.9.3
+# Basically, we only need the `texgit` Python companion package.
+# You can find it at https://thomasweise.github.io/texgit_py,
+# https://github.com/thomasWeise/texgit_py, or at
+# https://pypi.org/project/texgit.
+texgit == 0.9.3

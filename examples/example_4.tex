@@ -1,5 +1,5 @@
 \documentclass{article}%
-\usepackage{latexgit}% use our package
+\usepackage{texgit}% use our package
 \usepackage{xcolor}% to be able to use colors
 \usepackage[colorlinks]{hyperref}%  for printing the URL
 \usepackage{listings}% importing external code
@@ -12,7 +12,7 @@ backgroundcolor=\color{black!10!yellow!5!white}}%
 %
 \gdef\moptipySrc#1#2#3{%
 \gitLoad{#1}{https://github.com/thomasWeise/moptipy}{moptipy/#3}{%
-python3 -m latexgit.formatters.python --labels book}%
+python3 -m texgit.formatters.python --labels book}%
 \lstinputlisting[float,label={#1},caption={%
 #2~(\href{\gitUrl{#1}}{src})}]{\gitFile{#1}}}
 %

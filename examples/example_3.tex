@@ -1,5 +1,5 @@
 \documentclass{article}%
-\usepackage{latexgit}% use our package
+\usepackage{texgit}% use our package
 \usepackage{xcolor}% to be able to use colors
 \usepackage[colorlinks]{hyperref}%  for printing the URL
 \usepackage{listings}% importing external code
@@ -15,7 +15,7 @@ Behold the beautiful \autoref{l}.%
 %
 \gitLoad{R5}{https://github.com/thomasWeise/moptipy}{%
 moptipy/algorithms/so/rls.py}{%
-python3 -m latexgit.formatters.python --labels book}%  post-processor
+python3 -m texgit.formatters.python --labels book}%  post-processor
 %
 \lstinputlisting[label=l,caption={%
 The RLS Algorithm. (\href{\gitUrl{R5}}{src})}]{\gitFile{R5}}%
