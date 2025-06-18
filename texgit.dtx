@@ -1249,6 +1249,30 @@ literate=%
 % environments.
 % Then the execution order is always the same and clear.
 %
+% \section{Usage in GitHub Actions}
+% It is possible to use |texgit| in GitHub actions.
+% For this purpose, you would simply copy the |texgit.sty| file into the directory of your \LaTeX\ sources.
+% You can use \href{https://github.com/xu-cheng/texlive-action}{xu-cheng/texlive-action}, which provides TexLive, to run several |pdflatex| / |texgit| cycles.
+% Then, you could deploy the book that was built using \href{https://github.com/JamesIves/github-pages-deploy-action}{JamesIves/github-pages-deploy-action} to a GitHub page.
+% This way, whenever you commit changes \LaTeX\ sources residing in a |git| repository, your book would be re-built.
+% The projects below do it this way.
+%
+% \section{Projects using texgit}
+% |texgit| was developed specifically for teaching material book projects.
+% There are several book projects that use it.
+% \begin{itemize}%
+% \item \emph{Programming with Python}, available at \url{https://thomasWeise.github.io/programmingWithPython} is a book and a set of slides introducing the reader to Python programming.
+% It is enriched with many source code examples, which reside in the repository \url{https://github.com/thomasWeise/programmingWithPythonCode}.
+% These examples are automatically included and executed in the book building process via |texgit|.
+% \item \emph{Databases}, available at \url{https://thomasWeise.github.io/databases} is a book and a set of slides introducing the reader to relational databases.
+% It is enriched with many source code examples, which reside in the repository \url{https://github.com/thomasWeise/databasesCode}.
+% These examples are automatically included and executed in the book building process via |texgit|.
+% Actually, they are |sql| scripts that run on a PostgreSQL database management system.
+% With |texgit|, you can run complex scripts residing in |git| repositories.
+% It is possible to interact with a database server without problems.
+%
+% \end{itemize}%
+%
 % \clearpage%
 %
 % \StopEventually{}
