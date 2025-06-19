@@ -146,6 +146,27 @@ pygmentize -f html -l text -O full -O style=default -o website/requirements.html
 pygmentize -f html -l text -O full -O style=default -o website/requirements-dev.html requirements-dev.txt
 pygmentize -f html -l Bash -O full -O style=default -o website/make.html make.sh
 pygmentize -f html -l Bash -O full -O style=default -o website/make.html make_venv.sh
+
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Determining dependency versions (1)."
+TEXGIT_VERSION="$(python3 -c "import texgit; print(texgit.__version__);")"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): The version of the texgit Python package is $TEXGIT_VERSION."
+
+deactivate
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now getting plain requirements."
+venvDirPlain="$(mktemp -d)"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Got temp dir '$venvDirPlain', now creating environment in it."
+python3 -m venv "$venvDirPlain"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Activating plain virtual environment in '$venvDirPlain'."
+source "$venvDirPlain/bin/activate"
+pip install "texgit==$TEXGIT_VERSION"
+pip freeze --local > website/requirements-all.txt
+deactivate
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Deleting plain virtual environment."
+rm -rf "$venvDirPlain"
+
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Going back to full virtual environment."
+source "$venvDir/bin/activate"
+pygmentize -f html -l text -O full -O style=default -o website/requirements-all.html website/requirements-all.txt
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished creating additional files, now building index.html from README.md."
 PART_A='<!DOCTYPE html><html><title>'
 PART_B='</title><style>code {background-color:rgb(204 210 95 / 0.3);white-space:nowrap;border-radius:3px}</style><body style="margin-left:5%;margin-right:5%">'
@@ -171,46 +192,51 @@ cp requirements-dev.txt website
 touch website/.nojekyll
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building the website."
 
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now creating texgit.zip."
+zipTempDir="$(mktemp -d)"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Created temp directory '$zipTempDir'. Now building zip."
+mkdir -p "$zipTempDir/texgit/"
+cp README.md "$zipTempDir/texgit/"
+cp texgit.ins "$zipTempDir/texgit/"
+cp texgit.dtx "$zipTempDir/texgit/"
+cp website/texgit.pdf "$zipTempDir/texgit/texgit-doc.pdf"
+cp website/requirements-all.txt "$zipTempDir/texgit/"
+
+cd "$zipTempDir"
+zip -9 -r "texgit.zip" *
+mv "texgit.zip" "$currentDir/website"
+cd "$currentDir"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building texgit.zip."
+
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Deactivating virtual environment."
 deactivate
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Deleting virtual environment."
 rm -rf "$venvDir"
 
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now creating texgit.tds.zip."
-tempDir="$(mktemp -d)"
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Created temp directory '$tempDir'. Now building tds."
-mkdir -p "$tempDir/tex/latex/texgit/"
-cp website/texgit.sty "$tempDir/tex/latex/texgit/"
-mkdir -p "$tempDir/doc/latex/texgit/"
-cp README.md "$tempDir/doc/latex/texgit/"
-cp website/index.html "$tempDir/doc/latex/texgit/README.html"
-cp website/texgit.pdf "$tempDir/doc/latex/texgit/"
-mkdir -p "$tempDir/source/latex/texgit/"
-cp texgit.ins "$tempDir/source/latex/texgit/"
-cp texgit.dtx "$tempDir/source/latex/texgit/"
-mkdir -p "$tempDir/source/latex/texgit/examples"
-cp examples/*.tex "$tempDir/source/latex/texgit/examples"
-cd "$tempDir"
+tdsTempDir="$(mktemp -d)"
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Created temp directory '$tdsTempDir'. Now building tds."
+mkdir -p "$tdsTempDir/tex/latex/texgit/"
+cp website/texgit.sty "$tdsTempDir/tex/latex/texgit/"
+mkdir -p "$tdsTempDir/doc/latex/texgit/"
+cp README.md "$tdsTempDir/doc/latex/texgit/"
+cp website/requirements-all.txt "$tdsTempDir/doc/latex/texgit/"
+cp website/index.html "$tdsTempDir/doc/latex/texgit/README.html"
+cp website/texgit.pdf "$tdsTempDir/doc/latex/texgit/"
+mkdir -p "$tdsTempDir/source/latex/texgit/"
+cp texgit.ins "$tdsTempDir/source/latex/texgit/"
+cp texgit.dtx "$tdsTempDir/source/latex/texgit/"
+mkdir -p "$tdsTempDir/source/latex/texgit/examples"
+cp examples/*.tex "$tdsTempDir/source/latex/texgit/examples"
+cd "$tdsTempDir"
 zip -9 -r "texgit.tds.zip" tex doc source
 mv "texgit.tds.zip" "$currentDir/website"
-rm -rf "$tempDir"
 cd "$currentDir"
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building texgit.zip package."
 
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now creating texgit.zip."
-tempDir="$(mktemp -d)"
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Created temp directory '$tempDir'. Now building zip."
-mkdir -p "$tempDir/texgit/"
-cp README.md "$tempDir/texgit/"
-cp texgit.ins "$tempDir/texgit/"
-cp texgit.dtx "$tempDir/texgit/"
-cp website/texgit.pdf "$tempDir/texgit/texgit-doc.pdf"
-cd "$tempDir"
-zip -9 -r "texgit.zip" *
-mv "texgit.zip" "$currentDir/website"
-rm -rf "$tempDir"
-cd "$currentDir"
-echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Done building texgit.zip."
+echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Cleaning up temp directories."
+rm -rf "$tdsTempDir"
+rm -rf "$zipTempDir"
 
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Deleting all temporary and intermediate files after the build."
 rm texgit.aux || true

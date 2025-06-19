@@ -19,11 +19,11 @@
 \ProvidesFile{texgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{texgit}[2025/06/18 0.9.4 name change to texgit]%
+%<package>\ProvidesPackage{texgit}[2025/06/19 0.9.5 improved documentation and slight updates]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{texgit}[2025/06/18]
+\usepackage{texgit}[2025/06/19]
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -149,6 +149,7 @@ literate=%
 % \changes{0.9.2}{2025/06/15}{gitExec with empty ID permitted}
 % \changes{0.9.3}{2025/06/17}{better documentation}%
 % \changes{0.9.4}{2025/06/18}{name change to texgit}%
+% \changes{0.9.5}{2025/06/19}{improved documentation and slight updates}%
 %
 % \GetFileInfo{texgit.dtx}
 %
@@ -419,6 +420,11 @@ literate=%
 % \begin{quote}
 % |pip install texgit|
 % \end{quote}
+%
+% \subsubsection{git Executable}%
+% Make sure that the |git| executable is available in the |PATH|.
+% On Ubuntu Linux, you could install it via |sudo apt-get install git|, for example.
+% |git| is needed because the primary use case of our package is to clone |git| repositories and include the files from these repositories (or to execute them and to include their output) into \LaTeX\ documents.
 %
 % \subsection{Loading the Package}%
 % \label{sec:loadThePackage}%
@@ -1238,6 +1244,7 @@ literate=%
 % \afterpage{\clearpage}%
 %
 % \section{A Note on LaTeX Floating Environments}
+% \begin{sloppypar}%
 % \LaTeX\ offers us floating environments for laying out tables and figures.
 % Such environments, e.g., |\begin{figure}...\end{figure}| or
 % |\begin{table}...\end{table}| are automatically arranged by \LaTeX.
@@ -1248,7 +1255,7 @@ literate=%
 % It is therefore recommended to put these commands always outside of these
 % environments.
 % Then the execution order is always the same and clear.
-%
+% \end{sloppypar}%
 % \section{Usage in GitHub Actions}
 % It is possible to use |texgit| in GitHub actions.
 % For this purpose, you would simply copy the |texgit.sty| file into the directory of your \LaTeX\ sources.
@@ -1315,11 +1322,11 @@ literate=%
 \xdef\@texgit@dummyUrl{https://example.com}%  the dummy URL
 %
 % This command does nothing and is just a placeholder in the |aux| files.
-\protected\gdef\@texgit@gitFile#1#2#3#4{}%
+\gdef\@texgit@gitFile#1#2#3#4{}%
 % This command as well.
-\protected\gdef\@texgit@process#1#2#3#4{}%
+\gdef\@texgit@process#1#2#3#4{}%
 % This command as well.
-\protected\gdef\@texgit@argFile#1#2#3{}%
+\gdef\@texgit@argFile#1#2#3{}%
 %    \end{macrocode}
 %
 % \begin{macro}{\gitLoad}

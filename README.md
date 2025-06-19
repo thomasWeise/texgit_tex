@@ -3,11 +3,13 @@
 # texgit: Accessing Git Repositories from LaTeX
 
 - [Introduction](#1-introduction)
-- [Installation](#2-installation)
+- [Installation and Usage](#2-installation-and-usage)
 - [Files](#3-files)
 - [License](#4-license)
 - [Contact](#5-contact)
 
+**This LaTeX package requires a companion Python package to work.**
+Please see [Installation and Usage](#2-installation-and-usage).
 
 ## 1. Introduction
 This package allows you to download and access files that reside in a `git` repository from within your LaTeX code.
@@ -53,16 +55,18 @@ In your next LaTeX pass, you can now access the contents of these files.
 This process is described in detail in the [documentation](https://thomasweise.github.io/texgit_tex/texgit.pdf). 
 
 ## 2. Installation and Usage
-1. Install the Python package `texgit` via `pip install texgit`
-2. Download and copy [`texgit.sty`](https://thomasweise.github.io/texgit_tex/texgit.sty) from <https://thomasweise.github.io/texgit_tex/texgit.sty> into the folder of your LaTeX project *or* unpack [`texgit.tds.zip`](https://thomasweise.github.io/texgit_tex/texgit.tds.zip) into your TeX tree<sup>[1](https://ctan.org/TDS-guidelines)</sup> as described [here](https://texfaq.org/FAQ-inst-tds-zip) or [here](https://tex.stackexchange.com/questions/30307). 
-3. Find the usage of the `texgit` LaTeX package described in [`texgit.pdf`](https://thomasweise.github.io/texgit_tex/texgit.pdf) at <https://thomasweise.github.io/texgit_tex/texgit.pdf>. 
-4. Optionally: Read the [documentation](https://thomasweise.github.io/texgit_py) of the `texgit` Python companion at <https://thomasweise.github.io/texgit_py>.
+1. Install the Python package `texgit` via `pip install texgit`.
+2. Make sure that `git` is installed.
+   On Ubuntu Linux, you could install it via `sudo apt-get install git`.
+3. Download and copy [`texgit.sty`](https://thomasweise.github.io/texgit_tex/texgit.sty) from <https://thomasweise.github.io/texgit_tex/texgit.sty> into the folder of your LaTeX project *or* unpack [`texgit.tds.zip`](https://thomasweise.github.io/texgit_tex/texgit.tds.zip) into your TeX tree<sup>[1](https://ctan.org/TDS-guidelines)</sup> as described [here](https://texfaq.org/FAQ-inst-tds-zip) or [here](https://tex.stackexchange.com/questions/30307). 
+4. Find the recommended usage and use cases of the `texgit` LaTeX package described in [`texgit.pdf`](https://thomasweise.github.io/texgit_tex/texgit.pdf) at <https://thomasweise.github.io/texgit_tex/texgit.pdf>. 
+5. Optionally: Read the [documentation](https://thomasweise.github.io/texgit_py) of the `texgit` Python companion at <https://thomasweise.github.io/texgit_py>.
 
 To sum up things briefly:
 If you use the command `\gitLoad{id}{myRepoUrl}{myFilePath}{myPostProcessor}`, then our package will download the file at path `myFilePath` relative to the root of the `git` repository available at URL `myRepoUrl`.
 If `myPostProcessor` is left empty, the file is provided as-is at the path `\gitFile{id}`.
 If not left empty, `myPostProcessor` is executed as command in the shell, the downloaded file is piped into its `stdin`, and whatever the command writes to its `stdout` will become available as file pointed to by `\gitFile{id}`.
-You can then include this file or load it as code listing.
+You can then include this file via `\input{\gitFile{id}}` or load it as code listing from path `\gitFile{id}`.
 Again, please read the [documentation](https://thomasweise.github.io/texgit_tex/texgit.pdf).
 
 If your main document was stored as `article.tex`, you would build it using (at least) the three following steps:
@@ -70,6 +74,11 @@ If your main document was stored as `article.tex`, you would build it using (at 
 1. `pdflatex article`
 2. `python3 -m texgit.run article`
 3. `pdflatex article`
+
+During the first `pdflatex` run, all the requests to `texgit` are collected (and stored in the `aux` file).
+Calls to `\gitPath{...}` return the path to an empty dummy file.
+In the second step, `python3 -m texgit.run article`, the Python companion package is applied, reads the `aux` file, executes all the queries, and assigns proper paths to their results to them.
+In the second `pdflatex` run, `\gitFile` now returns the paths to the correctly downloaded and processed files.
 
 ## 3. Files
 Below, we provide a list of files that may be interesting to look at.
@@ -85,8 +94,9 @@ Below, we provide a list of files that may be interesting to look at.
 7. [`LICENSE.html`](https://thomasweise.github.io/texgit_tex/LICENSE.html) holds the license information for the package [[html](https://thomasweise.github.io/texgit_tex/LICENSE.html)]
 8. `make.sh` is the script with the build process [[html](https://thomasweise.github.io/texgit_tex/make.html)] | [[raw](https://thomasweise.github.io/texgit_tex/make.sh)]
 9. `make_venv.sh` creates a virtual environment with the required Python packages installed [[html](https://thomasweise.github.io/texgit_tex/make_venv.html)] | [[raw](https://thomasweise.github.io/texgit_tex/make_venv.sh)]
-10`requirements.txt` holds the Python requirements for using the package [[html](https://thomasweise.github.io/texgit_tex/requirements.html)] | [[txt](https://thomasweise.github.io/texgit_tex/requirements.txt)]
-11`requirements-dev.txt` holds the Python requirements for building the package [[html](https://thomasweise.github.io/texgit_tex/requirements-dev.html)] | [[txt](https://thomasweise.github.io/texgit_tex/requirements-dev.txt)]
+10. `requirements.txt` holds the Python requirements for using the package [[html](https://thomasweise.github.io/texgit_tex/requirements.html)] | [[txt](https://thomasweise.github.io/texgit_tex/requirements.txt)]
+11. `requirements-all.txt` holds the exact versions of the Python packages that were used when building the current version and documentation [[html](https://thomasweise.github.io/texgit_tex/requirements-all.html)] | [[txt](https://thomasweise.github.io/texgit_tex/requirements-all.txt)]
+12. `requirements-dev.txt` holds the Python requirements for building the package [[html](https://thomasweise.github.io/texgit_tex/requirements-dev.html)] | [[txt](https://thomasweise.github.io/texgit_tex/requirements-dev.txt)]
 
 ## 4. License
 [`texgit`](https://thomasweise.github.io/texgit_py) is a tool for accessing files in `git` repositories from `LaTeX`.
