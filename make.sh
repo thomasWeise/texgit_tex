@@ -129,7 +129,9 @@ echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Finished building the examples."
 
 echo "$(date +'%0Y-%0m-%0d %0R:%0S'): Now building the documentation."
 pdflatex texgit.dtx
+"$PYTHON_INTERPRETER" -m texgit.run texgit
 pdflatex texgit.dtx
+"$PYTHON_INTERPRETER" -m texgit.run texgit
 makeindex -s gglo.ist -o texgit.gls texgit.glo
 makeindex -s gind.ist -o texgit.ind texgit.idx
 pdflatex texgit.dtx

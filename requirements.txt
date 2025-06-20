@@ -6,4 +6,4 @@
 # You can find it at https://thomasweise.github.io/texgit_py,
 # https://github.com/thomasWeise/texgit_py, or at
 # https://pypi.org/project/texgit.
-texgit == 0.9.4
+texgit == 0.9.5

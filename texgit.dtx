@@ -19,11 +19,14 @@
 \ProvidesFile{texgit.dtx}
 %</driver>
 %<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
-%<package>\ProvidesPackage{texgit}[2025/06/19 0.9.5 improved documentation and slight updates]%
+%<package>\ProvidesPackage{texgit}[2025/06/20 0.9.6 now forcing pdflatex to crash if Python postprocessor is not applied]%
 %
 %<*driver>
 \documentclass{ltxdoc}
-\usepackage{texgit}[2025/06/19]
+\usepackage{texgit}[2025/06/20]%
+\makeatletter%
+\let\@texgit@needsTexgitPass\relax%
+\makeatother%
 %
 \usepackage{xcolor}%
 \usepackage[%
@@ -150,6 +153,7 @@ literate=%
 % \changes{0.9.3}{2025/06/17}{better documentation}%
 % \changes{0.9.4}{2025/06/18}{name change to texgit}%
 % \changes{0.9.5}{2025/06/19}{improved documentation and slight updates}%
+% \changes{0.9.6}{2025/06/20}{now forcing pdflatex to crash if Python postprocessor is not applied}%
 %
 % \GetFileInfo{texgit.dtx}
 %
@@ -432,12 +436,15 @@ literate=%
 % \begin{quote}
 %   |\usepackage{texgit}|
 % \end{quote}
-% \begin{sloppypar}%
 % The package has no options or parameters.
-% Loading it will automatically load the package
+%
+% \emph{Notice:}~If you load this package, then you \emph{\textbf{must}} run the
+% Python companion package inbetween |pdflatex| runs.
+% Otherwise, there the second |pdflatex| run will abort with an error.
+%
+% Loading the package will automatically load the package
 % |filecontents|\index{filecontents} as well,
 % see \autoref{sec:implementation}.
-% \end{sloppypar}%
 %
 % \subsection{Querying a File from a git Repository}%
 % \label{sec:gitquery}%
@@ -575,6 +582,7 @@ literate=%
 % The implementation of these macros is given in \autoref{sec:implementation}
 % and several examples can be found in \autoref{sec:examples}.
 %
+% \subsection{gitLoad}
 % \DescribeMacro{\gitLoad}%
 % The macro |\gitLoad|\marg{id}\marg{repositoryURL}\marg{path}\marg{postProcessing}
 % provides a local path to a file from a |git| repository.
@@ -611,6 +619,7 @@ literate=%
 % provide the correct URL for other repository types.%
 % \end{itemize}%
 %
+% \subsection{gitExec}
 % \DescribeMacro{\gitExec}%
 % The macro |\gitExec|\marg{id}\marg{repositoryURL}\marg{path}\marg{theCommand}
 % provides a local path to a file containing the captured standard output
@@ -653,6 +662,7 @@ literate=%
 % in which the standard output is stored.%
 % \end{itemize}%
 %
+% \subsection{gitArg}
 % \DescribeMacro{\gitArg}%
 % The macro |\gitArg|\marg{id}\marg{prefix}\marg{suffix} allows you to create
 % a file whose name has a given |prefix| and |suffix|.
@@ -675,6 +685,7 @@ literate=%
 % You can leave it empty.
 % \end{itemize}%
 %
+% \subsection{gitFile}
 % \DescribeMacro{\gitFile}%
 % The macro |\gitFile|\marg{id} returns the path to the file with the
 % contents of the |\gitLoad{id}...|, |\gitExec{id}....|, or
@@ -685,6 +696,7 @@ literate=%
 % pass.
 %
 %
+% \subsection{gitUrl}
 % \DescribeMacro{\gitUrl}%
 % The macro |\gitUrl|\marg{id} returns the URL from which the file
 % corresponding to the |\gitLoad{id}...| request was downloaded.
@@ -695,6 +707,7 @@ literate=%
 % downloaded (and optionally post-processed).
 %
 %
+% \subsection{gitIf}
 % \DescribeMacro{\gitIf}%
 % The macro |\gitIf|\marg{id}{ifDone}{ifNotDone} executes the code provided as
 % |ifDone| if the request with ID~|id| has already been executed and completed
@@ -717,7 +730,7 @@ literate=%
 % executed.
 % An example for this is given in \autoref{sec:example_8}.
 %
-% \subsection{Examples}\label{sec:examples}%
+% \section{Examples}\label{sec:examples}%
 %
 % Here we provide a set of examples for the use of the package.
 % Each example demonstrates another facet of the package and, at the same
@@ -1316,6 +1329,27 @@ literate=%
 \expandafter\begin\expandafter{filecontents*}{\@texgit@dummyPath}
 
 \end{filecontents*}
+%
+%% We need to make sure that the texgit postprocessor is actually
+%% properly applied.
+%% If you load our package, then if the postprocessor is not applied
+%% before the second pdflatex pass, we make sure that pdflatex
+%% crashes with an error.
+\protected\gdef\@texgit@needsTexgitPass{%
+\errmessage{texgit: You must run the Python companion package of texgit %
+% *before* doing the second pdflatex pass. %
+You can do this by invoking 'python3 -m texgit.run \jobname'. %
+You can obtain this Python package via 'pip install texgit'. %
+Check the documentation at %
+https://thomasweise.github.io/texgit_tex/texgit.pdf%
+}%
+%% force quit
+\batchmode\read-1 to \foo%
+}%
+%% Make sure that the texgit postprocessor is actually applied.
+\AtEndDocument{%
+\let\@texgit@needsTexgitPass\relax%
+\immediate\write\@mainaux{\noexpand\@texgit@needsTexgitPass}}%
 %
 % The dummy URL that is returned by |\gitURL| unless a proper URL is
 % available.
