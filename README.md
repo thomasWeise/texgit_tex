@@ -13,7 +13,7 @@ The `texgit` package allows you to do the following things
 - download files from a `git` repository and access them from LaTeX,
 - apply some post-processor to the downloaded files (e.g., strip comments and type hints from Python code) and access the post-processed files instead,
 - execute scripts or programs &mdash; either local or downloaded from `git` repositories &mdash; and fetch their output into local files accessible from LaTeX,
-- create local paths accessible from LaTeX which can be passed as arguments to the scripts or programs that are executed, e.g., as argument to a Python script that creates and stores a `matplotli` plot under the path that it received as argument, allowing you to programmatically create figures and include them LaTeX documents.
+- create local paths accessible from LaTeX which can be passed as arguments to the scripts or programs that are executed, e.g., as argument to a Python script that creates and stores a `matplotlib` plot under the path that it received as argument, allowing you to programmatically create figures and include them LaTeX documents.
 
 The package works a bit like `BibTeX`:
 Let's say your document is named `document.tex`.
