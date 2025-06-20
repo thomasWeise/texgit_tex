@@ -117,7 +117,7 @@ Below, we provide a list of files that may be interesting to look at.
 ## 4. License
 [`texgit`](https://thomasweise.github.io/texgit_py) is a tool for accessing files in `git` repositories from `LaTeX`.
 
-Copyright (C) 2023&mash;2025 Thomas Weise (汤卫思教授)
+Copyright (C) 2023&mdash;2025 Thomas Weise (汤卫思教授)
 
 Dr. Thomas Weise (see [Contact](#4-contact)) holds the copyright of this package.
 The package and its documentation are under the LaTeX Project Public License, version 1.3, which may be found online at <http://www.latex-project.org/lppl.txt> or at <https://thomasweise.github.io/texgit_tex/LICENSE.html>.
