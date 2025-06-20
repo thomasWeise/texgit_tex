@@ -1,12 +1,27 @@
 [![build](https://github.com/thomasWeise/texgit_tex/actions/workflows/build.yaml/badge.svg)](https://github.com/thomasWeise/texgit_tex/actions/workflows/build.yaml)
 
-# texgit: Accessing Git Repositories from LaTeX
+# texgit: Download, access, and potentially execute files from git repositories to access them or their output from LaTeX.
 
 - [Introduction](#1-introduction)
 - [Installation and Usage](#2-installation-and-usage)
 - [Files](#3-files)
 - [License](#4-license)
 - [Contact](#5-contact)
+
+The `texgit` package allows you to do the following things
+
+- download files from a `git` repository and access them from LaTeX,
+- apply some post-processor to the downloaded files (e.g., strip comments and type hints from Python code) and access the post-processed files instead,
+- execute scripts or programs &mdash; either local or downloaded from `git` repositories &mdash; and fetch their output into local files accessible from LaTeX,
+- create local paths accessible from LaTeX which can be passed as arguments to the scripts or programs that are executed, e.g., as argument to a Python script that creates and stores a `matplotli` plot under the path that it received as argument, allowing you to programmatically create figures and include them LaTeX documents.
+
+The package works a bit like `BibTeX`:
+Let's say your document is named `document.tex`.
+During the first `pdflatex` run, executed as `pdflatex document`, all the requests mentioned above, say, to download files from `git` repositories, are stored in the `aux` file.
+The paths corresponding to the requests point to an empty file at this stage.
+Then you would apply the `texgit` post-processor by calling `python3 -m texgit.run document`.
+This [Python program](https://pypi.org/project/texgit) executes all the requests and caches their results locally.
+During the second run of `pdflatex document`, the paths corresponding to the requests then point to the actual downloaded or generated files.
 
 **This LaTeX package requires a companion Python package to work.**
 Please see [Installation and Usage](#2-installation-and-usage).
