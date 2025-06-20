@@ -1,5 +1,3 @@
-[![build](https://github.com/thomasWeise/texgit_tex/actions/workflows/build.yaml/badge.svg)](https://github.com/thomasWeise/texgit_tex/actions/workflows/build.yaml)
-
 # texgit: Download, access, and potentially execute files from git repositories to access them or their output from LaTeX.
 
 - [Introduction](#1-introduction)
