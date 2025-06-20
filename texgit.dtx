@@ -323,7 +323,9 @@ literate=%
 % after \emph{each} pass.
 % However, |texgit| will only clone the repositories and execute the
 % programs once, during its first pass.
-% All results are cached, usually in a directory called |__git__|.
+%
+% All results are cached, usually in a directory called |__git__| in your
+% document's direcotry.
 % Unless you delete this directory, the cache will persist, even if you
 % change your \LaTeX\ document and perform an entirely new compilation.
 %
@@ -367,12 +369,18 @@ literate=%
 % \item In your document, you need to load the package in the preamble
 % (see \autoref{sec:loadThePackage}).%
 %%
-% \item Then you can make |git| queries and using the paths to files holding
-% their results (see \autoref{sec:gitquery}).
+% \item Then you can make |git| queries, e.g., via |\gitLoad{id}...|
+% or |\gitExec{id}...| (see \autoref{sec:gitquery}).
+%
+% \item At this stage, |\gitFile{id}| and |\gitUrl{id}| will hold dummy
+% results, meaning that you can still use these commands but they will
+% not yet provide useful data.
 %%
-% \item Finally, the Python package can carry them out after the first
-% |pdflatex| run and in the next |pdflatex| run, |\gitFile| and |\gitUrl| are
-% defined appropriately, see \autoref{sec:pythonProgram}.
+% \item The Python post-processor package can carry them out after the
+% first |pdflatex| run.
+%
+% \item In the next |pdflatex| run, |\gitFile{id}| and |\gitUrl{id}|
+% are defined appropriately, see \autoref{sec:pythonProgram}.
 % \end{enumerate}
 %
 % If your \LaTeX\ document is called |article.tex|, then you have at least the
@@ -382,6 +390,11 @@ literate=%
 % |python3 -m texgit.run article|\\
 % |pdflatex article|
 % \end{quote}
+%
+% All files are cached, usually in a directory called |__git__| in your
+% document's direcotry.
+% Unless you delete this directory, the cache will persist, even if you
+% change your \LaTeX\ document and perform an entirely new compilation.
 %
 % Comprehensive examples are provided in \autoref{sec:examples}.
 %

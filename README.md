@@ -23,6 +23,9 @@ Then you would apply the `texgit` post-processor by calling `python3 -m texgit.r
 This [Python program](https://pypi.org/project/texgit) executes all the requests and caches their results locally.
 During the second run of `pdflatex document`, the paths corresponding to the requests then point to the actual downloaded or generated files.
 
+All downloaded or generated files will be locally cached in a folder named `__git__`.
+You can delete this folder to refresh the files.
+
 **This LaTeX package requires a companion Python package to work.**
 Please see [Installation and Usage](#2-installation-and-usage).
 
