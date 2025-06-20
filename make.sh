@@ -202,7 +202,6 @@ cp README.md "$zipTempDir/texgit/"
 cp texgit.ins "$zipTempDir/texgit/"
 cp texgit.dtx "$zipTempDir/texgit/"
 cp website/texgit.pdf "$zipTempDir/texgit/texgit-doc.pdf"
-cp website/requirements-all.txt "$zipTempDir/texgit/"
 
 cd "$zipTempDir"
 zip -9 -r "texgit.zip" *
