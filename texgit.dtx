@@ -1,0 +1,1715 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2023--2025 by Thomas Weise
+%
+% This file may be distributed and/or modified under the conditions of the
+% LaTeX Project Public License, either version 1.3 of this license or
+% (at your option) any later version. The latest version of this license is in
+% http://www.latex-project.org/lppl.txt.
+% The license can be found at
+% https://thomasweise.github.io/texgit_tex/LICENSE.html.
+% This work is author-maintained, i.e., it can only be maintained by
+% Thomas Weise.
+%
+% \fi
+%
+% \iffalse
+%
+%<*driver>
+\ProvidesFile{texgit.dtx}
+%</driver>
+%<package>\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
+%<package>\ProvidesPackage{texgit}[2025/06/26 0.9.7 now offering file names (via gitName) and escaped file names (via gitNameEsc)]%
+%
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage{texgit}[2025/06/26]%
+\makeatletter%
+\let\@texgit@needsTexgitPass\relax%
+\makeatother%
+%
+\usepackage{xcolor}%
+\usepackage[%
+colorlinks,%
+breaklinks=true,%
+urlcolor={blue!80!black},%
+menucolor=black,%
+linkcolor={red!50!black},%
+bookmarks=true,%
+bookmarksopen=false,%
+hyperfootnotes=true,%
+citecolor={blue!50!black},%
+filecolor=black,%
+pdfkeywords={LaTeX, package, texgit}
+]{hyperref}%
+\usepackage{breakurl}%
+\usepackage[square,numbers,comma,sort&compress]{natbib}%
+%
+\RequirePackage[utf8]{inputenc}%
+\RequirePackage[T1]{fontenc}%
+\RequirePackage{CJKutf8}%
+\AtBeginDocument{\CJK{UTF8}{gkai}}%
+%
+\newcommand{\exampleautorefname}{Example}%
+\renewcommand{\sectionautorefname}{Section}%
+\renewcommand{\subsectionautorefname}{Section}%
+\renewcommand{\subsubsectionautorefname}{Section}%
+\usepackage{verbatim}%
+\usepackage{graphicx}%
+\usepackage{subcaption}%
+\usepackage{afterpage}%
+%
+\usepackage{listings}%
+\lstset{%
+language=[LaTeX]TeX,%
+basicstyle=\small,%
+keywordstyle=\ttfamily\color{teal!90!black}\bfseries,%
+morekeywords={url,verbatiminput,lstset,lstinputlisting},
+classoffset=1,morekeywords={gitLoad,gitFile,gitArg,gitExec,gitName,gitNameEsc,gitUrl},keywordstyle=\ttfamily\bfseries\color{red!70!black},classoffset=0,%
+identifierstyle=,%
+commentstyle=\color{gray}\footnotesize,%
+stringstyle=\ttfamily\color{red!90!black}, % typewriter type for string
+numbers=left,%
+numberstyle=\tiny,%
+columns=fullflexible,%
+frame=shadowbox,%
+frameround=tttt,%
+backgroundcolor=\color{black!10!yellow!5!white},%
+literate=%
+{á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1%
+{Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1%
+{à}{{\`a}}1 {è}{{\'e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1%
+{À}{{\`A}}1 {È}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1%
+{ä}{{\"a}}1 {ë}{{\"e}}1 {ï}{{\"i}}1 {ö}{{\"o}}1 {ü}{{\"u}}1%
+{Ä}{{\"A}}1 {Ë}{{\"E}}1 {Ï}{{\"I}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1%
+{â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {û}{{\^u}}1%
+{Â}{{\^A}}1 {Ê}{{\^E}}1 {Î}{{\^I}}1 {Ô}{{\^O}}1 {Û}{{\^U}}1%
+{œ}{{\oe}}1 {Œ}{{\OE}}1 {æ}{{\ae}}1 {Æ}{{\AE}}1 {ß}{{\ss}}1%
+{ç}{{\c c}}1 {Ç}{{\c C}}1 {ø}{{\o}}1 {å}{{\r a}}1 {Å}{{\r A}}1%
+{€}{{\EUR}}1 {£}{{\pounds}}1 {«}{{\guillemotleft}}1%
+{»}{{\guillemotright}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1%
+{…}{{\ldots}}1 {≥}{{>=}}1 {≤}{{<=}}1 {„}{{\glqq}}1 {“}{{\grqq}}1%
+{”}{{''}}1%
+{α}{{$\alpha$}}1 {β}{{$\beta$}}1 {γ}{{$\gamma$}}1 {δ}{{$\delta$}}1%
+{ε}{{$\epsilon$}}1 {ζ}{{$\zeta$}}1 {η}{{$\eta$}}1 {θ}{{$\theta$}}1%
+{ι}{{$\iota$}}1 {κ}{{$\kappa$}}1 {λ}{{$\lambda$}}1 {μ}{{$\mu$}}1%
+{ν}{{$\nu$}}1 {ξ}{{$\xi$}}1 {ο}{{o}}1 {π}{{$\pi$}}1 {ρ}{{$\rho$}}1%
+{σ}{{$\sigma$}}1 {τ}{{$\tau$}}1 {υ}{{$\upsilon$}}1 {φ}{{$\phi$}}1%
+{χ}{{$\chi$}}1 {ψ}{{$\psi$}}1 {ω}{{$\omega$}}1 {Α}{{A}}1 {Β}{{B}}1%
+{Γ}{{$\Gamma$}}1 {Δ}{{$\Delta$}}1 {Ε}{{E}}1 {Ζ}{{Z}}1 {Η}{{H}}1%
+{Θ}{{$\Theta$}}1 {Ι}{{I}}1 {Κ}{{K}}1 {Λ}{{$\Lambda$}}1 {Μ}{{M}}1%
+{Ν}{{N}}1 {Ξ}{{$\Xi$}}1 {Ο}{{O}}1 {Π}{{$\Pi$}}1 {Ρ}{{P}}1%
+{Σ}{{$\Sigma$}}1 {Τ}{{T}}1 {Υ}{{Y}}1 {Φ}{{$\Phi$}}1 {Χ}{{X}}1%
+{Ψ}{{$\Psi$}}1 {Ω}{{$\Omega$}}1%
+{∖}{{$\setminus$}}1 {∪}{{$\cup$}}1 {∩}{{$\cap$}}1%
+{≈}{{$\approx$}}1 {∈}{{$\in$}}1 {∉}{{$\notin$}}1%
+}%
+%
+%
+\gdef\tindex#1{\expandafter\index{#1}}%
+\gdef\tbindex#1{\expandafter\index{\textbackslash#1}}%
+%
+\usepackage{placeins}%
+%
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+%
+%
+\begin{document}
+  \DocInput{texgit.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \changes{0.8.0}{2023/12/04}{the initial draft version}
+% \changes{0.8.1}{2023/12/05}{slightly improved documentation}
+% \changes{0.8.2}{2023/12/05}{improved texgit.tds.zip}
+% \changes{0.8.3}{2024/08/01}{supporting arbitrary commands via the new |texgit_py| version}
+% \changes{0.8.4}{2024/08/02}{improved build process}
+% \changes{0.8.5}{2024/08/07}{improved examples: added an example with multiple git command results}
+% \changes{0.8.6}{2024/09/20}{the use case of virtual environments in conjunction with the |texgit| Python package of version 0.8.17 or greater is documented}
+% \changes{0.9.0}{2025/06/12}{complete overhaul of the API}
+% \changes{0.9.1}{2025/06/14}{improved documentation}
+% \changes{0.9.2}{2025/06/15}{gitExec with empty ID permitted}
+% \changes{0.9.3}{2025/06/17}{better documentation}%
+% \changes{0.9.4}{2025/06/18}{name change to texgit}%
+% \changes{0.9.5}{2025/06/19}{improved documentation and slight updates}%
+% \changes{0.9.6}{2025/06/20}{now forcing pdflatex to crash if Python postprocessor is not applied}%
+% \changes{0.9.7}{2025/06/26}{now offering file names (via gitName) and escaped file names (via gitNameEsc)}%
+%
+% \GetFileInfo{texgit.dtx}
+%
+% \DoNotIndex{\def,\if,\fi}
+%
+% \title{The \textsf{texgit} Package}
+% \author{Thomas Weise~(汤卫思教授)\\%
+% \resizebox{0.95\textwidth}{!}{%
+% \parbox{1.05\linewidth}{%
+% \centering%
+% Institute of Applied Optimization~(应用优化研究所, IAO)\\%
+% School of Artificial Intelligence and Big Data~(人工智能与大数据学院)\\%
+% Hefei University~(合肥大学)\\%
+% Hefei 230601, Anhui, China~(中国安徽省合肥市)\\%
+% \href{mailto:tweise@hfuu.edu.cn}{tweise@hfuu.edu.cn} $\cdot$ \href{mailto:tweise@ustc.edu.cn}{tweise@ustc.edu.cn}%
+% }}}%
+% \date{\today}
+%
+% \renewcommand{\textfraction}{0.05}%
+% \renewcommand{\topfraction}{0.85}%
+% \renewcommand{\bottomfraction}{0.95}%
+% \renewcommand{\floatpagefraction}{0.95}%
+%
+% \maketitle
+%
+% \begin{abstract}
+% This package allows you to download and access files that reside in a
+% |git| repository from within your \LaTeX\ code.
+% This can be used, for example, to include program code from an actual
+% software in life repository in your \LaTeX\ documents.
+% It allows you to postprocess these files, e.g., to apply programs that
+% remove comments or reformat code and then to include these postprocessed
+% files.
+% It furthermore allows you to execute programs (or scripts from |git|
+% repositories) on your machine and include their output into your \LaTeX\
+% documents.
+% Finally, it also allows you to allocate files and pass them as parameters
+% to the programs that you execute.
+% With this, you could create PDF figures on the fly and then include them
+% into your \LaTeX\ documents.
+%
+% This \LaTeX\ package works \emph{only} in combination with the Python
+% package |texgit|.
+% To implement its functionality, it offers the following commands:%
+%
+% \begin{itemize}\sloppy
+%
+% \item |\gitLoad{id}{repoURL}{pathInRepo}{postproc}|\tbindex{gitLoad}
+% loads a file |pathInRepo| from the |git|\tindex{git} repository |repoURL|,
+% \emph{optionally} post-processes it by piping its contents into the standard
+% input of a command |postproc| capturing its standard output.
+%
+% \item |\gitFile{id}|\tbindex{gitFile} provides a local path to a file
+% created this way.
+% Using the |\gitFile{id}| macro, you can then include the file in \LaTeX\
+% directly or load it as source code listing.
+%
+% \item |\gitName{id}|\tbindex{gitName} provides the name of the file
+% created this way.
+%
+% \item |\gitNameEsc{id}|\tbindex{gitName} provides the name of the file
+% created this way, but with the characters |_|, |$|, and | | escaped to
+% |\_|, |\$|, and |~|, respectively.
+%
+% \item |\gitUrl{id}|\tbindex{gitUrl} provides the URL to the original file
+% in the |git| repository.
+%
+% \item |\gitExec{id}{repoURL}{pathInRepo}{command}|\tbindex{gitExec}
+% executes an arbitrary command |command|, either in the current directory or
+% inside a directory |pathInRepo| of the |git|\tindex{git} repository
+% |repoURL| and fetches the standard output into a local file, the path to which
+% is made available to the file again as macro
+% |\gitFile{id}|\tbindex{gitFile}.
+% You can also leave the |id| parameter empty.
+% This makes sense if you are not interested in the output of the program.
+% Maybe you just want to execute a script, say, something that creates a figure
+% stored in some file.
+% Without |id| parameter, you cannot access the stdout of this command.
+% And sometimes, this is ok.
+%
+% \item |\gitArg{id}{prefix}{suffix}|\tbindex{gitArg} allocates an additional
+% file, whose name will be composed of the optional |prefix| and |suffix|.
+% Such files can be passed as arguments to |\gitExec| or
+% |\gitLoad|\tbindex{gitLoad} by including |(?id?)| in their commands'
+% argument list.
+% This way, we can, for example, instruct a program to create a graphic
+% and store it in a certain file that we can later load from
+% |\gitFile{id}|\tbindex{gitFile}.
+%
+% \item |\gitIf{id}{ifDone}{ifNotDone}| executes the code |ifDone| starting
+% in the second |pdflatex| pass, i.e., after the Python |texgit| package has
+% been applied to the |aux| file generated during the first |pdflatex| pass.
+% During the first |pdflatex| pass and before the Python |texgit| package
+% was applied, |ifNotDone| will be executed.
+% \end{itemize}
+%
+% The functionality of the package is implemented by storing the |git|
+% requests in the |aux|\tindex{aux} file of the project during the first
+% |pdflatex|\tindex{pdflatex} pass.
+% The |aux| file is then processed by the Python package which performs the
+% actual |git| queries, program executions, stores the result in local files,
+% and adds the resolved paths to the |aux| file.
+% Thus, during the first |pdflatex|\tindex{pdflatex} run, |\gitFile| and
+% |\gitUrl| offer dummy results.
+% During the second and later pass, after the Python program |texgit| has
+% been applied to the |aux| file, they then provide the actual paths and
+% URLs.
+% In the essense, |texgit| works somewhat like \BibTeX.
+% \end{abstract}
+%
+% \setcounter{tocdepth}{2}
+% \tableofcontents
+%
+% \section{Introduction}%
+%
+% \subsection{Addressed Problem and Use Case}%
+% Let's say you want to make teaching material in the field of computer
+% science.
+% In a wide variety of computer science fields, you may want to include source
+% code examples in your lecture script or slides.
+% The standard way is to either write some pseudo-code or program-like
+% snippets.
+% Usually these neither compile nor are they maintained well and they are,
+% hence, often riddled with mistakes.
+% That is not nice.
+%
+% What we want is to have snippets of ``real'' code.
+% Code that we can compile, unit test, and run.
+% Now such code naturally would not be sprinkled into our \LaTeX\ teaching
+% material sources.
+% That would be a mess to organize and maintain.
+%
+% A natural location for source code examples is a separate |git| repository.
+% Maybe on \href{https://github.com}{GitHub}, maybe somewhere else.
+% If I wanted to do a lecture on, say, optimization algorithms, I would like to
+% have the optimization algorithms
+% \href{https://thomasweise.github.io/moptipy}{implemented} in an useful
+% fashion.
+% I would put them into a repository where I can build and test these real
+% codes as a complete and separate piece of work.
+%
+% Then I want to use them in my lecture scripts (written in \LaTeX) as well.
+% However, I do not want to \emph{copy} them there.
+% I want that my lecture scripts directly reference the |git| repository with
+% the real code.
+% I want them to ``include'' the examples from there.
+% If I change the code in the |git| repository and then re-compile my
+% teaching material, these changes should automatically be reflected there.
+%
+% That is the use case we tackle here.
+% We offer a solution to the question
+%
+% \begin{quote}
+% \emph{``How can we include snippets of code from a separate, complex code
+% basis (located in a |git| repository) into our \LaTeX\ documents?''}
+% \end{quote}
+%
+% Additionally, sometimes we want to execute the code from that repository and
+% capture the standard output.
+% This output could then be displayed as listing next to the code.
+% This package also provides this functionality.
+%
+% Maybe we either have local programs or programs in a |git| repository that
+% create complex figures or graphics.
+% Our package also offers us the ability execute such programs, tell them
+% where to store their output, and then allowing us to include this output
+% into our \LaTeX\ documents, say, via |\includegraphics|.
+%
+% Our package furthermore \emph{caches} such outputs.
+% If you refer to multiple files from one repository, this repository will be
+% cloned only once.
+% If you need to perform several \LaTeX\ passes, say, because you have a
+% bibliography and a glossary and whatnot, then you need to run |texgit|
+% after \emph{each} pass.
+% However, |texgit| will only clone the repositories and execute the
+% programs once, during its first pass.
+%
+% All results are cached, usually in a directory called |__git__| in your
+% document's direcotry.
+% Unless you delete this directory, the cache will persist, even if you
+% change your \LaTeX\ document and perform an entirely new compilation.
+%
+% \subsection{Provided Functionality}%
+% \label{sec:functionality}%
+% Our package offers a combination of
+% \begin{itemize}
+% \item a \LaTeX\ package -- this package here -- with its sources at
+% \url{https://github.com/thomasWeise/texgit_tex}, and
+% \item a Python\index{Python} program, published at
+% \url{https://pypi.org/projects/texgit} with sources available at
+% \url{https://github.com/thomasWeise/texgit_py}.
+% \end{itemize}
+%
+% This \LaTeX\ package provides the command |\gitLoad| that can load a
+% specific file from a specific |git| repository and, optionally, pipe the
+% file contents through a program for post-processing.
+%
+% It also provides the command |\gitExec|, which can execute either a local
+% program or a program loaded from a git repository and fetch its output.
+%
+% The additional command |\gitArg| allows you to create files whose paths
+% are passed as arguments to programs, which may be useful to create graphics
+% and other non-textual output.
+%
+% All three types of requests are stored in the |aux| file during the first
+% |pdflatex| pass, then resolved by the Python program, and their results
+% become available in the second |pdflatex| pass via the commands |\gitFile|
+% and |\gitUrl|.
+%
+% \section{Usage}%
+% Using the package requires the following steps:
+% \begin{enumerate}%
+%%
+% \item Obviously, both the
+% \href{https://thomasweise.github.io/texgit_tex}{\LaTeX\ package}
+% \emph{and} its
+% \href{https://thomasweise.github.io/texgit_py}{Python companion}
+% package must be installed (see \autoref{sec:installation}).
+%%
+% \item In your document, you need to load the package in the preamble
+% (see \autoref{sec:loadThePackage}).%
+%%
+% \item Then you can make |git| queries, e.g., via |\gitLoad{id}...|
+% or |\gitExec{id}...| (see \autoref{sec:gitquery}).
+%
+% \item At this stage, |\gitFile{id}| and |\gitUrl{id}| will hold dummy
+% results, meaning that you can still use these commands but they will
+% not yet provide useful data.
+%%
+% \item The Python post-processor package can carry them out after the
+% first |pdflatex| run.
+%
+% \item In the next |pdflatex| run, |\gitFile{id}| and |\gitUrl{id}|
+% are defined appropriately, see \autoref{sec:pythonProgram}.
+% \end{enumerate}
+%
+% If your \LaTeX\ document is called |article.tex|, then you have at least the
+% following workflow:%
+% \begin{quote}
+% |pdflatex article|\\
+% |python3 -m texgit.run article|\\
+% |pdflatex article|
+% \end{quote}
+%
+% All files are cached, usually in a directory called |__git__| in your
+% document's direcotry.
+% Unless you delete this directory, the cache will persist, even if you
+% change your \LaTeX\ document and perform an entirely new compilation.
+%
+% Comprehensive examples are provided in \autoref{sec:examples}.
+%
+% \subsection{Installation}%
+% \label{sec:installation}%
+%
+% \subsubsection{\LaTeX\ Package}%
+% First, make sure that you have the |texgit.sty| either installed or inside
+% your document's directory.
+% For this, there are several options:%
+% \begin{enumerate}%
+% \item You can just download the file from
+% \url{https://thomasweise.github.io/texgit_tex/texgit.sty} directly.
+% You can now copy it into the folder of your document.
+%%
+% \item You can download |texgit.dtx|\tindex{texgit.dtx} and
+% |texgit.ins|\tindex{texgit.ins} from
+% \url{https://thomasweise.github.io/texgit_tex/texgit.dtx} and
+% \url{https://thomasweise.github.io/texgit_tex/texgit.ins}.
+% You can then execute
+% \begin{quote}%
+% |pdflatex texgit.ins|\tindex{pdflatex}
+% \end{quote}%
+% and you should get the style file |texgit.sty|\tindex{texgit.sty}.
+% You can now copy it into the folder of your document.
+%%
+% \item Or you can download the |texgit.tds.zip| file from
+% \url{https://thomasweise.github.io/texgit_tex/texgit.tds.zip} and
+% unpack it into your \TeX\ tree.
+% If you know what that is.
+% \end{enumerate}%
+%
+% \subsubsection{Python Package}%
+% \label{sec:texgitpy}%
+% The Python\index{Python} package is available at
+% \url{https://github.com/thomasWeise/texgit_py}\index{texgit\_py},
+% \url{https://thomasweise.github.io/texgit_py}, and
+% \url{https://pypi.org/project/texgit}.
+% You can most easily install it from PyPI\index{PyPI} by doing
+% \begin{quote}
+% |pip install texgit|
+% \end{quote}
+%
+% \subsubsection{git Executable}%
+% Make sure that the |git| executable is available in the |PATH|.
+% On Ubuntu Linux, you could install it via |sudo apt-get install git|, for example.
+% |git| is needed because the primary use case of our package is to clone |git| repositories and include the files from these repositories (or to execute them and to include their output) into \LaTeX\ documents.
+%
+% \subsection{Loading the Package}%
+% \label{sec:loadThePackage}%
+% Load this package using%
+% \begin{quote}
+%   |\usepackage{texgit}|
+% \end{quote}
+% The package has no options or parameters.
+%
+% \emph{Notice:}~If you load this package, then you \emph{\textbf{must}} run the
+% Python companion package inbetween |pdflatex| runs.
+% Otherwise, there the second |pdflatex| run will abort with an error.
+%
+% Loading the package will automatically load the package
+% |filecontents|\index{filecontents} as well,
+% see \autoref{sec:implementation}.
+%
+% \subsection{Querying a File from a git Repository}%
+% \label{sec:gitquery}%
+% To query a file stored at path |path| inside from a |git|\tindex{git}
+% repository available under URL |repositoryURL|, you would specify the
+% command
+% \begin{quote}
+% |\gitLoad{id}{repositoryURL}{path}{postproc}|\tbindex{gitLoad}
+% \end{quote}
+% After this command is executed, a local path to the file becomes available
+% in the command |\gitFile{id}|\tbindex{gitFile}.
+% The full URL to the file in the |git| repository, including the current
+% commit id, becomes available in the fully-expandable command
+% |\gitUrl{id}|\tbindex{gitUrl}.
+%
+% Notice that you must choose unique values of |id| for every |\gitLoad|,
+% |\gitExec|, and |\gitArg| invocation.
+% You can invoke |\gitLoad| any number of times.
+%
+% The fourth parameter, |postproc|, which we may often leave empty, can
+% specify an optional post-processing commend.
+% If it is not left empty, this command will be executed in the
+% shell\index{shell}.
+% The contents of the file loaded from the |git| repository will be piped to
+% the |stdin|\tindex{stdin} of the command.
+% The |stdout|\tindex{stdout} of the command will be piped to a file and
+% |\gitFile{id}|\tbindex{gitFile} will then contain the path to this file
+% instead.
+% For example, under Linux\index{Linux}, you could use the
+% \href{https://www.man7.org/linux/man-pages/man1/head.1.html}{|head|}\index{head}
+% command to return only the first 5~lines of a file as follows:
+% \begin{quote}
+% |\gitLoad{id}{repositoryURL}{path}{head -n 5}|\tbindex{gitLoad}
+% \end{quote}
+%
+% \subsection{Executing a Command (optionally inside a git Repository}%
+% \label{sec:gitexec}%
+% Sometimes, we want to execute a program and fetch its standard output.
+% \begin{quote}
+% |\gitExec{id}{repositoryURL}{path}{theCommand}|\tbindex{gitExec}
+% \end{quote}
+% The most common use case of our package is that you want to execute a
+% program which is part of a |git| repository.
+% In this case, you would put the URL of the repository in |repositoryURL|
+% and the relative path to the directory inside the repository in which the
+% command should be invoked as |path|.
+% If you want to invoke the command in the root folder of the repository,
+% put |.| as |path|.
+% The |theCommand| then holds the command line to be executed.
+% \emph{Notice:}~You can also leave \emph{both} |repositoryURL| and
+% |path| blank.
+% In this case, the command is executed in the current folder.
+% (The use case for this is to fetch the output of stuff like
+% |python3 --version|.)
+% Anyway, after this command is executed, a local path to the file with the
+% captured standard output becomes available in the command
+% |\gitFile{id}|\tbindex{gitFile}.
+%
+% Notice that you must choose unique values of |id| for every |\gitLoad|,
+% |\gitExec|, and |\gitArg| invocation.
+% You can invoke |\gitExec| any number of times.
+%
+% \subsection{Creating a File to be used as Argument}%
+% \label{sec:gitexec}%
+% Sometimes, we want to execute a program which requires a destination file.
+% Let's say a program that creates a PDF figure.
+% For this, we need to create an argument file on the fly.
+% \begin{quote}
+% |\gitArg{id1}{prefix}{suffix}|\tbindex{gitArg}\\
+% |\gitExec{id2}{repositoryURL}{path}{theCommand (?id1?)}|\tbindex{gitExec}
+% \end{quote}
+% For this purpose, use the |\gitArg| command.
+% This command takes a unique identifier~|id1|, a prefix, and a suffix as
+% parameters.
+% It will allocate a unique file path.
+% This path can then be passed to a command to later invocation of |\gitExec|
+% as parameter |(?id1?)| somewhere in its argument list.
+% |(?id1?)| is resolved to the automatically generated file name before the
+% actual command is invoked.
+% After that, you can access the path via |\gitFile{id1}|\tbindex{gitFile}.
+%
+% \subsection{Executing the Python Package}
+% \label{sec:pythonProgram}
+% \begin{sloppypar}%
+% During the first |pdflatex|\tindex{pdflatex} run, |\gitFile{id}| points to
+% an empty dummy file
+% (|\jobname.texgit.dummy|)\tbindex{jobname.texgit.dummy} and
+% |\gitUrl{id}| points to |http://example.com|\index{http://example.com}.
+% Both commands will only expand to useful information if the Python package
+% |texgit| is applied to the project's |aux| file.
+% This works very similar to \BibTeX.
+% If the name of your \TeX\ file is |myfile.tex|, then you would execute
+% \end{sloppypar}%
+% \begin{quote}
+% |python3 -m texgit.run myfile|
+% \end{quote}
+% More specifically, the Python package processes the |aux| files, so for a
+% specific |aux|\tindex{aux} file |myfile.aux|, you could also do:
+% \begin{quote}
+% |python3 -m texgit.run myfile.aux|
+% \end{quote}
+%
+% After this, in the next pass of |pdflatex|, |\gitFile{id}| and |\gitUrl{id}|
+% will contain the right paths and URLs.
+%
+% \subsection{A Note on Python Virtual Environments}%
+% The following only applies if you have installed this package inside a
+% virtual environment.
+% It also only applies in conjunction with version
+% \href{https://pypi.org/project/texgit/0.8.17/}{0.8.17} or newer of
+% the |texgit| Python package.
+%
+% If you are running this package inside a virtual environment, it is
+% important that you create this environment using the |--copies| setting and
+% \emph{not} using the (default) |--symlinks| parameter.
+% In other words, you should have created the virtual environment as follows,
+% where |venvDir| is the directory inside of which the virtual environment is
+% created.
+%
+% \begin{center}
+% |python3 -m venv --copies venvDir|
+% \end{center}
+%
+% If you create the environment like this (and activated), then our package will
+% automatically pick it up and use its Python interpreter for any invocation of
+% |python3| or |python3.x| (where |x| is the minor version of the interpreter).
+% If you use the |--symlinks| parameter to create the environment, then invocations
+% of the Python interpreter from our package may instead result in the system's
+% Python interpreter.
+%
+% \section{Provided Macros}\label{sec:providedMacros}%
+%
+% Here we discuss the macros that can directly be accessed by the user to
+% make use of the functionality of the |texgit| package.
+% The implementation of these macros is given in \autoref{sec:implementation}
+% and several examples can be found in \autoref{sec:examples}.
+%
+% \subsection{gitLoad}
+% \DescribeMacro{\gitLoad}%
+% The macro |\gitLoad|\marg{id}\marg{repositoryURL}\marg{path}\marg{postProcessing}
+% provides a local path to a file from a |git| repository.
+% \begin{itemize}\sloppy%
+%
+% \item[\marg{id}] is the request ID chosen by the user.
+% It must be unique over all requests made to |texgit|.
+% Imagine it something like a label.
+%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
+% repository URL.
+%
+% \item[\marg{path}] is then the path to the file within the repository.
+% This could be, for example, |latex/texgit.dtx|.%
+%
+% \item[\marg{postProcessing}] Can either be empty, in which case the
+% repository is downloaded and the the local path to the file is returned.
+% It can also be shell command, e.g., |head -n 5|.
+% In this case, the contents of the file are piped to |stdin|\tindex{stdin} of
+% the command and the text written to the |stdout|\tindex{stdout} by the
+% command is stored in a file whose path is returned.
+% \end{itemize}%
+%
+% You can access two results of this command via the following two commands:
+% \begin{itemize}%
+% \item[\texttt{{\textbackslash}gitFile\{id\}}] returns the path to the file
+% that was loaded and/or post-processed.%
+% \item[\texttt{{\textbackslash}gitUrl\{id\}}] returns the full URL to the
+% file in the |git| repository
+% online.
+% This command works for \href{https://github.com}{GitHub}, but it may not
+% provide the correct URL for other repository types.%
+% \end{itemize}%
+%
+% \subsection{gitExec}
+% \DescribeMacro{\gitExec}%
+% The macro |\gitExec|\marg{id}\marg{repositoryURL}\marg{path}\marg{theCommand}
+% provides a local path to a file containing the captured standard output
+% of a command (that may have been executed inside a directory inside a
+% |git| repository).
+% \begin{itemize}\sloppy%
+%
+% \item[\marg{id}] is the request ID chosen by the user.
+% It must be unique over all requests made to |texgit|.
+% Imagine it something like a label.
+%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
+% repository URL.
+% You can also leave this parameter empty if no |git| repository should
+% be used.%
+%
+% \item[\marg{path}] is the path to a directory within the repository.
+% This could be, for example, |latex| or |.|.
+% If |path| is provided, then this will be the working directory where
+% the command is executed.
+% If you want to execute a command in the root directory of a |git|
+% repository, you can put |.| here.
+%
+% \item[\marg{theCommand}] This is the command which should be executed.
+% If |repositoryURL| and |path| are provided, then the repository will be
+% downloaded and |path| will be resolved relative to the repository root
+% directory. |theCommand| will then be executed in this directory.
+% If neither |repositoryURL| nor |path| are provided, |theCommand| is
+% executed in the current directory.
+% Either way, its |stdout|\tindex{stdout} is captured in a file whose path
+% is returned.
+% \end{itemize}%
+%
+% After invoking this command its result can be obtained via the following
+% command:%
+% \begin{itemize}%
+% \item[\texttt{{\textbackslash}gitFile\{id\}}] returns the path to the file
+% in which the standard output is stored.%
+% \end{itemize}%
+%
+% \subsection{gitArg}
+% \DescribeMacro{\gitArg}%
+% The macro |\gitArg|\marg{id}\marg{prefix}\marg{suffix} allows you to create
+% a file whose name has a given |prefix| and |suffix|.
+% This file can then be used in the argument list of the command invoked by
+% |\gitExec| by writing |(?id?)|.
+% Before that command is executed, |(?id?)| is resolved to the actual file
+% name.
+% This allows you to use commands that generate more structured output, say
+% graphics.
+% \begin{itemize}%
+%
+% \item[\marg{id}] is the request ID chosen by the user.
+% It must be unique over all requests made to |texgit|.
+% Imagine it something like a label.
+%
+% \item[\marg{prefix}] is a prefix for the file name to be generated.
+% It can be empty.
+%
+% \item[\marg{suffix}] is the suffix for the file name to be generated.
+% You can leave it empty.
+% \end{itemize}%
+%
+% \subsection{gitFile}
+% \DescribeMacro{\gitFile}%
+% The macro |\gitFile|\marg{id} returns the path to the file with the
+% contents of the |\gitLoad{id}...|, |\gitExec{id}....|, or
+% |\gitArg{id}...| request using ID~|id|.
+% During the first |pdflatex| pass, this will be the path to a dummy file.
+% After the Python package has been applied to the |aux| file, then
+% |\gitFile{id}| will point to the proper file during the next |pdflatex|
+% pass.
+%
+%
+% \subsection{gitUrl}
+% \DescribeMacro{\gitUrl}%
+% The macro |\gitUrl|\marg{id} returns the URL from which the file
+% corresponding to the |\gitLoad{id}...| request was downloaded.
+% This command is designed to work with GitHub.
+% It will be the repository URL combine with the path of the file inside the
+% repository and the commit has code.
+% The Url thus points to the exact same version of the file that was
+% downloaded (and optionally post-processed).
+%
+%
+% \subsection{gitName}
+% \DescribeMacro{\gitName}%
+% The macro |\gitName|\marg{id} returns the name of the file
+% corresponding to the |\gitLoad{id}...| request.
+% This corresponds to the |basename| on unixoid file systems.
+% In other words, only the local name of the file, without any
+% other path components.
+% This command makes sense only with files that are directly
+% downloaded from |git| or filtered versions thereof, or \emph{maybe}
+% argument files.
+%
+%
+% \subsection{gitNameEsc}
+% \DescribeMacro{\gitNameEsc}%
+% The macro |\gitNameEsc|\marg{id} returns the \emph{escaped} name of the
+% file corresponding to the |\gitLoad{id}...| request.
+% This corresponds to the |basename| on unixoid file systems, as returned
+% by |\gitName|, but with |_|, |$|, and | | escaped to |\_|, |\$|, and |~|
+% respectively.
+% This allows you to use the name of a file in plain \TeX, maybe like
+% |\texttt{\gitNameEsc{myId}}|.
+% This command makes sense only with files that are directly
+% downloaded from |git| or filtered versions thereof, or \emph{maybe}
+% argument files.
+%
+%
+% \subsection{gitIf}
+% \DescribeMacro{\gitIf}%
+% The macro |\gitIf|\marg{id}{ifDone}{ifNotDone} executes the code provided as
+% |ifDone| if the request with ID~|id| has already been executed and completed
+% by the |texgit| Python package.
+% Otherwise, it will execute the code provided as |ifNotDone|.
+% As stated before, during the first |pdflatex| pass, all results of
+% |\gitFile| and |\gitUrl| are dummies, either empty files or dummy URLs.
+% However, some \LaTeX\ commands cannot deal with that.
+% For example, say that we execute a program to generate a PDF graphic and
+% store it in an argument file.
+% During the first |pdflatex| run, this file is empty.
+% If we try to |\includegraphics| it, this will crash.
+% So we would place the |\includegraphics| into a |\gitIf| block and only
+% execute it once the request is completed.
+% After the first |pdflatex| run, we would execute the Python package
+% |texgit|.
+% This package will complete the request and the argument file will then be
+% a proper graphic.
+% In the second |pdflatex| pass, the |\includegraphics| code could be
+% executed.
+% An example for this is given in \autoref{sec:example_8}.
+%
+% \section{Examples}\label{sec:examples}%
+%
+% Here we provide a set of examples for the use of the package.
+% Each example demonstrates another facet of the package and, at the same
+% time, serves as test case.
+% The first example given in \autoref{sec:example_1} is a Minimal Working
+% Example, i.e., just provides the barest bones.
+% It shows you how to import a single file from a |git| repository.
+% The second example in \autoref{sec:example_2} shows you how to import
+% multiple different files from different repositories (which equates to just
+% using the same command multiple times) and how to use post-processors.
+% The third example in \autoref{sec:example_3} shows how to create
+% beautiful (to my standards) listings by including code from a |git|
+% repository, post-processing it, and loading it as a |listing|.
+% Finally, the fourth example in \autoref{sec:example_4} shows that you can
+% also define macros for your favorite repository and post-processors to have
+% a more convenient way to import files from |git|.
+%
+% \subsection{Minimal Working Example}%
+% \label{sec:example_1}%
+% This minimal working example shows how to load a file from a |git|
+% repository and directly |\input|\expandafter\tbindex{input} its contents.
+% The result can be seen in \autoref{ex:example_2:res}.
+%
+% \lstinputlisting[classoffset=2,morekeywords={A,B,C,D},breaklines=True,keywordstyle=\ttfamily\bfseries\color{blue!90!black},classoffset=0,float,label=ex:example_1,caption={A minimal working example for using the \texttt{texgit} package, rendered as \autoref{ex:example_1:res}. The contents of \texttt{dummy.tex} are shown in \autoref{ex:dummy_tex}.}]{examples/example_1.tex}%
+%
+% As you can see in \autoref{ex:example_1}, we first load the package
+% |texgit| in line~2.
+% Inside the document, we define a |git| request via the |\gitLoad| command.
+% This command takes the ID of the request as first parameter.
+% Here, we chose |R1|.
+% Its second parameter is the URL of a |git| repository.
+% In this case, this is \url{https://github.com/thomasWeise/texgit_tex},
+% which happens to be the URL where you can find the repository of this
+% package on GitHub.
+% The third parameter is a path to the file in this repository relative to
+% the repository root.
+% In this case, this is the path to the file |examples/dummy.tex|, whose
+% contents you can find in \autoref{ex:dummy_tex}.
+%
+% \lstinputlisting[float,label=ex:dummy_tex,caption={The contents of the file \texttt{dummy.tex} included from \texttt{git} in \autoref{ex:example_1}.}]{examples/dummy.tex}%
+%
+% The fourth parameter shall be ignored for now.
+%
+% After defining the request, we can now use two commands, |\gitFile{R1}| and
+% |\gitUrl{R1}|.
+% In this Minimal Working Example, we shall only consider the first one.
+% This command expands to a local path of a file with the contents downloaded
+% from the |git| repository.
+%
+% Well, during the first \LaTeX\ or |pdflatex| run, it just points to a dummy
+% file with the name |\jobname.texgit.dummy|, where
+% |\jobname|\tbindex{jobname} evaluates to the name of the main \LaTeX\
+% document, say |article| for |article.tex|.
+% At that point, the dummy file's content is a single space character followed
+% by a newline.
+%
+% After the first |pdflatex| pass, you can apply the Python\index{Python}
+% processor (see \autoref{sec:texgitpy}) as follows:
+% \begin{quote}%
+% |python3 -m texgit.run jobname|
+% \end{quote}%
+% Where |jobname| shall be replaced with the main file name, again |article|
+% for |article.tex|, for instance.
+%
+% This command then downloads the file from |git| and puts it into a path that
+% can locally accessed by \LaTeX.
+% Usually, it will create a folder |__git__|\tindex{\_\_git\_\_} in your
+% project's directory and place the file there.
+%
+% Anyway, during the second \LaTeX\ or |pdflatex| pass, |\gitFile{R1}| points
+% to a valid file path with actual contents.
+% By doing |\input{\gitFile{R1}}|\tbindex{input}, we here include this file
+% (remember, its contents are given in \autoref{ex:dummy_tex}) as if it was
+% part of our normal \LaTeX\ project.
+% The result of this pass is shown in \autoref{ex:example_1:res}.
+%
+% If this example was stored as |example_1.tex|, then it could be built via
+% \begin{quote}
+% |pdflatex example_1|\\
+% |python3 -m texgit.run example_1|\\
+% |pdflatex example_1|
+% \end{quote}
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 9.3in 1.5in 1.6in,clip]{examples/example_1.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_1} (with trimmed page margins and bottom).}%
+% \label{ex:example_1:res}%
+% \end{figure}%
+%
+% If we look back at the \autoref{ex:example_1} of our main file, you will
+% notice the four blue marks {\bfseries\color{blue!90!black}A},
+% {\bfseries\color{blue!90!black}B}, {\bfseries\color{blue!90!black}C}, and
+% {\bfseries\color{blue!90!black}D}.
+% These are just normal letters, colored and emphasized for your convenience.
+% I put them there so that you can see where the action takes place.
+% |\gitLoad| produces no output, so ``ABC'' come out next to each other.
+% |\input{\gitFile}| between {\bfseries\color{blue!90!black}C} and
+% {\bfseries\color{blue!90!black}D} loads and directly includes the example
+% file, so this is where its content appear.
+%
+% One small interesting thing is that, since we directly |\input| the file,
+% its contents are interpreted as \LaTeX\ code.
+% This means that you could construct a document by inputting files from
+% different |git| repositories.
+%
+% However, this is not the envisioned use case.
+% The envisioned use case is to include source codes and snippets from source
+% codes as listings.
+% We will show how this could be done in the next example.
+%
+% \emph{Side note:}~Our Python companion package |texgit| downloads the
+% |git| repositories into a folder called |__git__|\tindex{\_\_git\_\_} by
+% default.
+% If you do not delete the folder, the same repository will not be downloaded
+% again but the downloaded copy will be used.
+% This significantly increases speed and reduces bandwidth when applying the
+% |texgit| command several times.
+% \clearpage%
+%
+% \subsection{The Second Example: Multiple Files and Post-Processing}%
+% \label{sec:example_2}%
+% \FloatBarrier%
+% In \autoref{ex:example_2} we, use |texgit| to download and present two
+% different files from two different GitHub repositories.
+% We also show how post-processing can work, once using the aforementioned
+% simple |head -n 5| command available in the Linux shell and also by
+% using the Python code formatting tool offered by the |texgit| Python
+% package.
+% The result can be seen in \autoref{ex:example_2:res}.
+%
+% \lstinputlisting[float,label=ex:example_2,caption={An example using the texgit package, rendered as \autoref{ex:example_2:res}.}]{examples/example_2.tex}%
+% \FloatBarrier%
+%
+% The file |example_2.tex| shown in \autoref{ex:example_2} begins by loading
+% our |texgit| package as well as package |verbatim|, which is later used
+% to display the included files.
+% The document creates three sections, each of which is used to display one
+% imported file.
+%
+% The first section loads one Python source file from the Python
+% package \href{https://thomasweise.github.io/pycommons}{pycommons}.
+% The sources of this package are available in the GitHub repository
+% \url{https://github.com/thomasWeise/pycommons}.
+% We download the file |pycommons/io/console.py|, which is just a small
+% utility for printing log strings to the output together with a time mark.
+% The full request, with the ID |R2|, contains these two components.
+%
+% Issuing this request will set the command |\gitFile{R2}| to the local file
+% containing the downloaded contents of |pycommons/io/console.py| from the
+% repository \url{https://github.com/thomasWeise/pycommons}.
+% The command |\gitUrl{R2}| will expand to the URL pointing to the downloaded
+% \emph{version} of the file in the original repository.
+% This command, at the present time, is only really valid for GitHub.
+% It builds a URL relative to the original repository based on the commit ID
+% that was valid when the file was downloaded from the repository.
+% Therefore, the URL then points to the \emph{exact same} contents that were
+% put into the file.
+% Anyway, the file contents and the generated URL are displayed in
+% \autoref{ex:example_2:1}.
+%
+% The second section of the example document queries the same file again.
+% However, this time, the fourth parameter of |\gitLoad| is specified.
+% If the fourth parameter is left blank, the downloaded file will be provided
+% as-is.
+% However, especially if we would like to include some snippets of a more
+% complex source file, we sometimes do not want to have the complete original
+% contents.
+% In this case, we can specify a post-processing command as third parameter.
+% This command will be executed in the shell\index{shell}
+% The contents of the downloaded file will then be piped into the
+% |stdin|\tindex{stdin} of the command and everything that the command writes
+% to its |stdout|\tindex{stdout} will be collected in a file.
+% We use ID |R2| for this request.
+% |\gitFile{R2}| then returns the path to that file.
+%
+% Since you can provide arbitrary commands as post-processors, this allows you
+% to do, well, arbitrary post-processing.
+% This could include re-formatting of code or selecting only specific lines
+% from the file.
+% The command can have arguments, separated by spaces, allowing you to pass
+% information such as line indices or other instructions to your
+% post-processing command.
+%
+% In the example, we use the standard Linux command |head -n 5|, which writes
+% the first five lines that were written to its |stdin| to its |stdout|.
+%
+% The resulting output in \autoref{ex:example_2:2} looks thus similar to
+% \autoref{ex:example_2:1}, but only imports ths first five lines from the
+% downloaded file.
+%
+% If this example was stored as |example_2.tex|, then it could be built via
+% \begin{quote}
+% |pdflatex example_2|\\
+% |python3 -m texgit.run example_2|\\
+% |pdflatex example_2|
+% \end{quote}
+%
+% \emph{Side note:}~Such post-processing steps are cached by the Python
+% companion package |texgit| in the |__git__|\tindex{\_\_git\_\_} folder
+% as well.
+%
+% Finally, in the third section, of \autoref{ex:example_2}, we import a file
+% from the sources of our Python package for metaheuristic optimization
+% (\href{https://thomasweise.github.io/moptipy}{moptipy}).
+% The sources of this package are located on GitHub at
+% \url{https://github.com/thomasWeise/moptipy}.
+% We download the file |moptipy/api/encoding.py|, which offers a convenient
+% API for implementing an \emph{encoding} which translates from the search to
+% the solution space (but that would lead too far here).
+% Either way, this is a file that has lots of content.
+% So we want to select certain contents while ignoring other.
+% We also remove all Python type hints and all comments from the source and
+% then reformat it.
+%
+% Luckily, our |texgit| Python package also offers a Python code formatter,
+% namely the executable module \href{https://thomasweise.github.io/texgit_py/texgit.formatters.html#module-texgit.formatters.python}{texgit.formatters.python}.
+% This module takes a set of parameters such as limiting |labels| that denote
+% the start and end of code snippets (in this case, the label ``|book|'') to
+% include as well |args| telling the system which part of the ``omittable''
+% code to preserve (in this case, preserve |doc|strings and delete everything
+% else that is non-essential).
+% If you are interested in such post-processing, feel invited to check out
+% the \href{https://thomasweise.github.io/texgit_py}{documentation} of the
+% Python companion package at \url{https://thomasweise.github.io/texgit_py}.
+% Either way, the file is downloaded, piped through this post-processor, and
+% the result is included as shown in \autoref{ex:example_2:3}.
+%
+% \begin{figure}%
+% \centering%
+% \strut\hfill\strut%
+% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_2}.\label{ex:example_2:1}%
+% }{%
+% \fbox{\includegraphics[page=1,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
+% }%
+% \strut\hfill\strut\hfill\strut%
+% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_2}.\label{ex:example_2:2}%
+% }{%
+% \fbox{\includegraphics[page=2,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
+% }%
+% \strut\hfill\strut%
+% \\%
+% \strut\hfill\strut%
+% \subcaptionbox{Page 3 of the pdf compiled from \autoref{ex:example_2}.\label{ex:example_2:3}%
+% }{\parbox{\linewidth}{\centering%
+% \fbox{\includegraphics[page=3,width=0.455\linewidth,trim=1.65in 5in 1.5in 1.5in,clip]{examples/example_2.pdf}}%
+% }}%
+% \strut\hfill\strut%
+%
+% \caption{The rendered result of \autoref{ex:example_2} (with trimmed page margins and bottoms).}%
+% \label{ex:example_2:res}%
+% \end{figure}%
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Third Example: Using the \texttt{listings} Package}%
+% \label{sec:example_3}%
+% \FloatBarrier%
+% As third example, let us show the interaction with the package |listings|.
+% This is not much different from using the package |verbatim| in the second
+% example above.
+% I just wanted to show you how it looks like.
+% Also, I wanted to show the intended use of |\gitUrl|:
+% You can use it to put some small ``(src)'' link in the listing's caption.
+% This way, you can create teaching material where every listing is linked to
+% the correct version of source code online without splattering long URLs into
+% your text.
+% Anyway.
+% The source code of the third example is given in \autoref{ex:example_3} and
+% the compiled result as \autoref{ex:example_3:res}.
+%
+% \lstinputlisting[float,label=ex:example_3,caption={An example using the \texttt{listings} package, rendered as \autoref{ex:example_3:res}.}]{examples/example_3.tex}%
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.4in 5.6in 1.5in 1.6in,clip]{examples/example_3.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_3} (with trimmed page margins and bottom).}%
+% \label{ex:example_3:res}%
+% \end{figure}%
+%
+% If this example was stored as |example_3.tex|, then it could be built via
+% \begin{quote}
+% |pdflatex example_3|\\
+% |python3 -m texgit.run example_3|\\
+% |pdflatex example_3|
+% \end{quote}
+%
+% \emph{Side note:}~If you actually check the \href{https://thomasweise.github.io/moptipy/_modules/moptipy/algorithms/so/rls.html}{source code}
+% of the RLS algorithm, which is linked to by the ``(\href{https://thomasweise.github.io/moptipy/_modules/moptipy/algorithms/so/rls.html}{src})''
+% in the caption of the example and that is displayed in the example, you will
+% find that it actually uses Python type hints.
+% It also has a comprehensive doc-string and is commented well.
+% In source code of a real project, we do want this.
+% In a listing in a book, we do not.
+% The post-processor command
+% \begin{quote}
+% |python3 -m texgit.formatters.python --labels book|
+% \end{quote}%
+% only keeps the code between the labels ``|# start book|'' and
+% ``|# end book|.''
+% It also removes all non-essential stuff such as type hints, comments, and
+% the doc-string.
+% Then it re-formats the code to save space.
+% Again, check out the documentation of our |texgit| Python companion
+% package at \url{https://thomasweise.github.io/texgit_py}.
+% This is the main intended use case of our package:
+% Be able to have nicely documented ``real'' code and to use parts of it
+% in teaching materials.
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Fourth Example: Using Git Commands in Macros}%
+% \label{sec:example_4}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_4,caption={An example using commands from the texgit package in macros, rendered as \autoref{ex:example_4:res}.}]{examples/example_4.tex}%
+%
+% The goal of the fourth example is to show that we can also put the commands
+% from our |texgit| package into \LaTeX\ macros.
+% We define a new command |\moptipySrc| with three parameters.
+% \href{https://thomasweise.github.io/moptpiy}{moptipy} is a Python package
+% that implements lots of metaheuristic algorithms.
+% We could want to load several files from such a repository
+% \url{https://github.com/thomasWeise/moptipy} and post-process and display
+% them all in the same way.
+% Then, it would be annoying to always do |\gitLoad|, |\lstinputlisting|,
+% and spell out the post-processor each time.
+% So we put all of this into a single command whose first argument is the
+% label to put for the listing, whose second command is the caption to use,
+% and whose third command is the path relative to the folder ``moptipy'' in
+% the |git| repository.
+% We also use this first parameter, the label, as ID for our |texgit|
+% commands.
+% In \autoref{ex:example_4}, we can then simply call |\moptipySrc| and it will
+% do the whole process of loading a file from the right repository,
+% post-processing it, putting a floating listing, and even putting a small
+% ``(\href{https://thomasweise.github.io/moptpiy}{src})'' into the caption of
+% the listing.
+% The results are shown in \autoref{ex:example_4:res}% and can be obtained via
+% \begin{quote}
+% |pdflatex example_4|\\
+% |python3 -m texgit.run example_4|\\
+% |pdflatex example_4|
+% \end{quote}
+% (if the example code from \autoref{ex:example_4} was stored in a file called
+% |example_4.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \strut\hfill\strut%
+% \subcaptionbox{Page 1 of the pdf compiled from \autoref{ex:example_4}.\label{ex:example_4:1}%
+% }{%
+% \fbox{\includegraphics[page=1,width=0.455\linewidth,trim=1.65in 6.2in 1.5in 1.8in,clip]{examples/example_4.pdf}}%
+% }%
+% \strut\hfill\strut\hfill\strut%
+% \subcaptionbox{Page 2 of the pdf compiled from \autoref{ex:example_4}.\label{ex:example_4:2}%
+% }{%
+% \fbox{\includegraphics[page=2,width=0.455\linewidth,trim=1.65in 3.7in 1.5in 3.7in,clip]{examples/example_4.pdf}}%
+% }%
+% \strut\hfill\strut%
+% \caption{The rendered result of \autoref{ex:example_4} (with trimmed page margins and bottoms).}%
+% \label{ex:example_4:res}%
+% \end{figure}%
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Fifth Example: Capturing the Output of a Program}%
+% \label{sec:example_5}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_5,caption={An example of capturing the output of a program, rendered as \autoref{ex:example_5:res}.}]{examples/example_5.tex}%
+%
+% The goal of the fifth example is to show that we can capture the output of
+% a program.
+% In \autoref{ex:example_5}, we just invoke |python3 --version| and capture
+% the output in a file.
+% We then load this file as listing.
+% The results are shown in \autoref{ex:example_5:res}% and can be obtained via
+% \begin{quote}
+% |pdflatex example_5|\\
+% |python3 -m texgit.run example_5|\\
+% |pdflatex example_5|
+% \end{quote}
+% (if the example code from \autoref{ex:example_5} was stored in a file called
+% |example_5.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 7.9in 1.5in 1.8in,clip]{examples/example_5.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_5} (with trimmed page margins and bottoms).}%
+% \label{ex:example_5:res}%
+% \end{figure}%
+%
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Sixth Example: Capturing the Output of a Program Executed Inside a git Repository}%
+% \label{sec:example_6}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_6,breaklines=True,caption={An example of capturing the output of a program executed inside a git repository, rendered as \autoref{ex:example_6:res}.}]{examples/example_6.tex}%
+%
+% The goal of the sixth example is to show that we can capture the output of
+% a program -- but this time we execute it inside a |git| repository.
+% In \autoref{ex:example_6}, we invoke a program which is part of the examples
+% suite of the \href{https://github.com/thomasWeise/pycommons}{pycommons}
+% utility package.
+% We capture its standard output in a file.
+% We then load this file as listing.
+% The results are shown in \autoref{ex:example_6:res}% and can be obtained via
+% \begin{quote}
+% |pdflatex example_6|\\
+% |python3 -m texgit.run example_6|\\
+% |pdflatex example_6|
+% \end{quote}
+% (if the example code from \autoref{ex:example_6} was stored in a file called
+% |example_6.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 7.5in 1.5in 1.8in,clip]{examples/example_6.pdf}}%
+% \caption{The rendered result of \autoref{ex:example_6} (with trimmed page margins and bottoms).}%
+% \label{ex:example_6:res}%
+% \end{figure}%
+%
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Seventh Example: Capturing the Output of Multiple Programs Executed Inside Different git Repositories}%
+% \label{sec:example_7}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_7,breaklines=True,caption={An example of capturing the output of three programs executed inside different git repositories, rendered as \autoref{ex:example_7:res}.}]{examples/example_7.tex}%
+%
+% The goal of the seventh example is to show that we can capture the output of
+% multiple programs from inside different |git| repositories.
+% In \autoref{ex:example_7}, we invoke the same program as in \autoref{ex:example_6} and of two
+% programs which are part of the examples suite of the
+% \href{https://github.com/thomasWeise/programmingWithPython}{Programming with Python}
+% book. The examples can be found in the repository
+% \url{https://github.com/thomasWeise/programmingWithPythonCode}, whereas the book can be downloaded
+% from \url{https://github.com/thomasWeise/programmingWithPython}.
+% We capture the standard output of both programs in three files.
+% We then load these file as listings.
+% The results are shown in \autoref{ex:example_7:res} and can be obtained via
+% \begin{quote}
+% |pdflatex example_7|\\
+% |python3 -m texgit.run example_7|\\
+% |pdflatex example_7|
+% \end{quote}
+% (if the example code from \autoref{ex:example_7} was stored in a file called
+% |example_7.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.9\linewidth,trim=1.65in 6.1in 1.5in 1.5in,clip]{examples/example_7.pdf}}
+% \caption{The rendered result of \autoref{ex:example_7} (with trimmed page margins and bottoms).}%
+% \label{ex:example_7:res}%
+% \end{figure}%
+%
+% \afterpage{\clearpage}%
+%
+%
+% \FloatBarrier%
+%
+%
+% \subsection{The Eight Example: Using Argument Files}%
+% \label{sec:example_8}%
+% \FloatBarrier%
+%
+% \lstinputlisting[float,label=ex:example_8,caption={An example of running a script residing in git and passing an automatically generated file path to it as input, rendered as \autoref{ex:example_8:res}.}]{examples/example_8.tex}%
+% \lstinputlisting[float,language=Python,label=py:make_pdf,caption={The Python script invoked in \autoref{ex:example_8} to create a graphic and store it in an argument file.}]{examples/make_pdf.py}%
+%
+% \begin{sloppypar}%
+% The goal of the eighth example is to show how to use argument files.
+% In \autoref{ex:example_8}, we first create an argument file via
+% |\gitArg{R13}{test}{.pdf}|.
+% This file will have the name prefix |test| and the suffix |.pdf|.
+% It will be available under the ID~|R13|.
+% The command |\gitExec{}{...}{...}{python3 make_pdf.py (?R13?)}| invokes
+% the Python program |make_pdf.py| residing in a certain directory of a |git|
+% repository (actually, our repository here).
+% We leave the first parameter, the |id|, empty, because we are not interested
+% in the output of this program.
+% The agument |(?R13?)| passed to the program will be resolved to the argument
+% file path before invoking the program.
+% The program is illustrated in \autoref{py:make_pdf}.
+% It generates a PDF graphic and stores it in the file that it received as
+% argument.
+% We can then include this graphic using |\includegraphics| and passing in
+% |\gitFile{R13}|.
+% \end{sloppypar}%
+%
+% However, |\gitFile{R13}| will only be valid after we applied the Python
+% |texgit| command \emph{after} the first |pdflatex| pass.
+% Therefore, during the first |pdflatex| pass, this file will be empty.
+% |\includegraphics| would fail.
+% Therefore, we protect this code to be only executed once the file has been
+% filled with data.
+% This is done by placing it into the
+% |\gitIf{R13}{<exec if done>}{<otherwise>}| block.
+%
+% The results are shown in \autoref{ex:example_8:res} and can be obtained via
+% \begin{quote}
+% |pdflatex example_8|\\
+% |python3 -m texgit.run example_8|\\
+% |pdflatex example_8|
+% \end{quote}
+% (if the example code from \autoref{ex:example_8} was stored in a file called
+% |example_8.tex|, that is.)
+%
+% \begin{figure}%
+% \centering%
+% \fbox{\includegraphics[page=1,width=0.7\linewidth,trim=1in 1in 1in 1in,clip]{examples/example_8.pdf}}
+% \caption{The rendered result of \autoref{ex:example_8} (with trimmed page margins and bottoms).}%
+% \label{ex:example_8:res}%
+% \end{figure}%
+%
+% \afterpage{\clearpage}%
+%
+% \section{A Note on LaTeX Floating Environments}
+% \begin{sloppypar}%
+% \LaTeX\ offers us floating environments for laying out tables and figures.
+% Such environments, e.g., |\begin{figure}...\end{figure}| or
+% |\begin{table}...\end{table}| are automatically arranged by \LaTeX.
+% This means that their order can change depending how they layout engine
+% determines where to put them.
+% This means that, if you put |\gitLoad|, |\gitArg|, or |\gitExec| commands
+% into such environments, their execution order can change.
+% It is therefore recommended to put these commands always outside of these
+% environments.
+% Then the execution order is always the same and clear.
+% \end{sloppypar}%
+% \section{Usage in GitHub Actions}
+% It is possible to use |texgit| in GitHub actions.
+% For this purpose, you would simply copy the |texgit.sty| file into the directory of your \LaTeX\ sources.
+% You can use \href{https://github.com/xu-cheng/texlive-action}{xu-cheng/texlive-action}, which provides TexLive, to run several |pdflatex| / |texgit| cycles.
+% Then, you could deploy the book that was built using \href{https://github.com/JamesIves/github-pages-deploy-action}{JamesIves/github-pages-deploy-action} to a GitHub page.
+% This way, whenever you commit changes \LaTeX\ sources residing in a |git| repository, your book would be re-built.
+% The projects below do it this way.
+%
+% \section{Projects using texgit}
+% |texgit| was developed specifically for teaching material book projects.
+% There are several book projects that use it.
+% \begin{itemize}%
+% \item \emph{Programming with Python}, available at \url{https://thomasWeise.github.io/programmingWithPython} is a book and a set of slides introducing the reader to Python programming.
+% It is enriched with many source code examples, which reside in the repository \url{https://github.com/thomasWeise/programmingWithPythonCode}.
+% These examples are automatically included and executed in the book building process via |texgit|.
+% \item \emph{Databases}, available at \url{https://thomasWeise.github.io/databases} is a book and a set of slides introducing the reader to relational databases.
+% It is enriched with many source code examples, which reside in the repository \url{https://github.com/thomasWeise/databasesCode}.
+% These examples are automatically included and executed in the book building process via |texgit|.
+% Actually, they are |sql| scripts that run on a PostgreSQL database management system.
+% With |texgit|, you can run complex scripts residing in |git| repositories.
+% It is possible to interact with a database server without problems.
+%
+% \end{itemize}%
+%
+% \clearpage%
+%
+% \StopEventually{}
+%
+% \section{Implementation}%
+% \label{sec:implementation}%
+% The names of all internal elements of the package are prefixed
+% with |@texgit@|.
+% This naming convention should prevent any name clashes with other packages.
+%
+% Our |texgit| package requires only one other package:%
+% \begin{enumerate}%
+% \item |filecontents|\index{filecontents}~\cite{P2023TFP} is used to allow us
+% to generate the dummy file on the fly.
+% This package is obsolete for the most recent \LaTeX\ version, where it
+% simply does nothing, but may help us to get our package to work on older
+% systems.
+% \end{enumerate}%
+%    \begin{macrocode}
+\RequirePackage{filecontents}%  Allow us to create the dummy file.
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+%
+% This is the path to the dummy file.
+% The dummy file is created directly below.
+% The dummy file is referenced by all invocations of |\gitFile| until the
+% Python package has been applied to the |.aux| file and has loaded the
+% actual files.
+\xdef\@texgit@dummyPath{\jobname.texgit.dummy}%  the dummy file
+%
+% Create the dummy file that replaces files before they are loaded.
+% This file only has one line with one single space.
+\expandafter\begin\expandafter{filecontents*}{\@texgit@dummyPath}
+
+\end{filecontents*}
+%
+%% We need to make sure that the texgit postprocessor is actually
+%% properly applied.
+%% If you load our package, then if the postprocessor is not applied
+%% before the second pdflatex pass, we make sure that pdflatex
+%% crashes with an error.
+\protected\gdef\@texgit@needsTexgitPass{%
+\errmessage{texgit: You must run the Python companion package of texgit %
+*before* doing the second pdflatex pass. %
+You can do this by invoking 'python3 -m texgit.run \jobname'. %
+You can obtain this Python package via 'pip install texgit'. %
+Check the documentation at %
+https://thomasweise.github.io/texgit_tex/texgit.pdf%
+}%
+%% force quit
+\batchmode\read-1 to \foo%
+}%
+%% Make sure that the texgit postprocessor is actually applied.
+\AtEndDocument{%
+\let\@texgit@needsTexgitPass\relax%
+\immediate\write\@mainaux{\noexpand\@texgit@needsTexgitPass}}%
+%
+% The dummy URL that is returned by |\gitURL| unless a proper URL is
+% available.
+\xdef\@texgit@dummyUrl{https://example.com}%  the dummy URL
+%
+% This command does nothing and is just a placeholder in the |aux| files.
+\gdef\@texgit@gitFile#1#2#3#4{}%
+% This command as well.
+\gdef\@texgit@process#1#2#3#4{}%
+% This command as well.
+\gdef\@texgit@argFile#1#2#3{}%
+%    \end{macrocode}
+%
+% \begin{macro}{\gitLoad}
+% The macro |\gitLoad|\marg{id}\marg{repositoryURL}\marg{path}\marg{postProcessing}
+% defines a query to a |git| repository.
+% The query is stored in the |aux| file of the project and carried out by the
+% Python companion package (see \autoref{sec:pythonProgram}).
+% The results of this macro will become available via the two other macros
+% |\gitFile{id}| and |\gitUrl{id}|.
+% During the first \LaTeX\ build, these macros will return a path to a dummy
+% file which only has a single space character in it followed by a newline and
+% the dummy URL \url{https://example.com}, respectively.
+% As said, |\gitLoad| will store all information in the |aux| file, which then
+% permits the |texgit| Python package to download (and optionally
+% post-process) the actual file.
+% In the second round of \LaTeX\ building, |\gitFile{id}| and |\gitUrl{id}| will
+% then return the local path to that downloaded file and the actual URL,
+% respectively.%
+%
+% \begin{itemize}\sloppy%
+% \item[\marg{id}] the uniquely chosen ID for this request.
+% Imagine this being something like a label.
+%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
+% repository URL.%
+%
+% \item[\marg{path}] is then the path to the file within the repository.
+% This could be, for example, |latex/texgit.dtx|.%
+%
+% \item[\marg{postProcessing}] Can either be empty, in which case the
+% repository is downloaded and the the local path to the file is
+% returned.
+% It can also be shell command, e.g., |head -n 5|.
+% In this case, the contents of the file are piped to |stdin| of the command
+% and the text written to the |stdout| by the command is stored in a file
+% whose path is returned.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Define a query to load and post-process a file from a |git| repository.
+%% #1 is the request ID
+%% #2 is the repository URL
+%% #3 is the path to the file inside the repository
+%% #4 is a command through which the file contents should be piped
+%%%   (leave #4 empty to use the file as-is)
+\protected\gdef\gitLoad#1#2#3#4{%
+\edef\@texgit@pA{#1}%  fully expand the request ID
+\edef\@texgit@pB{#2}%  fully expand the repository URL
+\edef\@texgit@pC{#3}%  fully expand the path into the repository
+\edef\@texgit@pD{#4}%  fully expand the (optional) shell command
+% Write the parameters to the aux file.
+\immediate\write\@mainaux{%
+\noexpand\@texgit@gitFile{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}{\@texgit@pD}}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\gitExec}
+% The macro |\gitExec|\marg{id}\marg{repositoryURL}\marg{path}\marg{theCommand}
+% defines a command to be executed either inside a |git| repository or
+% in the current directory.
+% The query is stored in the |aux| file of the project and carried out by the
+% Python companion package (see \autoref{sec:pythonProgram}).
+% The results of this macro will become available via the macro
+% |\gitFile{id}|.
+% During the first \LaTeX\ build, this macro will return a path to a dummy
+% file which only has a single space character in it followed by a newline.
+% As said, |\gitExec| will store all information in the |aux| file, which then
+% permits the |texgit| Python package to download (and optionally
+% post-process) the actual file.
+% In the second round of \LaTeX\ building, |\gitFile{id}| will then return the
+% local path to the file with the standard output of the executed
+% command.%
+%
+% \begin{itemize}\sloppy%
+% \item[\marg{id}] the uniquely chosen ID for this request.
+% Imagine this being something like a label.
+%
+% \item[\marg{repositoryURL}] is the URL of the |git| repository.
+% It could, e.g., be \url{https://github.com/thomasWeise/texgit\_tex} or
+% \url{ssh://git@github.com/thomasWeise/texgit\_tex} or any other valid
+% repository URL.%
+% You can leave this argument empty if you want to execute the command in the
+% current directory.
+%
+% \item[\marg{path}] is then the path to the directory within the repository.
+% This could be, for example, |latex|.
+% The command is executed at this directory.
+% Use |.| for the repository root.
+% Leave this empty if no repository is used.
+%
+% \item[\marg{theCommand}] The command line to be executed.
+% It can also be shell command, e.g., |python3 --version|.
+% The standard output produced by this command is captured as file.
+% \end{itemize}%
+%    \begin{macrocode}
+\newcount\@texgit@counter%  The counter for the dummy arguments of \gitExec
+\@texgit@counter0\relax%    We start the counter at 0.
+%%
+%% Define a query to execute a command, optionally in a |git| repository.
+%% #1 is the request ID, leave empty if you do not want to access the output
+%% #2 is the repository URL, or empty if no repository is needed
+%% #3 is the path to a directory inside the repository or empty
+%% #4 is a command to be executed
+\protected\gdef\gitExec#1#2#3#4{%
+\edef\@texgit@pA{#1}%  the request ID
+\ifx\@texgit@pA\empty\relax\edef\@texgit@pA{%
+@texgit@dummy@\the\@texgit@counter}%
+\global\advance\@texgit@counter by 1% step the counter for the next dummy
+\fi%
+\edef\@texgit@pB{#2}%  fully expand the repository URL, or empty
+\edef\@texgit@pC{#3}%  fully expand the path into the repository, or empty
+\edef\@texgit@pD{#4}%  fully expand the (optional) shell command
+% Write the parameters to the aux file.
+\immediate\write\@mainaux{%
+\noexpand\@texgit@process{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}{\@texgit@pD}}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\gitArg}
+% The macro |\gitArg|\marg{id}\marg{prefix}\marg{suffix}
+% allocates a unique file name with the given |prefix| and |suffix|
+% that can be passed as argument in invocations of |\gitExec|.
+% The results of this macro will become available via the macro
+% |\gitFile{id}|.
+% During the first \LaTeX\ build, this macro will return a path to a dummy
+% file which only has a single space character in it followed by a newline.
+% As said, |\gitExec| will store all information in the |aux| file, which then
+% permits the |texgit| Python package to download (and optionally
+% post-process) the actual file.
+% In the second round of \LaTeX\ building, |\gitFile{id}| will then return the
+% local path to the file with the standard output of the executed
+% command.%
+%
+% \begin{itemize}\sloppy%
+% \item[\marg{id}] the uniquely chosen ID for this request.
+% Imagine this being something like a label.
+%
+% \item[\marg{prefix}] is the optional prefix, which can be left empty.
+%
+% \item[\marg{suffix}] is the optional suffix, which can be left empty.
+%
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Define a query to allocate a file.
+%% #1 is the request ID
+%% #2 is the prefix
+%% #3 is the suffix
+\protected\gdef\gitArg#1#2#3{%
+\edef\@texgit@pA{#1}%  the request ID
+\edef\@texgit@pB{#2}%  fully expand the prefix
+\edef\@texgit@pC{#3}%  fully expand the suffix
+% Write the parameters to the aux file.
+\immediate\write\@mainaux{%
+\noexpand\@texgit@argFile{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\gitIf}
+% The macro |\gitIf|\marg{id}\marg{ifDone}\marg{ifNotDone} executes |ifDone|
+% if the request under the given |id| has already been executed, otherwise
+% executes |ifNotDone|.
+%
+% \begin{itemize}%
+% \item[\marg{id}] the request ID.
+% \item[\marg{ifDone}] executed if the request with the given ID has already
+% been executed.
+% \item[\marg{ifNotDone}] executed if the request with the given ID has not
+% yet been executed.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Conditionally execute code depending on whether the given request was
+%% already executed.
+%% #1 is the request ID
+%% #2 the code to execute if the request of the given ID has been executed.
+%% #3 the code to execute if the request of the given ID has NOT been
+%%    executed.
+\gdef\gitIf#1#2#3{%
+\expandafter\ifx\csname @texgit@path@#1\endcsname\relax%
+\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi{#3}{#2}%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\gitFile}
+% The macro |\gitFile|\marg{id} get the file path associated with the request
+% of ID~|id|.
+%
+% \begin{itemize}%
+% \item[\marg{id}] the request ID.
+% yet been executed.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Get the file path associated with the request ID.
+%% #1 is the request ID
+\gdef\gitFile#1{%
+\expandafter\ifx\csname @texgit@path@#1\endcsname\relax%
+\@texgit@dummyPath\else\csname @texgit@path@#1\endcsname\fi%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\gitUrl}
+% The macro |\gitUrl|\marg{id} get the URL associated with the request of
+% ID~|id|.
+%
+% \begin{itemize}%
+% \item[\marg{id}] the request ID.
+% yet been executed.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Get the URL associated with the request ID.
+%% #1 is the request ID
+\gdef\gitUrl#1{%
+\expandafter\ifx\csname @texgit@url@#1\endcsname\relax%
+\@texgit@dummyUrl\else\csname @texgit@url@#1\endcsname\fi%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\gitName}
+% The macro |\gitName|\marg{id} gets the base name of the path associated
+% with the request of ID~|id|.
+% Like |\gitUrl|, this makes only sense if the file is hosted in a |git|
+% repository.
+% If the file contains the data generated by a process, then this command
+% returns an empty string.
+%
+% \begin{itemize}%
+% \item[\marg{id}] the request ID.
+% yet been executed.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Get the base name of the path associated with the request ID.
+%% #1 is the request ID
+\gdef\gitName#1{%
+\expandafter\ifx\csname @texgit@name@#1\endcsname\relax%
+\else\csname @texgit@name@#1\endcsname\fi%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \begin{macro}{\gitNameEsc}
+% The macro |\gitNameEsc|\marg{id} gets the escaped base name of the path
+% associated with the request of ID~|id|.
+% Sometimes, file names may contain characters like |_| or |$|.
+% This means that you could not print the result of |\getFileName| in plain
+% \TeX, because it would cause an error during compilation.
+% |\getNameEsc| escapes |_|, |$|, and | | to |\_|, |\$|, and |~|,
+% respectively.
+% Therefore, its result can be typeset like normal text, at least in
+% |\texttt{...}|.
+% Like |\gitUrl|, this makes only sense if the file is hosted in a |git|
+% repository.
+% If the file contains the data generated by a process, then this command
+% returns an empty string.
+%
+% \begin{itemize}%
+% \item[\marg{id}] the request ID.
+% yet been executed.
+% \end{itemize}%
+%    \begin{macrocode}
+%%
+%% Get the base name of the path associated with the request ID.
+%% #1 is the request ID
+\gdef\gitNameEsc#1{%
+\expandafter\ifx\csname @texgit@escName@#1\endcsname\relax%
+\else\csname @texgit@escName@#1\endcsname\fi%
+}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{thebibliography}{10}
+% \providecommand{\natexlab}[1]{#1}
+% \providecommand{\url}[1]{\texttt{#1}}
+% \expandafter\ifx\csname urlstyle\endcsname\relax
+%   \providecommand{\doi}[1]{doi: #1}\else
+%   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+%
+% \bibitem[Pakin(2023)]{P2023TFP}
+% Scott Pakin.
+% \newblock {The \textbf{filecontents} package.}%
+% \newblock \emph{CTAN Comprehensive \TeX\ Archive Network}, \mbox{April 2, 2023}.%
+% \newblock URL \url{https://ctan.org/pkg/filecontents}%
+%
+% \end{thebibliography}
+% \Finale
+\endinput

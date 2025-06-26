@@ -1,0 +1,149 @@
+%%
+%% This is file `texgit.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% texgit.dtx  (with options: `package')
+%% This is a generated file.
+%% 
+%% Copyright (C) 2023--2025 by Thomas Weise <tweise@email.hfuu.edu.cn>
+%% 
+%% This file may be distributed and/or modified under the conditions of the
+%% The LaTeX Project Public License (LPPL) Version 1.3c  2008-05-04.
+%% The license can be found at
+%% https://thomasweise.github.io/texgit_tex/LICENSE.html.
+%% You can obtain the latest version of this package from
+%% http://thomasweise.github.io/texgit_tex or
+%% http://github.com/thomasWeise/texgit_tex.
+%% This work is author-maintained, i.e., it can only be maintained by
+%% Thomas Weise.
+\NeedsTeXFormat{LaTeX2e}[1999/12/01]%
+\ProvidesPackage{texgit}[2025/06/26 0.9.7 now offering file names (via gitName) and escaped file names (via gitNameEsc)]%
+%%
+%%
+%%
+%%
+%%
+%%
+\RequirePackage{filecontents}%  Allow us to create the dummy file.
+\xdef\@texgit@dummyPath{\jobname.texgit.dummy}%  the dummy file
+\expandafter\begin\expandafter{filecontents*}{\@texgit@dummyPath}
+
+\end{filecontents*}
+%% We need to make sure that the texgit postprocessor is actually
+%% properly applied.
+%% If you load our package, then if the postprocessor is not applied
+%% before the second pdflatex pass, we make sure that pdflatex
+%% crashes with an error.
+\protected\gdef\@texgit@needsTexgitPass{%
+\errmessage{texgit: You must run the Python companion package of texgit %
+*before* doing the second pdflatex pass. %
+You can do this by invoking 'python3 -m texgit.run \jobname'. %
+You can obtain this Python package via 'pip install texgit'. %
+Check the documentation at %
+https://thomasweise.github.io/texgit_tex/texgit.pdf%
+}%
+%% force quit
+\batchmode\read-1 to \foo%
+}%
+%% Make sure that the texgit postprocessor is actually applied.
+\AtEndDocument{%
+\let\@texgit@needsTexgitPass\relax%
+\immediate\write\@mainaux{\noexpand\@texgit@needsTexgitPass}}%
+\xdef\@texgit@dummyUrl{https://example.com}%  the dummy URL
+\gdef\@texgit@gitFile#1#2#3#4{}%
+\gdef\@texgit@process#1#2#3#4{}%
+\gdef\@texgit@argFile#1#2#3{}%
+%%
+%% Define a query to load and post-process a file from a |git| repository.
+%% #1 is the request ID
+%% #2 is the repository URL
+%% #3 is the path to the file inside the repository
+%% #4 is a command through which the file contents should be piped
+%%%   (leave #4 empty to use the file as-is)
+\protected\gdef\gitLoad#1#2#3#4{%
+\edef\@texgit@pA{#1}%  fully expand the request ID
+\edef\@texgit@pB{#2}%  fully expand the repository URL
+\edef\@texgit@pC{#3}%  fully expand the path into the repository
+\edef\@texgit@pD{#4}%  fully expand the (optional) shell command
+\immediate\write\@mainaux{%
+\noexpand\@texgit@gitFile{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}{\@texgit@pD}}%
+}%
+\newcount\@texgit@counter%  The counter for the dummy arguments of \gitExec
+\@texgit@counter0\relax%    We start the counter at 0.
+%%
+%% Define a query to execute a command, optionally in a |git| repository.
+%% #1 is the request ID, leave empty if you do not want to access the output
+%% #2 is the repository URL, or empty if no repository is needed
+%% #3 is the path to a directory inside the repository or empty
+%% #4 is a command to be executed
+\protected\gdef\gitExec#1#2#3#4{%
+\edef\@texgit@pA{#1}%  the request ID
+\ifx\@texgit@pA\empty\relax\edef\@texgit@pA{%
+@texgit@dummy@\the\@texgit@counter}%
+\global\advance\@texgit@counter by 1% step the counter for the next dummy
+\fi%
+\edef\@texgit@pB{#2}%  fully expand the repository URL, or empty
+\edef\@texgit@pC{#3}%  fully expand the path into the repository, or empty
+\edef\@texgit@pD{#4}%  fully expand the (optional) shell command
+\immediate\write\@mainaux{%
+\noexpand\@texgit@process{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}{\@texgit@pD}}%
+}%
+%%
+%% Define a query to allocate a file.
+%% #1 is the request ID
+%% #2 is the prefix
+%% #3 is the suffix
+\protected\gdef\gitArg#1#2#3{%
+\edef\@texgit@pA{#1}%  the request ID
+\edef\@texgit@pB{#2}%  fully expand the prefix
+\edef\@texgit@pC{#3}%  fully expand the suffix
+\immediate\write\@mainaux{%
+\noexpand\@texgit@argFile{\@texgit@pA}{\@texgit@pB}{%
+\@texgit@pC}}%
+}%
+%%
+%% Conditionally execute code depending on whether the given request was
+%% already executed.
+%% #1 is the request ID
+%% #2 the code to execute if the request of the given ID has been executed.
+%% #3 the code to execute if the request of the given ID has NOT been
+%%    executed.
+\gdef\gitIf#1#2#3{%
+\expandafter\ifx\csname @texgit@path@#1\endcsname\relax%
+\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi{#3}{#2}%
+}%
+%%
+%% Get the file path associated with the request ID.
+%% #1 is the request ID
+\gdef\gitFile#1{%
+\expandafter\ifx\csname @texgit@path@#1\endcsname\relax%
+\@texgit@dummyPath\else\csname @texgit@path@#1\endcsname\fi%
+}%
+%%
+%% Get the URL associated with the request ID.
+%% #1 is the request ID
+\gdef\gitUrl#1{%
+\expandafter\ifx\csname @texgit@url@#1\endcsname\relax%
+\@texgit@dummyUrl\else\csname @texgit@url@#1\endcsname\fi%
+}%
+%%
+%% Get the base name of the path associated with the request ID.
+%% #1 is the request ID
+\gdef\gitName#1{%
+\expandafter\ifx\csname @texgit@name@#1\endcsname\relax%
+\else\csname @texgit@name@#1\endcsname\fi%
+}%
+%%
+%% Get the base name of the path associated with the request ID.
+%% #1 is the request ID
+\gdef\gitNameEsc#1{%
+\expandafter\ifx\csname @texgit@escName@#1\endcsname\relax%
+\else\csname @texgit@escName@#1\endcsname\fi%
+}%
+\endinput
+%%
+%% End of file `texgit.sty'.

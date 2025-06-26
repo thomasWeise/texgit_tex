@@ -1,0 +1,151 @@
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd"><title></title><meta content="text/html; charset=utf-8"http-equiv=content-type><style>pre{line-height:125%}td.linenos .normal,span.linenos{color:inherit;background-color:#0000;padding-left:5px;padding-right:5px}td.linenos .special,span.linenos.special{color:#000;background-color:#ffffc0;padding-left:5px;padding-right:5px}body .hll{background-color:#ffc}body{background:#f8f8f8}body .c{color:#3d7b7b;font-style:italic}body .err{border:1px solid red}body .k{color:green;font-weight:700}body .o{color:#666}body .ch,body .cm{color:#3d7b7b;font-style:italic}body .cp{color:#9c6500}body .cpf,body .c1,body .cs{color:#3d7b7b;font-style:italic}body .gd{color:#a00000}body .ge{font-style:italic}body .ges{font-style:italic;font-weight:700}body .gr{color:#e40000}body .gh{color:navy;font-weight:700}body .gi{color:#008400}body .go{color:#717171}body .gp{color:navy;font-weight:700}body .gs{font-weight:700}body .gu{color:purple;font-weight:700}body .gt{color:#04d}body .kc,body .kd,body .kn{color:green;font-weight:700}body .kp{color:green}body .kr{color:green;font-weight:700}body .kt{color:#b00040}body .m{color:#666}body .s{color:#ba2121}body .na{color:#687822}body .nb{color:green}body .nc{color:#00f;font-weight:700}body .no{color:#800}body .nd{color:#a2f}body .ni{color:#717171;font-weight:700}body .ne{color:#cb3f38;font-weight:700}body .nf{color:#00f}body .nl{color:#767600}body .nn{color:#00f;font-weight:700}body .nt{color:green;font-weight:700}body .nv{color:#19177c}body .ow{color:#a2f;font-weight:700}body .w{color:#bbb}body .mb,body .mf,body .mh,body .mi,body .mo{color:#666}body .sa,body .sb,body .sc,body .dl{color:#ba2121}body .sd{color:#ba2121;font-style:italic}body .s2{color:#ba2121}body .se{color:#aa5d1f;font-weight:700}body .sh{color:#ba2121}body .si{color:#a45a77;font-weight:700}body .sx{color:green}body .sr{color:#a45a77}body .s1{color:#ba2121}body .ss{color:#19177c}body .bp{color:green}body .fm{color:#00f}body .vc,body .vg,body .vi,body .vm{color:#19177c}body .il{color:#666}</style><body><h2></h2><div class=highlight><pre><span></span><span class=c>%%</span>
+<span class=c>%% This is file `texgit.sty',</span>
+<span class=c>%% generated with the docstrip utility.</span>
+<span class=c>%%</span>
+<span class=c>%% The original source files were:</span>
+<span class=c>%%</span>
+<span class=c>%% texgit.dtx  (with options: `package')</span>
+<span class=c>%% This is a generated file.</span>
+<span class=c>%% </span>
+<span class=c>%% Copyright (C) 2023--2025 by Thomas Weise &LTtweise@email.hfuu.edu.cn></span>
+<span class=c>%% </span>
+<span class=c>%% This file may be distributed and/or modified under the conditions of the</span>
+<span class=c>%% The LaTeX Project Public License (LPPL) Version 1.3c  2008-05-04.</span>
+<span class=c>%% The license can be found at</span>
+<span class=c>%% https://thomasweise.github.io/texgit_tex/LICENSE.html.</span>
+<span class=c>%% You can obtain the latest version of this package from</span>
+<span class=c>%% http://thomasweise.github.io/texgit_tex or</span>
+<span class=c>%% http://github.com/thomasWeise/texgit_tex.</span>
+<span class=c>%% This work is author-maintained, i.e., it can only be maintained by</span>
+<span class=c>%% Thomas Weise.</span>
+<span class=k>\NeedsTeXFormat</span><span class=nb>{</span>LaTeX2e<span class=nb>}</span>[1999/12/01]<span class=c>%</span>
+<span class=k>\ProvidesPackage</span><span class=nb>{</span>texgit<span class=nb>}</span>[2025/06/26 0.9.7 now offering file names (via gitName) and escaped file names (via gitNameEsc)]<span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%%</span>
+<span class=c>%%</span>
+<span class=c>%%</span>
+<span class=c>%%</span>
+<span class=c>%%</span>
+<span class=k>\RequirePackage</span><span class=nb>{</span>filecontents<span class=nb>}</span><span class=c>%  Allow us to create the dummy file.</span>
+<span class=k>\xdef\@texgit@dummyPath</span><span class=nb>{</span><span class=k>\jobname</span>.texgit.dummy<span class=nb>}</span><span class=c>%  the dummy file</span>
+<span class=k>\expandafter\begin\expandafter</span><span class=nb>{</span>filecontents*<span class=nb>}{</span><span class=k>\@texgit@dummyPath</span><span class=nb>}</span>
+
+<span class=k>\end</span><span class=nb>{</span>filecontents*<span class=nb>}</span>
+<span class=c>%% We need to make sure that the texgit postprocessor is actually</span>
+<span class=c>%% properly applied.</span>
+<span class=c>%% If you load our package, then if the postprocessor is not applied</span>
+<span class=c>%% before the second pdflatex pass, we make sure that pdflatex</span>
+<span class=c>%% crashes with an error.</span>
+<span class=k>\protected\gdef\@texgit@needsTexgitPass</span><span class=nb>{</span><span class=c>%</span>
+<span class=k>\errmessage</span><span class=nb>{</span>texgit: You must run the Python companion package of texgit <span class=c>%</span>
+*before* doing the second pdflatex pass. <span class=c>%</span>
+You can do this by invoking 'python3 -m texgit.run <span class=k>\jobname</span>'. <span class=c>%</span>
+You can obtain this Python package via 'pip install texgit'. <span class=c>%</span>
+Check the documentation at <span class=c>%</span>
+https://thomasweise.github.io/texgit<span class=nb>_</span>tex/texgit.pdf<span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%% force quit</span>
+<span class=k>\batchmode\read</span>-1 to <span class=k>\foo</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%% Make sure that the texgit postprocessor is actually applied.</span>
+<span class=k>\AtEndDocument</span><span class=nb>{</span><span class=c>%</span>
+<span class=k>\let\@texgit@needsTexgitPass\relax</span><span class=c>%</span>
+<span class=k>\immediate\write\@mainaux</span><span class=nb>{</span><span class=k>\noexpand\@texgit@needsTexgitPass</span><span class=nb>}}</span><span class=c>%</span>
+<span class=k>\xdef\@texgit@dummyUrl</span><span class=nb>{</span>https://example.com<span class=nb>}</span><span class=c>%  the dummy URL</span>
+<span class=k>\gdef\@texgit@gitFile</span>#1#2#3#4<span class=nb>{}</span><span class=c>%</span>
+<span class=k>\gdef\@texgit@process</span>#1#2#3#4<span class=nb>{}</span><span class=c>%</span>
+<span class=k>\gdef\@texgit@argFile</span>#1#2#3<span class=nb>{}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Define a query to load and post-process a file from a |git| repository.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=c>%% #2 is the repository URL</span>
+<span class=c>%% #3 is the path to the file inside the repository</span>
+<span class=c>%% #4 is a command through which the file contents should be piped</span>
+<span class=c>%%%   (leave #4 empty to use the file as-is)</span>
+<span class=k>\protected\gdef\gitLoad</span>#1#2#3#4<span class=nb>{</span><span class=c>%</span>
+<span class=k>\edef\@texgit@pA</span><span class=nb>{</span>#1<span class=nb>}</span><span class=c>%  fully expand the request ID</span>
+<span class=k>\edef\@texgit@pB</span><span class=nb>{</span>#2<span class=nb>}</span><span class=c>%  fully expand the repository URL</span>
+<span class=k>\edef\@texgit@pC</span><span class=nb>{</span>#3<span class=nb>}</span><span class=c>%  fully expand the path into the repository</span>
+<span class=k>\edef\@texgit@pD</span><span class=nb>{</span>#4<span class=nb>}</span><span class=c>%  fully expand the (optional) shell command</span>
+<span class=k>\immediate\write\@mainaux</span><span class=nb>{</span><span class=c>%</span>
+<span class=k>\noexpand\@texgit@gitFile</span><span class=nb>{</span><span class=k>\@texgit@pA</span><span class=nb>}{</span><span class=k>\@texgit@pB</span><span class=nb>}{</span><span class=c>%</span>
+<span class=k>\@texgit@pC</span><span class=nb>}{</span><span class=k>\@texgit@pD</span><span class=nb>}}</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=k>\newcount\@texgit@counter</span><span class=c>%  The counter for the dummy arguments of \gitExec</span>
+<span class=k>\@texgit@counter</span>0<span class=k>\relax</span><span class=c>%    We start the counter at 0.</span>
+<span class=c>%%</span>
+<span class=c>%% Define a query to execute a command, optionally in a |git| repository.</span>
+<span class=c>%% #1 is the request ID, leave empty if you do not want to access the output</span>
+<span class=c>%% #2 is the repository URL, or empty if no repository is needed</span>
+<span class=c>%% #3 is the path to a directory inside the repository or empty</span>
+<span class=c>%% #4 is a command to be executed</span>
+<span class=k>\protected\gdef\gitExec</span>#1#2#3#4<span class=nb>{</span><span class=c>%</span>
+<span class=k>\edef\@texgit@pA</span><span class=nb>{</span>#1<span class=nb>}</span><span class=c>%  the request ID</span>
+<span class=k>\ifx\@texgit@pA\empty\relax\edef\@texgit@pA</span><span class=nb>{</span><span class=c>%</span>
+@texgit@dummy@<span class=k>\the\@texgit@counter</span><span class=nb>}</span><span class=c>%</span>
+<span class=k>\global\advance\@texgit@counter</span> by 1<span class=c>% step the counter for the next dummy</span>
+<span class=k>\fi</span><span class=c>%</span>
+<span class=k>\edef\@texgit@pB</span><span class=nb>{</span>#2<span class=nb>}</span><span class=c>%  fully expand the repository URL, or empty</span>
+<span class=k>\edef\@texgit@pC</span><span class=nb>{</span>#3<span class=nb>}</span><span class=c>%  fully expand the path into the repository, or empty</span>
+<span class=k>\edef\@texgit@pD</span><span class=nb>{</span>#4<span class=nb>}</span><span class=c>%  fully expand the (optional) shell command</span>
+<span class=k>\immediate\write\@mainaux</span><span class=nb>{</span><span class=c>%</span>
+<span class=k>\noexpand\@texgit@process</span><span class=nb>{</span><span class=k>\@texgit@pA</span><span class=nb>}{</span><span class=k>\@texgit@pB</span><span class=nb>}{</span><span class=c>%</span>
+<span class=k>\@texgit@pC</span><span class=nb>}{</span><span class=k>\@texgit@pD</span><span class=nb>}}</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Define a query to allocate a file.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=c>%% #2 is the prefix</span>
+<span class=c>%% #3 is the suffix</span>
+<span class=k>\protected\gdef\gitArg</span>#1#2#3<span class=nb>{</span><span class=c>%</span>
+<span class=k>\edef\@texgit@pA</span><span class=nb>{</span>#1<span class=nb>}</span><span class=c>%  the request ID</span>
+<span class=k>\edef\@texgit@pB</span><span class=nb>{</span>#2<span class=nb>}</span><span class=c>%  fully expand the prefix</span>
+<span class=k>\edef\@texgit@pC</span><span class=nb>{</span>#3<span class=nb>}</span><span class=c>%  fully expand the suffix</span>
+<span class=k>\immediate\write\@mainaux</span><span class=nb>{</span><span class=c>%</span>
+<span class=k>\noexpand\@texgit@argFile</span><span class=nb>{</span><span class=k>\@texgit@pA</span><span class=nb>}{</span><span class=k>\@texgit@pB</span><span class=nb>}{</span><span class=c>%</span>
+<span class=k>\@texgit@pC</span><span class=nb>}}</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Conditionally execute code depending on whether the given request was</span>
+<span class=c>%% already executed.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=c>%% #2 the code to execute if the request of the given ID has been executed.</span>
+<span class=c>%% #3 the code to execute if the request of the given ID has NOT been</span>
+<span class=c>%%    executed.</span>
+<span class=k>\gdef\gitIf</span>#1#2#3<span class=nb>{</span><span class=c>%</span>
+<span class=k>\expandafter\ifx\csname</span> @texgit@path@#1<span class=k>\endcsname\relax</span><span class=c>%</span>
+<span class=k>\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi</span><span class=nb>{</span>#3<span class=nb>}{</span>#2<span class=nb>}</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Get the file path associated with the request ID.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=k>\gdef\gitFile</span>#1<span class=nb>{</span><span class=c>%</span>
+<span class=k>\expandafter\ifx\csname</span> @texgit@path@#1<span class=k>\endcsname\relax</span><span class=c>%</span>
+<span class=k>\@texgit@dummyPath\else\csname</span> @texgit@path@#1<span class=k>\endcsname\fi</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Get the URL associated with the request ID.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=k>\gdef\gitUrl</span>#1<span class=nb>{</span><span class=c>%</span>
+<span class=k>\expandafter\ifx\csname</span> @texgit@url@#1<span class=k>\endcsname\relax</span><span class=c>%</span>
+<span class=k>\@texgit@dummyUrl\else\csname</span> @texgit@url@#1<span class=k>\endcsname\fi</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Get the base name of the path associated with the request ID.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=k>\gdef\gitName</span>#1<span class=nb>{</span><span class=c>%</span>
+<span class=k>\expandafter\ifx\csname</span> @texgit@name@#1<span class=k>\endcsname\relax</span><span class=c>%</span>
+<span class=k>\else\csname</span> @texgit@name@#1<span class=k>\endcsname\fi</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=c>%%</span>
+<span class=c>%% Get the base name of the path associated with the request ID.</span>
+<span class=c>%% #1 is the request ID</span>
+<span class=k>\gdef\gitNameEsc</span>#1<span class=nb>{</span><span class=c>%</span>
+<span class=k>\expandafter\ifx\csname</span> @texgit@escName@#1<span class=k>\endcsname\relax</span><span class=c>%</span>
+<span class=k>\else\csname</span> @texgit@escName@#1<span class=k>\endcsname\fi</span><span class=c>%</span>
+<span class=nb>}</span><span class=c>%</span>
+<span class=k>\endinput</span>
+<span class=c>%%</span>
+<span class=c>%% End of file `texgit.sty'.</span>
+</pre></div>

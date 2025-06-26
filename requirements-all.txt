@@ -1,0 +1,7 @@
+platformdirs==4.3.8
+psutil==7.0.0
+pycommons==0.8.67
+strip-hints==0.1.13
+texgit==0.9.8
+wheel==0.45.1
+yapf==0.43.0
