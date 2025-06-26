@@ -52,6 +52,11 @@ To implement its functionality, it offers the following commands:
   Such files can be passed as arguments to `\gitExec` or `\gitLoad`\tbindex{gitLoad} by including `(?id?)` in their commands' argument list. 
   This way, we can, for example, instruct a program to create a graphic and store it in a certain file that we can later load from `\gitFile{id}`.
 
+- `\gitName{id}` provides the name of the original file in the `git` repository.
+- 
+- `\gitNameEsc{id}` provides the name of the original file in the `git` repository, but with some special characters escaped.
+  This makes it easy to include the file name in LaTeX documents.
+
 - `\gitIf{id}{ifDone}{ifNotDone}` executes the code `ifDone` starting  in the second `pdflatex` pass, i.e., after the Python `texgit` package has been applied to the `aux` file generated during the first `pdflatex` pass.
   During the first `pdflatex` pass and before the Python `texgit` package was applied, `ifNotDone` will be executed.
 

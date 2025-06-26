@@ -15,29 +15,29 @@ https://github.com/thomasWeise/pycommons}{%
 pycommons/io/console.py}{}%
 % now, \gitFile and \gitUrl are defined and can be used.
 \verbatiminput{\gitFile{R2}}%  print the contents of the file
-The above file was loaded from URL \url{\gitUrl{R2}}.%  print the url
+The file \gitNameEsc{R2} was loaded from URL \url{\gitUrl{R2}}.%  print url
 %
 \clearpage\section{Second File}%
-We now load the same file again, but this time retain only the first five lines.
+We load the same file again, but this time retain only the first five lines.
 We do this by specifying that the file contents should be piped through
 ``\verb=head -n 5='' before inclusion.
 \gitLoad{R3}{https://github.com/thomasWeise/pycommons}{%
 pycommons/io/console.py}{head -n 5}%
 % now, \gitFile and \gitUrl are defined and can be used.
 \verbatiminput{\gitFile{R3}}%  print the contents of the file
-The above file was loaded from URL \url{\gitUrl{R3}}.%  print the url
+The file \gitNameEsc{R3} was loaded from URL \url{\gitUrl{R3}}.%  print url
 %
 \clearpage\section{Third File}%
 We now load a file from the ``\url{https://github.com/thomasWeise/moptipy}''
-GitHub repository. The contents of this file will be piped through the  Python code
-formatter, which retains only a snippet of the code and removes type hints and
-comments, while keeping the doc strings. (It doesn't really matter what it does,
-it is just postprocessing.)
+GitHub repository. The contents of this file will be piped through the Python
+code formatter, which retains only a snippet of the code and removes type
+hints and comments, while keeping the doc strings. (It doesn't really matter
+what it does, it is just postprocessing.)
 \gitLoad{R4}{%
 https://github.com/thomasWeise/moptipy}{moptipy/api/encoding.py}{%
 python3 -m texgit.formatters.python --labels book --args doc}%  post-processor
 % now, \gitFile and \gitUrl are defined and can be used.
 \verbatiminput{\gitFile{R4}}%  print the contents of the file
-The above file was loaded from URL \url{\gitUrl{R4}}.%  print the url
+The file \gitNameEsc{R4} was loaded from URL \url{\gitUrl{R4}}.%  print url
 %
 \end{document}%
